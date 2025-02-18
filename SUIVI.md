@@ -19,4 +19,5 @@ Mardi 18 février :
 
 -connexion de unity au gitlab
 
-
+objectifs pour la suite :
+continuer à se documenter sur la prise en main de unity et mettre à jour le document ressources 
