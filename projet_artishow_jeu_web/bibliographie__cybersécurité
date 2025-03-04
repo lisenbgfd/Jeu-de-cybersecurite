@@ -5,6 +5,12 @@ utilisation de l'intelligence artificielle pour créer des deepfakes, phishings 
 - expansion du télétravail (accès à distance sécurisé)
 - essor de l'informatique quantique : défis et opportunités pour la cybersécurité : déchiffrement quantique émergent (https://www.cyber-securite.fr/2025-lannee-cle-pour-la-cybersecurite-quantique/#:~:text=Avec%20l'essor%20de%20l,cruciale%20pour%20tous%20les%20secteurs.)
 - attaques de phishing modernes : techniques plus personnalisées et techniques plus avancées : liens vers des URLs identiques à des sites officiels + clickbait: encourager à cliquer en promettant par exemple un téléphone gratuit 
+- attaque de spear phising : a pour but de convaincre un collaborateur d'une entreprise ou d'un secteur $
+véritable cible, l'entreprise elle-même
+- attaque de whaling : cible une personne spécifique, afin de voler de l'argent ou d'obtenir des informa$
+
+
+
 Bonnes pratiques en cybersécurité :
 Utilisation de mots de passe forts et uniques
 
@@ -55,3 +61,5 @@ Ne pas sécuriser l’accès aux comptes et appareils
 
 6  Mauvaise pratique : Ne pas verrouiller son smartphone, ne pas activer l’authentification forte.
 Référence : Google Security Blog (Google Security).
+
+
