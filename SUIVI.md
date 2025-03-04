@@ -27,3 +27,4 @@ Mardi 4 mars:
 - Tara et Lise ont crée et rempli un fichier avec des premières informations et documentations sur la cybersécurité. 
 -  Lise a crée un premier fichier test Unity et a commencé à se familiariser sur ce fichier à l'utilisation de Unity
 - Sara a crée un premier jeu vidéo sur Unity avec un petit personnage se déplaçant. 
+- Sylvia a créé un premier fichier test Unity 
