@@ -1,4 +1,12 @@
-rapport de cybermenaces: tendances en cybersécurité de 2024 (https://www.splashtop.com/fr/blog/cybersecurity-trends-and-predictions-2024#:~:text=En%202024%2C%20l'IA%20et,les%20syst%C3%A8mes%20de%20d%C3%A9tection%20pr%C3%A9coce.)
+BIBLIOGRAPHIE SUR LA CYBERSECURITE
+
+
+I] Rapport de cybermenace : rapport de cybermenaces: tendances en cybersécurité de 2024 
+
+
+(https://www.splashtop.com/fr/blog/cybersecurity-trends-and-predictions-2024#:~:text=En%202024%2C%20l'IA%20et,les%20syst%C3%A8mes%20de%20d%C3%A9tection%20pr%C3%A9coce.)
+
+
 - IA de plus en plus présente dans les cybermenaces mais aussi dans leur détéction : 
 utilisation de l'intelligence artificielle pour créer des deepfakes, phishings personalisés... 
 - l'IoT présente des défis pour la cybersécurité : utilisation de la technologie blockchain et formation des utilisateurs (https://exed.centralesupelec.fr/actualites/cybersecurite-et-iot-enjeux-menaces-et-solutions-partie-1-2/)
@@ -11,7 +19,8 @@ véritable cible, l'entreprise elle-même
 
 
 
-Bonnes pratiques en cybersécurité :
+II] Bonnes pratiques en cybersécurité :
+
 Utilisation de mots de passe forts et uniques
 
 1  Bonne pratique : Utiliser un gestionnaire de mots de passe, activer l’authentification multifactorielle (MFA).
