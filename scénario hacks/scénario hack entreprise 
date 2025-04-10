@@ -1,10 +1,12 @@
 ping-pong entre hackers et hackés 
-1. mise en place d'une attaque Ddos (ping flood requêtes ICMP)
-lancement d'une attaque sur un site de e-commerce pour le BlackFriday, configuration d'un outil C2 (Command et Control )
-pour répartir l'attaque : un UDP flood vers le backend, un HTTP flood sur le site en ligne, et une amplification DNS via des serveurs DNS mal configurés
- (solution : mettre en place un parefeu )
-détails: 
-- avant l'attaque : mettre en place un CDN, un WAF, limiter les connexions par IP 
-- pendant l'attaque: travailler avec le fournisseur d'accès pour rediriger le traffic
-- après l'attaque: corriger les failles (serveurs DNS mal configurés  )
-3. usurpation de l'identite, création d'un deep fake (vidéo) qui demande d'effectuer un virement important 
+1. mise en place d'une attaque Ddos (création d'un botnet ping flood requêtes ICMP)
+lancement d'une attaque sur un site de e-commerce pour le BlackFriday: 
+déroulé de l'attaque : 
+- l'attaquant découvre ton IP publique via une recherche DNS 
+- il lance un script simple pour envoyer des milliers de requêtes ping par seconde au serveur, résultat le site devient inacessible 
+Solutions mise en place du point de vue du hacké: 
+- Limiter ou bloquer ICMP avec iptables ou ufw 
+- surveiller le traffic réseau
+- utiliser un reverse proxy avec mitigation Ddos 
+- déplacer l'ébergement vers une infra plus robuste
+
