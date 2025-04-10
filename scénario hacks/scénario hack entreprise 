@@ -8,5 +8,5 @@ Solutions mise en place du point de vue du hacké:
 - Limiter ou bloquer ICMP avec iptables ou ufw 
 - surveiller le traffic réseau
 - utiliser un reverse proxy avec mitigation Ddos 
-- déplacer l'ébergement vers une infra plus robuste
+- déplacer l'hébergement vers une infrastructure plus robuste
 
