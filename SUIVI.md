@@ -44,3 +44,8 @@ Lise : hack d'une entreprise par la méthode du DDOS
 Tara : fishing d'une employée 
 Sarah : chantage d'une jeune adolescente
 Sylvia : hack d'un youtubeur par la méthode du RAT
+
+Lundi 5 mai: 
+Nous avons rédigé le rapport sur les enjeux sociétaux et environnementaux de notre projet. 
+Lise, Tara et Sarah ont regardé des tutorials pour comprendre très présicesement comment coder sur Unity, notamment pour aider à résoudre des erreurs qu'elles avaient sur leurs projets d'entraînement: l'objectif est que chacun commence à coder le niveau qu'on lui a attribué. 
+Sylvia a bien avancé sur les interfaces graphiques (nous allons essayé de toutes utilisés les mêmes pour garantir davantage d'unité visuelle). 
