@@ -49,3 +49,11 @@ Lundi 5 mai:
 Nous avons rédigé le rapport sur les enjeux sociétaux et environnementaux de notre projet. 
 Lise, Tara et Sarah ont regardé des tutorials pour comprendre très présicesement comment coder sur Unity, notamment pour aider à résoudre des erreurs qu'elles avaient sur leurs projets d'entraînement: l'objectif est que chacun commence à coder le niveau qu'on lui a attribué. 
 Sylvia a bien avancé sur les interfaces graphiques (nous allons essayé de toutes utilisés les mêmes pour garantir davantage d'unité visuelle). 
+
+Lundi 12 mai: 
+On a commencé à coder nos jeux: Tara a crée une interface avec un bouton, Lise une interface avec des petits cercles représentants les attaques. Sarah a codé MarioBros et Sylvia a tenté pleins de choses mais n'a rien donné de concluant. 
+
+Lundi 19 mai: Séance d'audit des autres groupes et retour sur notre projet : il est urgent de commencer à coder, et il faudrait s'interesser à la cohérence graphique de notre interface. 
+
+
+Lundi 26 mai : 
