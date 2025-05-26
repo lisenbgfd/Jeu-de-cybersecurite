@@ -56,4 +56,4 @@ On a commencé à coder nos jeux: Tara a crée une interface avec un bouton, Lis
 Lundi 19 mai: Séance d'audit des autres groupes et retour sur notre projet : il est urgent de commencer à coder, et il faudrait s'interesser à la cohérence graphique de notre interface. 
 
 
-Lundi 26 mai : 
+Lundi 26 mai : après maintes réflexion, on a décidé de coder sur html, chacune a crée une page web à présenter au prof 
