@@ -57,3 +57,5 @@ Lundi 19 mai: Séance d'audit des autres groupes et retour sur notre projet : il
 
 
 Lundi 26 mai : après maintes réflexion, on a décidé de coder sur html, chacune a crée une page web à présenter au prof 
+
+Lundi 2 juin: chacun se concentre sur les points d'amélioration de son niveau : Lise doit rajouter la partie documentation sous forme de messages explicatifs, et faire plusieurs niveaux de jeu (acccès à tous, puis à la partie hacké, puis à la partie hacker). Tara devrait configurer une interface de messagerie et revoir les différents choix proposés (pourquoi 4 par exemple). Sylvia doit rendre l'interface "plus naturelle" (retravailler un peu le scénario). Sarah doit créer un faux compte Instagram réaliste, sur lequel sa page web redirigerait le joueur. 
