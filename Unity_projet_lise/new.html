@@ -1251,6 +1251,375 @@
             if (challengeWaveTimeout) clearTimeout(challengeWaveTimeout);
             if (countdownInterval) clearInterval(countdownInterval);
         };
+    
+    // Phase Attaquant - Nouvelles variables
+        let attackerPhaseActive = false;
+        let attackerBudget = 5000; // Budget augmenté
+        let defenderHealth = 100;
+        let attackerScore = 0;
+        let currentDefenseWave = 0;
+
+        // Scénarios de défense pour la phase attaquant (plus faciles)
+        const defenseWaves = [
+            {
+                name: "Défenses Basiques",
+                defenses: ['firewall'],
+                budget: 500,
+                warning: "🛡️ DÉFENSE 1: Firewall ICMP déployé!",
+                tip: "Un simple Ping Flood devrait suffire contre cette défense."
+            },
+            {
+                name: "Défenses Multiples",
+                defenses: ['firewall', 'rateLimiting'],
+                budget: 1300,
+                warning: "🛡️ DÉFENSE 2: Firewall + Rate Limiting activés!",
+                tip: "Utilisez le Botnet pour surmonter ces défenses facilement."
+            },
+            {
+                name: "Défenses Avancées",
+                defenses: ['firewall', 'reverseProxy', 'rateLimiting'],
+                budget: 2800,
+                warning: "🛡️ DÉFENSE FINALE: Système de défense complet!",
+                tip: "Même avec toutes ces défenses, vos attaques restent efficaces."
+            }
+        ];
+
+        // Attaques disponibles pour la phase attaquant (seulement 2 attaques)
+        const attackerArsenal = {
+            pingFlood: { cost: 300, effectiveness: 1.5, description: "Attaque Ping Flood" },
+            botnet: { cost: 800, effectiveness: 2.5, description: "Attaque Botnet" }
+        };
+
+        function startAttackerPhase() {
+            attackerPhaseActive = true;
+            gameState.phase = 'attacker';
+            currentDefenseWave = 0;
+            attackerBudget = 5000; // Budget plus généreux
+            defenderHealth = 100;
+            attackerScore = 0;
+            
+            // Reset des défenses
+            Object.keys(gameState.defenses).forEach(key => {
+                gameState.defenses[key].active = false;
+            });
+            
+            // Modification de l'interface
+            document.getElementById('phaseIndicator').textContent = 'PHASE ATTAQUANT - Brisez les défenses!';
+            document.getElementById('phaseIndicator').classList.add('challenge');
+            document.getElementById('phaseIndicator').style.borderColor = '#ff0000';
+            document.getElementById('phaseIndicator').style.background = 'rgba(255, 0, 0, 0.1)';
+            
+            // Modifier le panneau d'attaque
+            updateAttackerPanel();
+            
+            // Désactiver le panneau de défense
+            document.getElementById('challengeBtn').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'none';
+            
+            // Ajouter le bouton de retour
+            const phaseControls = document.getElementById('phaseControls');
+            phaseControls.innerHTML = `
+                <button class="phase-btn" onclick="resetToLearning()" style="background: linear-gradient(45deg, #cc0000, #990000);">
+                    Retour Apprentissage
+                </button>
+            `;
+            
+            addLog('💀 Phase Attaquant activée - Brisez les défenses!', 'error');
+            addLog('💰 Budget attaque: 5000€', 'info');
+            updateAttackerUI();
+            
+            // Démarrer la première vague de défense
+            setTimeout(() => {
+                executeNextDefenseWave();
+            }, 3000);
+        }
+
+        function updateAttackerPanel() {
+            const attackPanel = document.querySelector('.attack-panel h3');
+            attackPanel.textContent = '💀 ARSENAL D\'ATTAQUE';
+            
+            const attackPanelContent = document.querySelector('.attack-panel');
+            const buttonsHtml = `
+                <button class="btn btn-attack" onclick="launchAttackerPingFlood()" id="attackerPingBtn">
+                    Ping Flood
+                    <span class="cost">300€ - Efficacité: 1.5x</span>
+                </button>
+                <button class="btn btn-attack" onclick="launchAttackerBotnet()" id="attackerBotnetBtn">
+                    Botnet Attack
+                    <span class="cost">800€ - Efficacité: 2.5x</span>
+                </button>
+                <div class="countdown" id="attackerCountdown" style="display: none;"></div>
+            `;
+            
+            // Remplacer le contenu après les contrôles de phase
+            const phaseControls = attackPanelContent.querySelector('.phase-controls');
+            const existingButtons = attackPanelContent.querySelectorAll('.btn');
+            existingButtons.forEach(btn => btn.remove());
+            attackPanelContent.querySelector('.countdown')?.remove();
+            
+            phaseControls.insertAdjacentHTML('afterend', buttonsHtml);
+        }
+
+        function executeNextDefenseWave() {
+            if (currentDefenseWave >= defenseWaves.length) {
+                attackerPhaseComplete();
+                return;
+            }
+
+            const wave = defenseWaves[currentDefenseWave];
+            showWaveAnnouncement(wave.warning);
+            addLog(`🛡️ ${wave.warning}`, 'warning');
+            
+            // Activer les défenses de cette vague
+            wave.defenses.forEach(defenseKey => {
+                gameState.defenses[defenseKey].active = true;
+            });
+            
+            // Activer les systèmes visuels correspondants
+            if (wave.defenses.includes('firewall')) {
+                document.getElementById('firewall').classList.add('active');
+            }
+            if (wave.defenses.includes('infrastructure')) {
+                document.getElementById('shield').classList.add('active');
+            }
+            
+            updateAttackerUI();
+            addLog(`💡 ${wave.tip}`, 'info');
+        }
+
+        function launchAttackerPingFlood() {
+            launchAttackerAttack('pingFlood');
+        }
+
+        function launchAttackerBotnet() {
+            launchAttackerAttack('botnet');
+        }
+
+        function launchAttackerAttack(attackType) {
+            const attack = attackerArsenal[attackType];
+            
+            if (attackerBudget < attack.cost) {
+                addLog('❌ Budget insuffisant pour cette attaque!', 'error');
+                return;
+            }
+            
+            if (gameState.isUnderAttack) {
+                addLog('⚠️ Une attaque est déjà en cours!', 'warning');
+                return;
+            }
+            
+            attackerBudget -= attack.cost;
+            addLog(`🚀 Lancement: ${attack.description} (-${attack.cost}€)`, 'error');
+            
+            // Calculer les dégâts en fonction des défenses actives (plus de dégâts, défenses moins efficaces)
+            let damage = attack.effectiveness * 25; // Dégâts de base augmentés
+            let blocked = false;
+            
+            // Les défenses réduisent l'efficacité mais sont moins puissantes
+            Object.values(gameState.defenses).forEach(defense => {
+                if (defense.active) {
+                    if (Math.random() < defense.blockChance * 0.2) { // Chance de blocage très réduite
+                        blocked = true;
+                    } else {
+                        damage *= (1 - defense.damageReduction * 0.3); // Réduction d'efficacité diminuée
+                    }
+                }
+            });
+            
+            // Exécuter l'attaque visuelle
+            executeAttackerAttackVisual(attackType, attack.effectiveness);
+            
+            setTimeout(() => {
+                if (!blocked) {
+                    defenderHealth -= damage;
+                    attackerScore += Math.round(damage * 2);
+                    addLog(`💥 Défenses percées! -${Math.round(damage)} points`, 'error');
+                } else {
+                    addLog('🛡️ Attaque partiellement bloquée!', 'warning');
+                    defenderHealth -= Math.round(damage * 0.3); // Même bloqué, fait des dégâts
+                    attackerScore += 10; // Score pour tentative
+                }
+                
+                if (defenderHealth <= 0) {
+                    defenderHealth = 0;
+                    defensesBroken();
+                } else {
+                    // Vérifier si on peut passer à la vague suivante (seuil plus bas)
+                    if (defenderHealth < 80 && currentDefenseWave < defenseWaves.length - 1) {
+                        setTimeout(() => {
+                            currentDefenseWave++;
+                            executeNextDefenseWave();
+                        }, 3000);
+                    }
+                }
+                
+                updateAttackerUI();
+            }, 2000);
+        }
+
+        function executeAttackerAttackVisual(attackType, intensity) {
+            gameState.isUnderAttack = true;
+            gameState.currentTraffic = 300 * intensity;
+            activateSpawnPoints();
+            
+            const duration = 3000;
+            const spawnRate = Math.max(50, 200 / intensity);
+            
+            const visualAttack = setInterval(() => {
+                spawnAttackPacket(Math.random() < 0.1); // Seulement 10% de chance d'être bloqué visuellement
+            }, spawnRate);
+            
+            setTimeout(() => {
+                clearInterval(visualAttack);
+                gameState.isUnderAttack = false;
+                gameState.currentTraffic = 45;
+                deactivateSpawnPoints();
+            }, duration);
+        }
+
+        function defensesBroken() {
+            addLog('💀 DÉFENSES BRISÉES! Victoire de l\'attaquant!', 'error');
+            attackerScore += 150; // Bonus plus élevé
+            
+            setTimeout(() => {
+                alert(`Défenses brisées! Vous avez réussi à percer le système!\nScore Attaquant: ${attackerScore}\nBudget restant: ${attackerBudget}€`);
+                currentDefenseWave++;
+                if (currentDefenseWave < defenseWaves.length) {
+                    // Passer à la vague suivante
+                    defenderHealth = 100;
+                    setTimeout(() => {
+                        executeNextDefenseWave();
+                    }, 2000);
+                } else {
+                    attackerPhaseComplete();
+                }
+            }, 1000);
+        }
+
+        function attackerPhaseComplete() {
+            addLog('🎯 PHASE ATTAQUANT TERMINÉE!', 'error');
+            setTimeout(() => {
+                alert(`Phase Attaquant terminée!\nScore final: ${attackerScore}\nVous avez testé ${defenseWaves.length} configurations de défense!\nBravo!`);
+                resetToLearning();
+            }, 1000);
+        }
+
+        function updateAttackerUI() {
+            // Mettre à jour la barre de santé pour représenter les défenses
+            document.getElementById('healthFill').style.width = defenderHealth + '%';
+            document.getElementById('healthText').textContent = Math.round(defenderHealth) + '%';
+            
+            // Changer le label de santé
+            document.querySelector('.status-bar .stat .stat-label').textContent = 'Santé Défenses';
+            
+            // Mettre à jour le budget attaquant
+            document.getElementById('budgetText').textContent = attackerBudget + '€';
+            document.querySelector('.status-bar .stat:nth-child(2) .stat-label').textContent = 'Budget Attaque';
+            
+            // Mettre à jour le score
+            document.getElementById('scoreText').textContent = attackerScore;
+            
+            // Mettre à jour les boutons d'attaque selon le budget (seulement 2 boutons maintenant)
+            const attackKeys = Object.keys(attackerArsenal);
+            const btnIds = ['attackerPingBtn', 'attackerBotnetBtn'];
+            
+            attackKeys.forEach((attackKey, index) => {
+                const btn = document.getElementById(btnIds[index]);
+                if (btn) {
+                    const attack = attackerArsenal[attackKey];
+                    if (attackerBudget < attack.cost) {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.3';
+                    } else {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    }
+                }
+            });
+            
+            // Mettre à jour l'état du serveur (maintenant représente les défenses)
+            const server = document.getElementById('server');
+            server.className = 'server';
+            if (gameState.isUnderAttack) {
+                server.classList.add('under-attack');
+            }
+            if (hasActiveDefenses()) {
+                server.classList.add('protected');
+            }
+            server.textContent = 'DÉFENSES';
+        }
+
+        // Modifier la fonction resetToLearning pour gérer la phase attaquant
+        const originalResetToLearning = resetToLearning;
+        resetToLearning = function() {
+            attackerPhaseActive = false;
+            
+            // Remettre le serveur à son état normal
+            document.getElementById('server').textContent = 'SERVER';
+            
+            // Remettre les labels normaux
+            document.querySelector('.status-bar .stat .stat-label').textContent = 'Santé Serveur';
+            document.querySelector('.status-bar .stat:nth-child(2) .stat-label').textContent = 'Budget';
+            
+            // Remettre le panneau d'attaque normal
+            const attackPanel = document.querySelector('.attack-panel h3');
+            attackPanel.textContent = '🔥 ATTAQUES';
+            
+            const attackPanelContent = document.querySelector('.attack-panel');
+            const phaseControls = attackPanelContent.querySelector('.phase-controls');
+            
+            // Supprimer les boutons d'attaquant
+            const attackerButtons = attackPanelContent.querySelectorAll('.btn');
+            attackerButtons.forEach(btn => btn.remove());
+            
+            // Remettre les boutons originaux
+            const originalButtonsHtml = `
+                <button class="btn btn-attack" onclick="startPingFlood()">
+                    Ping Flood
+                    <span class="cost">Attaque modérée</span>
+                </button>
+                <button class="btn btn-attack" onclick="startBotnetAttack()">
+                    Botnet Attack
+                    <span class="cost">Attaque massive</span>
+                </button>
+                <button class="btn btn-attack" onclick="stopAttack()" id="stopBtn" disabled>
+                    Arrêter Attaque
+                </button>
+                <div class="countdown" id="countdown" style="display: none;"></div>
+            `;
+            
+            phaseControls.insertAdjacentHTML('afterend', originalButtonsHtml);
+            
+            // Remettre les contrôles de phase originaux
+            phaseControls.innerHTML = `
+                <button class="phase-btn" onclick="startChallengePhase()" id="challengeBtn">
+                    Commencer le Défi
+                </button>
+                <button class="phase-btn" onclick="startAttackerPhase()" id="attackerBtn">
+                    Mode Attaquant
+                </button>
+                <button class="phase-btn" onclick="resetToLearning()" id="resetBtn" style="display: none;">
+                    Retour Apprentissage
+                </button>
+            `;
+            
+            // Remettre l'indicateur de phase normal
+            document.getElementById('phaseIndicator').style.borderColor = '#00ff00';
+            document.getElementById('phaseIndicator').style.background = 'rgba(0, 0, 0, 0.8)';
+            
+            // Appeler la fonction originale
+            originalResetToLearning();
+        };
+
+        // Ajouter le bouton Mode Attaquant à l'initialisation
+        window.addEventListener('load', function() {
+            const challengeBtn = document.getElementById('challengeBtn');
+            challengeBtn.insertAdjacentHTML('afterend', `
+                <button class="phase-btn" onclick="startAttackerPhase()" id="attackerBtn">
+                    Mode Attaquant
+                </button>
+            `);
+        });
     </script>
 </body>
 </html>
