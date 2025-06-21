@@ -811,23 +811,29 @@
         }
 
         function updateDefenseButtons() {
-            const buttons = ['firewallBtn', 'proxyBtn', 'rateLimitBtn', 'infraBtn'];
-            const defenseKeys = ['firewall', 'reverseProxy', 'rateLimiting', 'infrastructure'];
-            
-            buttons.forEach((btnId, index) => {
-                const btn = document.getElementById(btnId);
-                const defense = gameState.defenses[defenseKeys[index]];
-                
+            const buttons = [
+                { id: 'firewallBtn', defense: 'firewall', name: 'Firewall ICMP', cost: '500€ - Bloque 40%' },
+                { id: 'proxyBtn', defense: 'reverseProxy', name: 'Reverse Proxy', cost: '1500€ - Réduit 60%' },
+                { id: 'rateLimitBtn', defense: 'rateLimiting', name: 'Rate Limiting', cost: '800€ - Réduit 30%' },
+                { id: 'infraBtn', defense: 'infrastructure', name: 'Infrastructure+', cost: '3000€ - Réduit 70%' }
+            ];
+
+            buttons.forEach(btnInfo => {
+                const btn = document.getElementById(btnInfo.id);
+                const defense = gameState.defenses[btnInfo.defense];
+
                 if (defense.active) {
                     btn.disabled = true;
                     btn.style.opacity = '0.5';
-                    btn.innerHTML = btn.innerHTML.replace('€', '€ - ACTIVÉ');
+                    btn.innerHTML = `${btnInfo.name}<span class="cost">${btnInfo.cost} - ACTIVÉ</span>`;
                 } else if (gameState.budget < defense.cost) {
                     btn.disabled = true;
                     btn.style.opacity = '0.3';
+                    btn.innerHTML = `${btnInfo.name}<span class="cost">${btnInfo.cost}</span>`;
                 } else {
                     btn.disabled = false;
                     btn.style.opacity = '1';
+                    btn.innerHTML = `${btnInfo.name}<span class="cost">${btnInfo.cost}</span>`;
                 }
             });
         }
