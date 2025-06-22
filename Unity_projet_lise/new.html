@@ -591,7 +591,7 @@
 
         <!-- Panel de Défense -->
         <div class="panel defense-panel">
-            <h3>🛡️ DÉFENSES</h3>
+            <h3> DÉFENSES</h3>
             <button class="btn btn-defense" onclick="deployFirewall()" id="firewallBtn">
                 Firewall ICMP
                 <span class="cost">500€ - Bloque 40%</span>
@@ -673,7 +673,7 @@
                 attack: "pingFlood",
                 intensity: 0.5,
                 duration: 10000,
-                warning: "🔍 VAGUE 1: Sondage du serveur - Attaque Ping Flood détectée!",
+                warning: " VAGUE 1: Sondage du serveur - Attaque Ping Flood détectée!",
                 tip: "Un firewall ICMP serait efficace contre cette attaque."
             },
             {
@@ -689,7 +689,7 @@
                 attack: "botnet",
                 intensity: 0.7,
                 duration: 20000,
-                warning: "🤖 VAGUE 3: Botnet activé - Attaque distribuée!",
+                warning: " VAGUE 3: Botnet activé - Attaque distribuée!",
                 tip: "Cette attaque nécessite des défenses avancées."
             },
             {
@@ -697,7 +697,7 @@
                 attack: "botnet",
                 intensity: 1.2,
                 duration: 25000,
-                warning: "💀 VAGUE FINALE: Assaut total du botnet!",
+                warning: " VAGUE FINALE: Assaut total du botnet!",
                 tip: "Toutes vos défenses seront nécessaires."
             }
         ];
@@ -705,22 +705,22 @@
         // Définitions des attaques avec leurs explications
         const attackExplanations = {
             pingFlood: {
-                title: "🏓 Attaque Ping Flood (ICMP Flood)",
+                title: " Attaque Ping Flood (ICMP Flood)",
                 type: "attack",
                 content: [
                     "Une attaque Ping Flood consiste à bombarder le serveur cible avec des paquets ICMP Echo Request (ping) en masse.",
-                    "📊 Principe Technique : L'attaquant envoie des milliers de requêtes ping simultanément, saturant la bande passante et les ressources processeur du serveur qui doit traiter chaque requête.",
-                    "🎯 Impact sur le Système : Le serveur devient incapable de traiter les requêtes légitimes car toutes ses ressources sont monopolisées pour répondre aux pings malveillants. La latence augmente drastiquement.",
+                    " Principe Technique : L'attaquant envoie des milliers de requêtes ping simultanément, saturant la bande passante et les ressources processeur du serveur qui doit traiter chaque requête.",
+                    "Impact sur le Système : Le serveur devient incapable de traiter les requêtes légitimes car toutes ses ressources sont monopolisées pour répondre aux pings malveillants. La latence augmente drastiquement.",
                 ]
             },
             botnet: {
-                title: "🤖 Attaque Botnet Distribuée (DDoS)",
+                title: " Attaque Botnet Distribuée (DDoS)",
                 type: "attack",
                 content: [
                     "Une attaque botnet utilise un réseau de machines infectées (zombies) réparties géographiquement pour attaquer simultanément la cible.",
-                    "🌐 Architecture Distribuée : Des milliers d'ordinateurs compromis dans le monde entier sont coordonnés par un serveur de commande pour envoyer du trafic malveillant synchronisé.",
+                    "Architecture Distribuée : Des milliers d'ordinateurs compromis dans le monde entier sont coordonnés par un serveur de commande pour envoyer du trafic malveillant synchronisé.",
                     "⚡ Puissance Dévastatrice : Cette attaque peut générer des millions de requêtes par seconde depuis des milliers de sources différentes, rendant la défense extrêmement complexe.",
-                    "🚨 Camouflage Avancé : Le trafic malveillant provient d'adresses IP légitimes (machines infectées), rendant très difficile la distinction entre trafic normal et malveillant.",
+                    " Camouflage Avancé : Le trafic malveillant provient d'adresses IP légitimes (machines infectées), rendant très difficile la distinction entre trafic normal et malveillant.",
                 ]
             }
         };
@@ -728,42 +728,42 @@
         // Définitions des défenses avec leurs explications
         const defenseExplanations = {
             firewall: {
-                title: "🛡️ Firewall ICMP - Filtrage de Paquets",
+                title: "Firewall ICMP - Filtrage de Paquets",
                 type: "defense",
                 content: [
                     "Un firewall ICMP filtre et bloque les paquets ping malveillants avant qu'ils n'atteignent le serveur principal.",
-                    "🔍 Inspection Profonde : Le firewall analyse chaque paquet ICMP entrant, détecte les patterns d'attaque (volume anormal, fréquence suspecte) et bloque automatiquement le trafic malveillant.",
+                    " Inspection Profonde : Le firewall analyse chaque paquet ICMP entrant, détecte les patterns d'attaque (volume anormal, fréquence suspecte) et bloque automatiquement le trafic malveillant.",
                     "⚡ Protection en Temps Réel : Agit comme une première ligne de défense, traitant les menaces à la vitesse du réseau sans impacter les performances du serveur.",
-                    "📊 Efficacité : Bloque environ 40% des attaques Ping Flood, réduisant significativement la charge sur l'infrastructure.",
+                    " Efficacité : Bloque environ 40% des attaques Ping Flood, réduisant significativement la charge sur l'infrastructure.",
                 ]
             },
             reverseProxy: {
-                title: "🔄 Reverse Proxy - Distribution Intelligente",
+                title: "Reverse Proxy - Distribution Intelligente",
                 type: "defense",
                 content: [
                     "Un reverse proxy agit comme un intermédiaire intelligent entre les clients et le serveur, distribuant et filtrant le trafic.",
-                    "🌐 Cache Intelligent : Met en cache les réponses fréquentes, réduisant la charge sur le serveur principal de 60% lors d'attaques répétitives.",
-                    "🔀 Load Balancing : Distribue automatiquement les requêtes sur plusieurs instances, empêchant la saturation d'un seul point.",
-                    "🛡️ Filtrage Avancé : Analyse le comportement des requêtes et identifie les patterns d'attaque sophistiqués que les firewalls basiques manquent.",
+                    " Cache Intelligent : Met en cache les réponses fréquentes, réduisant la charge sur le serveur principal de 60% lors d'attaques répétitives.",
+                    " Load Balancing : Distribue automatiquement les requêtes sur plusieurs instances, empêchant la saturation d'un seul point.",
+                    " Filtrage Avancé : Analyse le comportement des requêtes et identifie les patterns d'attaque sophistiqués que les firewalls basiques manquent.",
                 ]
             },
             rateLimiting: {
-                title: "⏱️ Rate Limiting - Contrôle de Débit",
+                title: "⏱Rate Limiting - Contrôle de Débit",
                 type: "defense",
                 content: [
                     "Le rate limiting contrôle le nombre de requêtes qu'une source peut envoyer dans un intervalle de temps donné.",
-                    "📏 Limitation Granulaire : Définit des seuils précis (ex: 100 req/min par IP) au-delà desquels les requêtes sont automatiquement rejetées.",
-                    "🎯 Ciblage Intelligent : Distingue le trafic légitime du trafic abusif en analysant les patterns de comportement des utilisateurs.",
-                    "⚖️ Équilibre Parfait : Permet aux utilisateurs normaux de naviguer sans restrictions tout en bloquant les attaques automatisées.",
+                    " Limitation Granulaire : Définit des seuils précis (ex: 100 req/min par IP) au-delà desquels les requêtes sont automatiquement rejetées.",
+                    " Ciblage Intelligent : Distingue le trafic légitime du trafic abusif en analysant les patterns de comportement des utilisateurs.",
+                    " Équilibre Parfait : Permet aux utilisateurs normaux de naviguer sans restrictions tout en bloquant les attaques automatisées.",
                 ]
             },
             infrastructure: {
-                title: "🏗️ Infrastructure Renforcée - Puissance Maximale",
+                title: " Infrastructure Renforcée - Puissance Maximale",
                 type: "defense",
                 content: [
                     "Mise à niveau complète de l'infrastructure avec des serveurs haute performance et une architecture distribuée.",
-                    "🚀 Capacité Décuplée : Augmente drastiquement la capacité de traitement du serveur, lui permettant de gérer 10x plus de requêtes simultanées.","🌐 Redondance Géographique : Déploie l'application sur plusieurs data centers, garantissant la continuité de service même sous attaque massive.",
-                    "🔧 Optimisation Avancée : Implémente des algorithmes de compression, mise en cache avancée et optimisations réseau réduisant l'impact des attaques de 70%.",
+                    " Capacité Décuplée : Augmente drastiquement la capacité de traitement du serveur, lui permettant de gérer 10x plus de requêtes simultanées.","🌐 Redondance Géographique : Déploie l'application sur plusieurs data centers, garantissant la continuité de service même sous attaque massive.",
+                    " Optimisation Avancée : Implémente des algorithmes de compression, mise en cache avancée et optimisations réseau réduisant l'impact des attaques de 70%.",
                 ]
             }
         };
@@ -788,7 +788,7 @@
             document.getElementById('healthText').textContent = Math.round(gameState.serverHealth) + '%';
             document.getElementById('budgetText').textContent = gameState.budget + '€';
             document.getElementById('trafficText').textContent = gameState.isUnderAttack ? 
-                `🚨 Attaque: ${Math.round(gameState.currentTraffic)} req/s` : 
+                ` Attaque: ${Math.round(gameState.currentTraffic)} req/s` : 
                 `Normal: ${Math.round(gameState.currentTraffic)} req/s`;
             document.getElementById('scoreText').textContent = gameState.score;
 
@@ -844,7 +844,7 @@
             
             showInfoComment('pingFlood');
             executeAttack('pingFlood', 1.0);
-            addLog('🚨 Attaque Ping Flood détectée!', 'error');
+            addLog('Attaque Ping Flood détectée!', 'error');
         }
 
         function startBotnetAttack() {
@@ -852,7 +852,7 @@
             
             showInfoComment('botnet');
             executeAttack('botnet', 1.0);
-            addLog('💀 Attaque Botnet massive détectée!', 'error');
+            addLog(' Attaque Botnet massive détectée!', 'error');
         }
 
         function executeAttack(type, intensity) {
@@ -912,7 +912,7 @@
             gameState.currentTraffic = 45 + Math.random() * 20;
             document.getElementById('stopBtn').disabled = true;
             deactivateSpawnPoints();
-            addLog('✅ Attaque terminée', 'success');
+            addLog(' Attaque terminée', 'success');
             hideInfoComment();
             updateUI();
 
@@ -999,7 +999,7 @@
                 gameState.budget -= defense.cost;
                 defense.active = true;
                 gameState.score += Math.round(defense.cost / 100);
-                addLog(`✅ ${getDefenseName(defenseType)} déployé(e)`, 'success');
+                addLog(` ${getDefenseName(defenseType)} déployé(e)`, 'success');
                 updateUI();
             }
         }
@@ -1067,8 +1067,8 @@
             document.getElementById('challengeBtn').style.display = 'none';
             document.getElementById('resetBtn').style.display = 'inline-block';
             
-            addLog('🚀 Mode Défi activé - Préparez-vous!', 'warning');
-            addLog('🛡️ Utilisez vos défenses pour survivre aux attaques!', 'info');
+            addLog(' Mode Défi activé - Préparez-vous!', 'warning');
+            addLog(' Utilisez vos défenses pour survivre aux attaques!', 'info');
             updateUI();
             
             // Reset des systèmes de défense visuels
@@ -1102,7 +1102,7 @@
 
             const wave = challengeWaves[gameState.wave];
             showWaveAnnouncement(wave.warning);
-            addLog(`📢 ${wave.warning}`, 'warning');
+            addLog(` ${wave.warning}`, 'warning');
             
             setTimeout(() => {
                 if (wave.attack === 'pingFlood') {
@@ -1117,7 +1117,7 @@
                     gameState.wave++;
                     
                     if (gameState.serverHealth > 0) {
-                        addLog(`✅ Vague ${gameState.wave} repoussée!`, 'success');
+                        addLog(`Vague ${gameState.wave} repoussée!`, 'success');
                         gameState.score += 50;
                         
                         // Pause entre les vagues
@@ -1160,7 +1160,7 @@
                 attackInterval = null;
             }
             
-            addLog('💥 GAME OVER - Serveur hors service!', 'error');
+            addLog(' GAME OVER - Serveur hors service!', 'error');
             alert(`Game Over! Votre serveur a été compromis.\nScore final: ${gameState.score}`);
             
             setTimeout(() => {
@@ -1241,7 +1241,7 @@
         // Initialisation au chargement de la page
         window.onload = function() {
             initGame();
-            addLog('🚀 Simulateur DDoS Defense initialisé', 'info');
+            addLog(' Simulateur DDoS Defense initialisé', 'info');
         };
 
         // Nettoyage à la fermeture
@@ -1265,21 +1265,21 @@
                 name: "Défenses Basiques",
                 defenses: ['firewall'],
                 budget: 500,
-                warning: "🛡️ DÉFENSE 1: Firewall ICMP déployé!",
+                warning: "DÉFENSE 1: Firewall ICMP déployé!",
                 tip: "Un simple Ping Flood devrait suffire contre cette défense."
             },
             {
                 name: "Défenses Multiples",
                 defenses: ['firewall', 'rateLimiting'],
                 budget: 1300,
-                warning: "🛡️ DÉFENSE 2: Firewall + Rate Limiting activés!",
+                warning: " DÉFENSE 2: Firewall + Rate Limiting activés!",
                 tip: "Utilisez le Botnet pour surmonter ces défenses facilement."
             },
             {
                 name: "Défenses Avancées",
                 defenses: ['firewall', 'reverseProxy', 'rateLimiting'],
                 budget: 2800,
-                warning: "🛡️ DÉFENSE FINALE: Système de défense complet!",
+                warning: "DÉFENSE FINALE: Système de défense complet!",
                 tip: "Même avec toutes ces défenses, vos attaques restent efficaces."
             }
         ];
@@ -1324,8 +1324,8 @@
                 </button>
             `;
             
-            addLog('💀 Phase Attaquant activée - Brisez les défenses!', 'error');
-            addLog('💰 Budget attaque: 5000€', 'info');
+            addLog('Phase Attaquant activée - Brisez les défenses!', 'error');
+            addLog('Budget attaque: 5000€', 'info');
             updateAttackerUI();
             
             // Démarrer la première vague de défense
@@ -1336,7 +1336,7 @@
 
         function updateAttackerPanel() {
             const attackPanel = document.querySelector('.attack-panel h3');
-            attackPanel.textContent = '💀 ARSENAL D\'ATTAQUE';
+            attackPanel.textContent = 'ARSENAL D\'ATTAQUE';
             
             const attackPanelContent = document.querySelector('.attack-panel');
             const buttonsHtml = `
@@ -1399,17 +1399,17 @@
             const attack = attackerArsenal[attackType];
             
             if (attackerBudget < attack.cost) {
-                addLog('❌ Budget insuffisant pour cette attaque!', 'error');
+                addLog(' Budget insuffisant pour cette attaque!', 'error');
                 return;
             }
             
             if (gameState.isUnderAttack) {
-                addLog('⚠️ Une attaque est déjà en cours!', 'warning');
+                addLog(' Une attaque est déjà en cours!', 'warning');
                 return;
             }
             
             attackerBudget -= attack.cost;
-            addLog(`🚀 Lancement: ${attack.description} (-${attack.cost}€)`, 'error');
+            addLog(`Lancement: ${attack.description} (-${attack.cost}€)`, 'error');
             
             // Calculer les dégâts en fonction des défenses actives (plus de dégâts, défenses moins efficaces)
             let damage = attack.effectiveness * 25; // Dégâts de base augmentés
@@ -1433,9 +1433,9 @@
                 if (!blocked) {
                     defenderHealth -= damage;
                     attackerScore += Math.round(damage * 2);
-                    addLog(`💥 Défenses percées! -${Math.round(damage)} points`, 'error');
+                    addLog(` Défenses percées! -${Math.round(damage)} points`, 'error');
                 } else {
-                    addLog('🛡️ Attaque partiellement bloquée!', 'warning');
+                    addLog(' Attaque partiellement bloquée!', 'warning');
                     defenderHealth -= Math.round(damage * 0.3); // Même bloqué, fait des dégâts
                     attackerScore += 10; // Score pour tentative
                 }
@@ -1478,7 +1478,7 @@
         }
 
         function defensesBroken() {
-            addLog('💀 DÉFENSES BRISÉES! Victoire de l\'attaquant!', 'error');
+            addLog(' DÉFENSES BRISÉES! Victoire de l\'attaquant!', 'error');
             attackerScore += 150; // Bonus plus élevé
             
             setTimeout(() => {
@@ -1497,7 +1497,7 @@
         }
 
         function attackerPhaseComplete() {
-            addLog('🎯 PHASE ATTAQUANT TERMINÉE!', 'error');
+            addLog(' PHASE ATTAQUANT TERMINÉE!', 'error');
             setTimeout(() => {
                 alert(`Phase Attaquant terminée!\nScore final: ${attackerScore}\nVous avez testé ${defenseWaves.length} configurations de défense!\nBravo!`);
                 resetToLearning();
@@ -1563,7 +1563,7 @@
             
             // Remettre le panneau d'attaque normal
             const attackPanel = document.querySelector('.attack-panel h3');
-            attackPanel.textContent = '🔥 ATTAQUES';
+            attackPanel.textContent = ' ATTAQUES';
             
             const attackPanelContent = document.querySelector('.attack-panel');
             const phaseControls = attackPanelContent.querySelector('.phase-controls');
