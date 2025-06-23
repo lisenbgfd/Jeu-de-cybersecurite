@@ -1418,7 +1418,7 @@
         function deployRateLimiting() {
             const cost = 1200;
             if (gameState.budget < cost) {
-                addLog('❌ Budget insuffisant pour le Rate Limiting', 'error');
+                addLog(' Budget insuffisant pour le Rate Limiting', 'error');
                 return;
             }
             
@@ -1467,7 +1467,7 @@
         function deployRedundancy() {
     const cost = 3500;
     if (gameState.budget < cost) {
-        addLog('❌ Budget insuffisant pour la Redondance', 'error');
+        addLog('Budget insuffisant pour la Redondance', 'error');
         return;
     }
     
@@ -1530,8 +1530,8 @@
         document.head.appendChild(style);
     }
     
-    addLog('✅ Système de redondance activé', 'success');
-    addLog('🔄 Serveurs de backup déployés', 'info');
+    addLog(' Système de redondance activé', 'success');
+    addLog(' Serveurs de backup déployés', 'info');
     updateUI();
 }
 
@@ -1736,8 +1736,8 @@ function startAttackMode() {
     document.getElementById('targetedAttackCost').textContent = '20 bots - 100 Mbps';
     
     updateAttackResources();
-    addLog('🔥 Mode attaque activé - Ressources disponibles', 'warning');
-    addLog('📊 Botnet: 100 bots, Bande passante: 1000 Mbps', 'info');
+    addLog(' Mode attaque activé - Ressources disponibles', 'warning');
+    addLog(' Botnet: 100 bots, Bande passante: 1000 Mbps', 'info');
 }
 
 // Fonction pour mettre à jour l'affichage des ressources
@@ -1778,7 +1778,7 @@ function consumeAttackResources(botsUsed, bandwidthUsed) {
     if (gameState.phase !== 'attack') return true;
     
     if (gameState.botnetCount < botsUsed || gameState.bandwidthCount < bandwidthUsed) {
-        addLog('❌ Ressources insuffisantes pour cette attaque', 'error');
+        addLog(' Ressources insuffisantes pour cette attaque', 'error');
         return false;
     }
     
@@ -1804,7 +1804,7 @@ function startAdvancedAttack() {
         'Coût: 30 bots, 150 Mbps. Durée: 8 secondes.', 
         'attack');
     
-    addLog('🚀 Attaque avancée initiée', 'error');
+    addLog(' Attaque avancée initiée', 'error');
     
     attackInterval = setInterval(() => {
         Object.keys(gameState.servers).forEach(serverId => {
@@ -1832,7 +1832,7 @@ function startSocialEngineering() {
         'Coût: 15 bots, 75 Mbps. Durée: 6 secondes.', 
         'attack');
     
-    addLog('🎭 Attaque par ingénierie sociale lancée', 'error');
+    addLog(' Attaque par ingénierie sociale lancée', 'error');
     
     attackInterval = setInterval(() => {
         Object.keys(gameState.servers).forEach(serverId => {
@@ -1880,7 +1880,7 @@ function attackServerAdvanced(serverId, intensity) {
         
         if (server.health <= 0) {
             gameState.activeServers--;
-            addLog(`💀 ${server.type} neutralisé par attaque avancée`, 'error');
+            addLog(` ${server.type} neutralisé par attaque avancée`, 'error');
         }
     }
     
@@ -1910,7 +1910,7 @@ function attackServerSocial(serverId, intensity) {
     
     if (server.health <= 0) {
         gameState.activeServers--;
-        addLog(`🎯 ${server.type} compromis par ingénierie sociale`, 'error');
+        addLog(` ${server.type} compromis par ingénierie sociale`, 'error');
     }
     
     createAttackPackets(serverId, false);
@@ -1954,7 +1954,7 @@ function startAttackMode() {
         resourcesDiv.id = 'attackResourcesDisplay';
         resourcesDiv.innerHTML = `
             <div style="background: #2a0a0a; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #ff4444;">
-                <h4 style="color: #ff4444; margin: 0 0 10px 0;">🔥 RESSOURCES D'ATTAQUE</h4>
+                <h4 style="color: #ff4444; margin: 0 0 10px 0;"> RESSOURCES D'ATTAQUE</h4>
                 <div style="display: flex; justify-content: space-between; color: white; font-size: 12px;">
                     <span>Botnet: <span id="botnetDisplay">${gameState.attackResources.botnet}</span></span>
                     <span>Bande passante: <span id="bandwidthDisplay">${gameState.attackResources.bandwidth}</span> Mbps</span>
