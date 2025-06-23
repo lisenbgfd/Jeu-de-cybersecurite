@@ -115,11 +115,11 @@
         }
 
         .email-item.suspicious {
-            border-left-color: #ff5722;
+            border-left-color: #000F05;
         }
 
         .email-item.safe {
-            border-left-color: #4caf50;
+            border-left-color: #000F05;
         }
 
         .email-content {
@@ -288,17 +288,17 @@
                                 <strong>Sony Partnership</strong><br>
                                 <small>Opportunité de partenariat exclusive</small>
                             </li>
-                            <li class="email-item safe" onclick="showEmail('mom')">
-                                <strong>Maman</strong><br>
-                                <small>Photos du weekend dernier</small>
+                            <li class="email-item safe" onclick="showEmail('adobe')">
+                                <strong>Julie Martin</strong><br>
+                                <small>Adobe souhaite collaborer avec vous</small>
                             </li>
                             <li class="email-item suspicious" onclick="showEmail('urgent-bank')">
                                 <strong>Banque Sécurisée</strong><br>
                                 <small>URGENT: Vérification de compte</small>
                             </li>
-                            <li class="email-item safe" onclick="showEmail('friend')">
-                                <strong>Claire (amie)</strong><br>
-                                <small>Sortie photo ce weekend?</small>
+                            <li class="email-item safe" onclick="showEmail('alerte')">
+                                <strong>Alerte Sécurité - Youtube</strong><br>
+                                <small>Une activité inhabituelle a été détectée sur votre compte YouTube.</small>
                             </li>
                         </ul>
                     </div>
@@ -442,21 +442,20 @@ Marie Dubois
 Responsable Partenariats Sony France`,
                 safe: false
             },
-            'mom': {
-                from: 'maman.dubois@gmail.com',
-                subject: 'Photos du weekend dernier',
-                body: `Ma chérie,
+            'adobe': {
+                from: 'julie.martin@adobe.fr',
+                subject: 'Adobe souhaite collaborer avec vous',
+                body: `Bonjour Emma,
 
-J'espère que tu vas bien ! J'ai enfin trié les photos de notre sortie de dimanche dernier.
+Je suis Julie, chargée des partenariats chez Adobe France. Nous avons suivi votre contenu avec beaucoup d’intérêt.
 
-Tu étais magnifique avec ton nouvel appareil photo ! Papa était très fier de voir comme tu maîtrises bien.
+Nous aimerions vous proposer une collaboration pour notre prochaine campagne sur Lightroom.
 
-Je t'envoie quelques clichés en pièce jointe.
+Pourrions-nous convenir d’un appel cette semaine ?
 
-Bisous,
-Maman
-
-PS: N'oublie pas le déjeuner familial dimanche prochain !`,
+Bien à vous,
+Julie Martin
+Adobe France`,
                 safe: true
             },
             'urgent-bank': {
@@ -485,21 +484,20 @@ Ne tardez pas, votre argent est en danger !
 Service Sécurité Banque Sécurisée`,
                 safe: false
             },
-            'friend': {
-                from: 'claire.martin@gmail.com',
-                subject: 'Sortie photo ce weekend?',
-                body: `Salut Emma !
+            'alerte': {
+                from: 'alert@support-youtub3.com',
+                subject: 'Problème avec votre compte YouTube',
+                body: `Bonjour,
 
-Ça te dit une sortie photo samedi ? Il fait super beau et j'ai repéré un spot génial près de la Seine.
+Une activité inhabituelle a été détectée sur votre compte YouTube.
+Cliquez ici pour vérifier votre compte et éviter sa désactivation :
+👉 Vérifier mon compte
 
-On pourrait tester tes nouveaux objectifs ! Et après on pourrait aller boire un verre.
-
-Dis-moi si ça te va !
-
-Bisous,
-Claire`,
-                safe: true
+Merci,
+Support Sécurité YouTube`,
+                safe: false
             }
+
         };
 
         function switchMode(mode) {
