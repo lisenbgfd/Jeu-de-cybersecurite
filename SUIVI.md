@@ -45,3 +45,18 @@ Lise : hack d'une entreprise par la méthode du DDOS
 Tara : fishing d'une employée 
 Sarah : chantage d'une jeune adolescente
 Sylvia : hack d'un youtubeur par la méthode du RAT
+
+Lundi 5 mai: 
+Nous avons rédigé le rapport sur les enjeux sociétaux et environnementaux de notre projet. 
+Lise, Tara et Sarah ont regardé des tutorials pour comprendre très présicesement comment coder sur Unity, notamment pour aider à résoudre des erreurs qu'elles avaient sur leurs projets d'entraînement: l'objectif est que chacun commence à coder le niveau qu'on lui a attribué. 
+Sylvia a bien avancé sur les interfaces graphiques (nous allons essayé de toutes utilisés les mêmes pour garantir davantage d'unité visuelle). 
+
+Lundi 12 mai: 
+On a commencé à coder nos jeux: Tara a crée une interface avec un bouton, Lise une interface avec des petits cercles représentants les attaques. Sarah a codé MarioBros et Sylvia a tenté pleins de choses mais n'a rien donné de concluant. 
+
+Lundi 19 mai: Séance d'audit des autres groupes et retour sur notre projet : il est urgent de commencer à coder, et il faudrait s'interesser à la cohérence graphique de notre interface. 
+
+
+Lundi 26 mai : après maintes réflexion, on a décidé de coder sur html, chacune a crée une page web à présenter au prof 
+
+Lundi 2 juin: chacun se concentre sur les points d'amélioration de son niveau : Lise doit rajouter la partie documentation sous forme de messages explicatifs, et faire plusieurs niveaux de jeu (acccès à tous, puis à la partie hacké, puis à la partie hacker). Tara devrait configurer une interface de messagerie et revoir les différents choix proposés (pourquoi 4 par exemple). Sylvia doit rendre l'interface "plus naturelle" (retravailler un peu le scénario). Sarah doit créer un faux compte Instagram réaliste, sur lequel sa page web redirigerait le joueur. 
