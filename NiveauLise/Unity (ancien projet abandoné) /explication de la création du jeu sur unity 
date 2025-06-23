@@ -1,0 +1,1094 @@
+Guide Unity - Scène DDoS Attack/Defense
+1. Structure de la Scène
+Hiérarchie des GameObjects
+Scene_DDoS_Simulation
+├── Environment
+│   ├── Ground
+│   ├── Skybox
+│   └── Lighting
+├── Server
+│   ├── ServerModel
+│   ├── HealthBar
+│   └── ProtectionShield
+├── AttackSources
+│   ├── HackerWorkstation
+│   ├── BotnetNodes (12 objets)
+│   └── PacketSpawners
+├── DefenseSystems
+│   ├── Firewall
+│   ├── ReverseProxy
+│   ├── RateLimiter
+│   └── InfrastructureUpgrade
+├── UI
+│   ├── Canvas_Main
+│   ├── AttackControls
+│   ├── DefenseControls
+│   └── StatusPanel
+├── Effects
+│   ├── ParticlePackets
+│   ├── AttackEffects
+│   └── DefenseEffects
+└── Managers
+    ├── GameManager
+    ├── AttackManager
+    └── DefenseManager
+
+2. Scripts Principaux
+A. GameManager.cs
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+public class GameManager : MonoBehaviour
+{
+    [Header("Server Status")]
+    public float serverHealth = 100f;
+    public float maxHealth = 100f;
+    public int budget = 5000;
+    public int lostSales = 0;
+    
+    [Header("References")]
+    public GameObject serverObject;
+    public Slider healthBar;
+    public Text healthText;
+    public Text budgetText;
+    public Text salesText;
+    public Text trafficText;
+    
+    [Header("Attack State")]
+    public bool isUnderAttack = false;
+    public float currentTraffic = 45f;
+    
+    public static GameManager Instance;
+    
+    void Awake()
+    {
+        Instance = this;
+    }
+    
+    void Start()
+    {
+        UpdateUI();
+        StartCoroutine(NormalTrafficSimulation());
+    }
+    
+    IEnumerator NormalTrafficSimulation()
+    {
+        while (true)
+        {
+            if (!isUnderAttack)
+            {
+                currentTraffic = 45f + Random.Range(0f, 20f);
+                UpdateUI();
+            }
+            yield return new WaitForSeconds(1f);
+        }
+    }
+    
+    public void TakeDamage(float damage)
+    {
+        serverHealth = Mathf.Max(0, serverHealth - damage);
+        
+        if (serverHealth < 50f)
+        {
+            lostSales += Mathf.RoundToInt(damage * 100);
+        }
+        
+        UpdateUI();
+        
+        if (serverHealth <= 0)
+        {
+            GameOver();
+        }
+    }
+    
+    public bool SpendBudget(int cost)
+    {
+        if (budget >= cost)
+        {
+            budget -= cost;
+            UpdateUI();
+            return true;
+        }
+        return false;
+    }
+    
+    void UpdateUI()
+    {
+        healthBar.value = serverHealth / maxHealth;
+        healthText.text = $"{Mathf.RoundToInt(serverHealth)}%";
+        budgetText.text = $"{budget}€";
+        salesText.text = $"{lostSales}€";
+        
+        string trafficStatus = isUnderAttack ? "ATTAQUE" : "Normal";
+        trafficText.text = $"{trafficStatus}: {Mathf.RoundToInt(currentTraffic)} req/s";
+    }
+    
+    void GameOver()
+    {
+        Debug.Log("GAME OVER - Server destroyed!");
+        // Afficher écran de fin
+    }
+}
+
+B. AttackManager.cs
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class AttackManager : MonoBehaviour
+{
+    [Header("Attack Settings")]
+    public GameObject packetPrefab;
+    public Transform[] spawnPoints;
+    public Transform serverTarget;
+    
+    [Header("Visual Effects")]
+    public ParticleSystem attackParticles;
+    public Material attackMaterial;
+    public AudioSource attackSound;
+    
+    private Coroutine currentAttack;
+    private bool[] activeSpawnPoints;
+    
+    void Start()
+    {
+        activeSpawnPoints = new bool[spawnPoints.Length];
+    }
+    
+    public void StartPingFlood()
+    {
+        if (GameManager.Instance.isUnderAttack) return;
+        
+        GameManager.Instance.isUnderAttack = true;
+        LogManager.Instance.AddLog("⚠️ ALERTE: Attaque Ping Flood détectée!", LogType.Error);
+        
+        // Activer 4 spawn points
+        for (int i = 0; i < 4 && i < spawnPoints.Length; i++)
+        {
+            activeSpawnPoints[i] = true;
+            spawnPoints[i].gameObject.SetActive(true);
+        }
+        
+        currentAttack = StartCoroutine(PingFloodAttack());
+        
+        // Effets visuels sur le serveur
+        ServerController.Instance.SetAttackState(true);
+    }
+    
+    public void StartBotnetAttack()
+    {
+        if (GameManager.Instance.isUnderAttack) return;
+        
+        GameManager.Instance.isUnderAttack = true;
+        LogManager.Instance.AddLog("🚨 ALERTE CRITIQUE: Attaque Botnet massive!", LogType.Error);
+        
+        // Activer tous les spawn points
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            activeSpawnPoints[i] = true;
+            spawnPoints[i].gameObject.SetActive(true);
+        }
+        
+        currentAttack = StartCoroutine(BotnetAttack());
+        ServerController.Instance.SetAttackState(true);
+    }
+    
+    IEnumerator PingFloodAttack()
+    {
+        while (GameManager.Instance.isUnderAttack)
+        {
+            SpawnPackets(50);
+            GameManager.Instance.currentTraffic = 1000f + Random.Range(0f, 2000f);
+            
+            float damage = 2f;
+            damage = DefenseManager.Instance.CalculateDamageReduction(damage);
+            GameManager.Instance.TakeDamage(damage);
+            
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+    
+    IEnumerator BotnetAttack()
+    {
+        while (GameManager.Instance.isUnderAttack)
+        {
+            SpawnPackets(200);
+            GameManager.Instance.currentTraffic = 5000f + Random.Range(0f, 10000f);
+            
+            float damage = 5f;
+            damage = DefenseManager.Instance.CalculateDamageReduction(damage);
+            GameManager.Instance.TakeDamage(damage);
+            
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+    
+    void SpawnPackets(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            StartCoroutine(SpawnSinglePacket(Random.Range(0f, 0.2f)));
+        }
+    }
+    
+    IEnumerator SpawnSinglePacket(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        List<Transform> activeSpawns = new List<Transform>();
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            if (activeSpawnPoints[i])
+                activeSpawns.Add(spawnPoints[i]);
+        }
+        
+        if (activeSpawns.Count == 0) yield break;
+        
+        Transform spawnPoint = activeSpawns[Random.Range(0, activeSpawns.Count)];
+        GameObject packet = Instantiate(packetPrefab, spawnPoint.position, Quaternion.identity);
+        
+        PacketController packetCtrl = packet.GetComponent<PacketController>();
+        bool isBlocked = DefenseManager.Instance.ShouldBlockPacket();
+        
+        packetCtrl.Initialize(serverTarget.position, isBlocked);
+    }
+    
+    public void StopAttack()
+    {
+        if (!GameManager.Instance.isUnderAttack) return;
+        
+        GameManager.Instance.isUnderAttack = false;
+        
+        if (currentAttack != null)
+        {
+            StopCoroutine(currentAttack);
+        }
+        
+        // Désactiver tous les spawn points
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            activeSpawnPoints[i] = false;
+            spawnPoints[i].gameObject.SetActive(false);
+        }
+        
+        ServerController.Instance.SetAttackState(false);
+        LogManager.Instance.AddLog("✅ Attaque terminée - Retour à la normale", LogType.Success);
+    }
+}
+
+C. DefenseManager.cs
+using UnityEngine;
+
+public class DefenseManager : MonoBehaviour
+{
+    [System.Serializable]
+    public class DefenseSystem
+    {
+        public bool isActive;
+        public int cost;
+        public float damageReduction;
+        public float blockChance;
+        public GameObject visualObject;
+    }
+    
+    [Header("Defense Systems")]
+    public DefenseSystem firewall = new DefenseSystem { cost = 500, damageReduction = 0.4f, blockChance = 0.4f };
+    public DefenseSystem reverseProxy = new DefenseSystem { cost = 1500, damageReduction = 0.6f, blockChance = 0.3f };
+    public DefenseSystem rateLimiting = new DefenseSystem { cost = 800, damageReduction = 0.3f, blockChance = 0.2f };
+    public DefenseSystem robustInfra = new DefenseSystem { cost = 3000, damageReduction = 0.7f, blockChance = 0f };
+    
+    public static DefenseManager Instance;
+    
+    void Awake()
+    {
+        Instance = this;
+    }
+    
+    public void DeployFirewall()
+    {
+        if (GameManager.Instance.SpendBudget(firewall.cost) && !firewall.isActive)
+        {
+            firewall.isActive = true;
+            firewall.visualObject.SetActive(true);
+            LogManager.Instance.AddLog("🛡️ Firewall ICMP déployé", LogType.Success);
+        }
+    }
+    
+    public void DeployReverseProxy()
+    {
+        if (GameManager.Instance.SpendBudget(reverseProxy.cost) && !reverseProxy.isActive)
+        {
+            reverseProxy.isActive = true;
+            reverseProxy.visualObject.SetActive(true);
+            ServerController.Instance.SetProtectedState(true);
+            LogManager.Instance.AddLog("🔄 Reverse Proxy activé", LogType.Success);
+        }
+    }
+    
+    public void DeployRateLimiting()
+    {
+        if (GameManager.Instance.SpendBudget(rateLimiting.cost) && !rateLimiting.isActive)
+        {
+            rateLimiting.isActive = true;
+            rateLimiting.visualObject.SetActive(true);
+            LogManager.Instance.AddLog("⏱️ Rate Limiting activé", LogType.Success);
+        }
+    }
+    
+    public void UpgradeInfrastructure()
+    {
+        if (GameManager.Instance.SpendBudget(robustInfra.cost) && !robustInfra.isActive)
+        {
+            robustInfra.isActive = true;
+            robustInfra.visualObject.SetActive(true);
+            GameManager.Instance.serverHealth = Mathf.Min(100f, GameManager.Instance.serverHealth + 30f);
+            LogManager.Instance.AddLog("🏗️ Infrastructure renforcée", LogType.Success);
+        }
+    }
+    
+    public float CalculateDamageReduction(float baseDamage)
+    {
+        float reduction = 1f;
+        
+        if (firewall.isActive) reduction *= (1f - firewall.damageReduction);
+        if (reverseProxy.isActive) reduction *= (1f - reverseProxy.damageReduction);
+        if (rateLimiting.isActive) reduction *= (1f - rateLimiting.damageReduction);
+        if (robustInfra.isActive) reduction *= (1f - robustInfra.damageReduction);
+        
+        return baseDamage * reduction;
+    }
+    
+    public bool ShouldBlockPacket()
+    {
+        float blockChance = 0f;
+        
+        if (firewall.isActive) blockChance += firewall.blockChance;
+        if (reverseProxy.isActive) blockChance += reverseProxy.blockChance;
+        if (rateLimiting.isActive) blockChance += rateLimiting.blockChance;
+        
+        return Random.Range(0f, 1f) < blockChance;
+    }
+}
+
+D. PacketController.cs
+using UnityEngine;
+
+public class PacketController : MonoBehaviour
+{
+    [Header("Movement")]
+    public float speed = 10f;
+    public AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    
+    [Header("Visual")]
+    public Material normalMaterial;
+    public Material blockedMaterial;
+    public ParticleSystem trailEffect;
+    
+    private Vector3 targetPosition;
+    private Vector3 startPosition;
+    private bool isBlocked;
+    private float journeyTime = 0f;
+    private float journeyLength;
+    
+    public void Initialize(Vector3 target, bool blocked)
+    {
+        targetPosition = target;
+        startPosition = transform.position;
+        isBlocked = blocked;
+        journeyLength = Vector3.Distance(startPosition, targetPosition);
+        
+        // Appliquer le matériau approprié
+        GetComponent<Renderer>().material = blocked ? blockedMaterial : normalMaterial;
+        
+        // Configurer les effets de particules
+        if (trailEffect != null)
+        {
+            var main = trailEffect.main;
+            main.startColor = blocked ? Color.gray : Color.red;
+        }
+    }
+    
+    void Update()
+    {
+        journeyTime += Time.deltaTime * speed;
+        float fractionOfJourney = journeyTime / journeyLength;
+        
+        if (fractionOfJourney >= 1f)
+        {
+            ReachTarget();
+            return;
+        }
+        
+        // Mouvement avec courbe d'animation
+        float curveValue = movementCurve.Evaluate(fractionOfJourney);
+        transform.position = Vector3.Lerp(startPosition, targetPosition, curveValue);
+        
+        // Rotation vers la cible
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+    }
+    
+    void ReachTarget()
+    {
+        if (!isBlocked)
+        {
+            // Effet d'impact sur le serveur
+            ServerController.Instance.OnPacketHit();
+        }
+        
+        Destroy(gameObject);
+    }
+}
+
+E. ServerController.cs
+using UnityEngine;
+
+public class ServerController : MonoBehaviour
+{
+    [Header("Visual States")]
+    public Material normalMaterial;
+    public Material attackedMaterial;
+    public Material protectedMaterial;
+    
+    [Header("Effects")]
+    public ParticleSystem impactEffect;
+    public ParticleSystem protectionShield;
+    public AudioSource impactSound;
+    
+    [Header("Animation")]
+    public float shakeIntensity = 0.1f;
+    
+    private Vector3 originalPosition;
+    private bool isUnderAttack;
+    private bool isProtected;
+    private Renderer serverRenderer;
+    
+    public static ServerController Instance;
+    
+    void Awake()
+    {
+        Instance = this;
+        originalPosition = transform.position;
+        serverRenderer = GetComponent<Renderer>();
+    }
+    
+    public void SetAttackState(bool underAttack)
+    {
+        isUnderAttack = underAttack;
+        UpdateVisualState();
+        
+        if (underAttack)
+        {
+            InvokeRepeating(nameof(ShakeServer), 0f, 0.1f);
+        }
+        else
+        {
+            CancelInvoke(nameof(ShakeServer));
+            transform.position = originalPosition;
+        }
+    }
+    
+    public void SetProtectedState(bool protected)
+    {
+        isProtected = protected;
+        if (protectionShield != null)
+        {
+            protectionShield.gameObject.SetActive(protected);
+        }
+        UpdateVisualState();
+    }
+    
+    void UpdateVisualState()
+    {
+        if (isProtected)
+        {
+            serverRenderer.material = protectedMaterial;
+        }
+        else if (isUnderAttack)
+        {
+            serverRenderer.material = attackedMaterial;
+        }
+        else
+        {
+            serverRenderer.material = normalMaterial;
+        }
+    }
+    
+    void ShakeServer()
+    {
+        if (!isUnderAttack) return;
+        
+        Vector3 shakeOffset = Random.insideUnitSphere * shakeIntensity;
+        shakeOffset.y = 0; // Garder sur le même plan Y
+        transform.position = originalPosition + shakeOffset;
+    }
+    
+    public void OnPacketHit()
+    {
+        if (impactEffect != null)
+        {
+            impactEffect.Play();
+        }
+        
+        if (impactSound != null)
+        {
+            impactSound.Play();
+        }
+    }
+}
+
+3. Configuration des Éléments Visuels
+A. Matériaux
+Server Normal: Couleur verte avec émission
+Server Under Attack: Couleur rouge clignotante
+Server Protected: Couleur bleue avec bouclier
+Normal Packet: Rouge avec trail de particules
+Blocked Packet: Gris avec effet désactivé
+B. Systèmes de Particules
+Attack Particles: Émission rapide de particules rouges
+Defense Shield: Dôme de protection bleu
+Packet Trails: Traînées colorées selon l'état
+Impact Effects: Explosion au contact du serveur
+C. Audio
+Attack Sound: Son d'alarme/sirène
+Defense Sound: Son de bouclier/activation
+Packet Impact: Son d'impact métallique
+Background: Musique électronique tendue
+4. Interface Utilisateur
+Canvas Principal
+UI Canvas
+├── Attack Panel (Gauche)
+│   ├── Button_PingFlood
+│   ├── Button_Botnet
+│   └── Button_StopAttack
+├── Defense Panel (Droite)
+│   ├── Button_Firewall
+│   ├── Button_ReverseProxy
+│   ├── Button_RateLimiting
+│   └── Button_Infrastructure
+├── Status Panel (Haut)
+│   ├── HealthBar
+│   ├── Budget_Text
+│   ├── Traffic_Text
+│   └── Sales_Text
+└── Log Panel (Bas)
+    └── ScrollView_Logs
+
+5. Timeline et Séquençage
+Phase 1: État Normal (0-10s)
+Serveur vert, trafic normal
+Interface disponible
+Logs d'initialisation
+Phase 2: Début d'Attaque (10-15s)
+Animation d'alerte
+Changement visuel du serveur
+Spawn des premiers paquets
+Phase 3: Attaque Intensive (15-45s)
+Paquets massifs
+Dégâts continus
+Interface de défense active
+Phase 4: Déploiement Défenses (45s+)
+Activation des systèmes
+Réduction visuelle des attaques
+Stabilisation du serveur
+6. Points Clés d'Implémentation
+Optimisation
+Pool d'objets pour les paquets
+LOD pour les éléments distants
+Limitation du nombre de particules
+Interactivité
+Boutons avec feedback visuel
+Tooltips explicatifs
+Sons de confirmation
+Progression
+Sauvegarde des scores
+Déblocage de défenses
+Modes de difficulté
+Cette structure vous donne une base solide pour créer une scène Unity immersive qui raconte l'histoire de l'attaque et de la défense de manière visuelle et interactive.
+Unity DDoS Scene - Guide Étape par Étape
+ÉTAPE 1 : Création et Configuration de Base (15 minutes)
+1.1 Nouveau Projet Unity
+Ouvrez Unity Hub
+Cliquez sur "New Project"
+Choisissez "3D (Built-in Render Pipeline)" ou "3D (URP)" selon votre préférence
+Nommez le projet : DDoS_Defense_Simulator
+Cliquez sur "Create project"
+1.2 Configuration de la Scène
+Supprimez l'objet "Main Camera" par défaut
+Renommez la scène : Ctrl+S → "DDoS_Scene"
+Organisez la hiérarchie :
+Clic droit dans Hierarchy → Create Empty → Nommez "=== ENVIRONMENT ==="
+Répétez pour : "=== SERVER ===", "=== ATTACKS ===", "=== DEFENSES ===", "=== UI ===", "=== MANAGERS ==="
+1.3 Caméra et Éclairage
+Nouvelle caméra : Create → Camera
+Position : X=0, Y=8, Z=-12
+Rotation : X=25, Y=0, Z=0
+Éclairage : Window → Rendering → Lighting → Generate Lighting
+ÉTAPE 2 : Création du Serveur Central (10 minutes)
+2.1 Objet Serveur Principal
+Dans Hierarchy :
+1. Clic droit sur "=== SERVER ===" → 3D Object → Cube
+2. Renommez en "MainServer"
+3. Position : X=0, Y=0.5, Z=0
+4. Scale : X=2, Y=1, Z=1
+2.2 Matériau du Serveur
+Dans Project :
+1. Create → Material → "ServerNormal"
+2. Albedo : Vert (#00FF00)
+3. Emission : Cochez, couleur verte claire (#004400)
+4. Glissez le matériau sur le serveur
+2.3 Composants du Serveur
+Sélectionnez MainServer
+Add Component → New Script → "ServerController"
+Add Component → Audio Source (décochez Play On Awake)
+ÉTAPE 3 : Points d'Attaque (15 minutes)
+3.1 Création d'un Spawn Point
+1. Clic droit sur "=== ATTACKS ===" → Create Empty → "SpawnPoint_01"
+2. Position : X=8, Y=0.5, Z=0
+3. Add Component → 3D Object → Sphere (comme enfant)
+4. Scale de la sphère : X=0.3, Y=0.3, Z=0.3
+3.2 Matériau Spawn Point
+1. Create → Material → "SpawnPointMaterial"
+2. Albedo : Rouge (#FF0000)
+3. Emission : Coché, rouge foncé (#440000)
+4. Appliquez à la sphère
+3.3 Duplication des Spawn Points
+1. Sélectionnez SpawnPoint_01
+2. Ctrl+D (dupliquer) 11 fois
+3. Positionnez en cercle autour du serveur :
+   - SpawnPoint_02 : X=4, Z=7
+   - SpawnPoint_03 : X=-4, Z=7
+   - SpawnPoint_04 : X=-8, Z=0
+   - SpawnPoint_05 : X=-4, Z=-7
+   - SpawnPoint_06 : X=4, Z=-7
+   - (continuez le cercle...)
+Astuce : Pour placer rapidement en cercle :
+Créez un Empty GameObject "SpawnPointPivot" au centre (0,0,0)
+Placez un SpawnPoint à (8,0.5,0)
+Faites-le enfant du Pivot
+Dupliquez et tournez le Pivot de 30° en Y pour chaque copie
+ÉTAPE 4 : Interface Utilisateur de Base (20 minutes)
+4.1 Canvas Principal
+1. Clic droit sur "=== UI ===" → UI → Canvas
+2. Canvas Scaler → UI Scale Mode : "Scale With Screen Size"
+3. Reference Resolution : 1920x1080
+4. Renommez en "MainCanvas"
+4.2 Panel d'Attaque (Gauche)
+1. Clic droit sur MainCanvas → UI → Panel → "AttackPanel"
+2. Rect Transform :
+   - Anchor : Left
+   - Position X : 150, Y : 0
+   - Width : 250, Height : 400
+3. Background : Noir semi-transparent
+4.3 Boutons d'Attaque
+Dans AttackPanel :
+1. UI → Button → "ButtonPingFlood"
+2. Text du bouton : "Ping Flood Attack"
+3. Colors → Normal : Rouge foncé, Hover : Rouge clair
+4. Dupliquez pour "ButtonBotnet" et "ButtonStopAttack"
+4.4 Panel de Défense (Droite)
+1. Même process que AttackPanel
+2. Position X : -150 (côté droit)
+3. Boutons : "Firewall", "Reverse Proxy", "Rate Limiting", "Infrastructure"
+4. Colors : Vert pour les défenses
+ÉTAPE 5 : Premier Script - GameManager (25 minutes)
+5.1 Création du GameManager
+1. Clic droit sur "=== MANAGERS ===" → Create Empty → "GameManager"
+2. Add Component → New Script → "GameManager"
+3. Ouvrez le script dans votre éditeur de code
+5.2 Code GameManager de Base
+csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GameManager : MonoBehaviour
+{
+    [Header("Server Status")]
+    public float serverHealth = 100f;
+    public int budget = 5000;
+    public int lostSales = 0;
+    
+    [Header("UI References")]
+    public Slider healthBar;
+    public Text healthText;
+    public Text budgetText;
+    public Text salesText;
+    public Text trafficText;
+    
+    [Header("Game State")]
+    public bool isUnderAttack = false;
+    public float currentTraffic = 45f;
+    
+    public static GameManager Instance;
+    
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    void Start()
+    {
+        UpdateUI();
+        InvokeRepeating("SimulateNormalTraffic", 1f, 1f);
+    }
+    
+    void SimulateNormalTraffic()
+    {
+        if (!isUnderAttack)
+        {
+            currentTraffic = 45f + Random.Range(0f, 20f);
+            UpdateUI();
+        }
+    }
+    
+    public void TakeDamage(float damage)
+    {
+        serverHealth = Mathf.Max(0, serverHealth - damage);
+        
+        if (serverHealth < 50f)
+        {
+            lostSales += Mathf.RoundToInt(damage * 100);
+        }
+        
+        UpdateUI();
+        
+        if (serverHealth <= 0)
+        {
+            Debug.Log("GAME OVER!");
+        }
+    }
+    
+    public bool SpendBudget(int cost)
+    {
+        if (budget >= cost)
+        {
+            budget -= cost;
+            UpdateUI();
+            return true;
+        }
+        return false;
+    }
+    
+    void UpdateUI()
+    {
+        if (healthText != null)
+            healthText.text = $"Health: {Mathf.RoundToInt(serverHealth)}%";
+        
+        if (budgetText != null)
+            budgetText.text = $"Budget: {budget}€";
+        
+        if (salesText != null)
+            salesText.text = $"Lost Sales: {lostSales}€";
+        
+        if (trafficText != null)
+        {
+            string status = isUnderAttack ? "ATTACK" : "Normal";
+            trafficText.text = $"{status}: {Mathf.RoundToInt(currentTraffic)} req/s";
+        }
+        
+        if (healthBar != null)
+            healthBar.value = serverHealth / 100f;
+    }
+}
+5.3 Interface UI pour GameManager
+1. Créez les éléments UI manquants :
+   - UI → Slider → "HealthBar" (en haut de l'écran)
+   - UI → Text → "HealthText", "BudgetText", "SalesText", "TrafficText"
+2. Glissez ces éléments dans les champs du GameManager
+3. Configurez le Slider : Min=0, Max=1, Value=1
+ÉTAPE 6 : Test Initial (5 minutes)
+6.1 Première Exécution
+1. Sauvegardez tout : Ctrl+S
+2. Appuyez sur Play
+3. Vérifiez que :
+   - Le trafic change toutes les secondes
+   - L'UI affiche les bonnes valeurs
+   - Aucune erreur dans la Console
+6.2 Débogage Rapide
+Si il y a des erreurs :
+NullReferenceException : Vérifiez que tous les champs UI sont assignés
+Script manquant : Recompilez en sauvant les scripts
+ÉTAPE 7 : Préparation pour la Suite
+7.1 Prefab du Paquet
+1. Create → 3D Object → Sphere → "AttackPacket"
+2. Scale : X=0.1, Y=0.1, Z=0.1
+3. Create → Material → "PacketMaterial" (Rouge)
+4. Glissez AttackPacket dans Project pour créer un Prefab
+5. Supprimez l'original de la scène
+7.2 Structure des Dossiers
+Dans Project, créez ces dossiers :
+- Materials/
+- Scripts/
+- Prefabs/
+- Audio/
+- Scenes/
+7.3 Organisation
+Déplacez vos assets :
+- Tous les Materials → dossier Materials/
+- GameManager.cs → dossier Scripts/
+- AttackPacket prefab → dossier Prefabs/
+✅ Checkpoint - Ce que vous devez avoir maintenant :
+Scène organisée avec hiérarchie claire
+Serveur central vert au milieu
+12 spawn points rouges en cercle
+Interface utilisateur avec panels gauche/droite
+GameManager fonctionnel qui affiche les stats
+Trafic simulé qui change toutes les secondes
+Projet organisé avec dossiers propres
+🚀 Prochaines Étapes :
+Une fois cette base terminée, nous ajouterons :
+AttackManager pour lancer les attaques
+Animation des paquets vers le serveur
+Systèmes de défense
+Effets visuels et sonores
+Temps estimé pour cette première partie : 1h30
+Dites-moi quand vous avez terminé cette première partie ou si vous rencontrez des problèmes à une étape spécifique !
+- Create → 2D Object → Sprite → Square
+- Renommez en "MainServer" 
+- Position : X=0, Y=0, Z=0
+- Scale : X=2, Y=1.5, Z=1
+- Couleur : Vert
+
+- Create → 2D Object → Sprite → Circle
+- Scale : X=0.3, Y=0.3, Z=1
+- Couleur : Rouge
+- Positionnez en cercle autour du serveur (même positions X,Y mais Z=0)
+
+- La caméra 2D est déjà bien configurée par défaut
+- Position : X=0, Y=0, Z=-10
+- Projection : Orthographic (déjà fait en 2D)
+
+- Create → 2D Object → Sprite → Circle
+- Scale : X=0.1, Y=0.1, Z=1
+- Couleur : Rouge
+- Créez le prefab normalement
+
+// Au lieu de Vector3, on utilisera Vector2 pour certains calculs
+Vector2 direction = (targetPosition - startPosition).normalized;
+// Mais on garde Vector3 pour transform.position
+
+ ÉTAT ACTUEL - Ce que vous avez déjà ✅
+Scène organisée avec hiérarchie propre
+Serveur central avec matériau vert
+12 spawn points en cercle autour du serveur
+Interface UI fonctionnelle (Health, Budget, Traffic, Lost Sales)
+GameManager qui simule le trafic normal
+Structure de base solide
+
+🎯 ÉTAPE 6 : CRÉATION DES PAQUETS D'ATTAQUE (30 min)
+Objectif : Créer les projectiles qui attaqueront le serveur
+6.1 Prefab du Paquet d'Attaque
+Créer un petit cube/sphère rouge
+Ajouter un Rigidbody (kinematic)
+Script PacketController pour le mouvement
+Trail Renderer pour l'effet visuel
+Matériaux : Normal (rouge) et Blocked (gris)
+6.2 Script PacketController
+csharp
+// Gestion du mouvement vers le serveur
+// Animation fluide avec courbes
+// Détection de collision avec le serveur
+// Destruction automatique
+// États : Normal vs Bloqué
+6.3 Pool d'Objets Simple
+Système de recyclage des paquets
+Performance optimisée pour 100+ paquets simultanés
+✅ Résultat attendu : Paquets qui se déplacent vers le serveur
+
+🚨 ÉTAPE 7 : SYSTÈME D'ATTAQUE (45 min)
+Objectif : Déclencher de vraies attaques DDoS
+7.1 Script AttackManager
+csharp
+// Gestion des différents types d'attaques
+// Spawn de paquets depuis les points d'attaque
+// Contrôle de l'intensité (Ping Flood vs Botnet)
+// Effets visuels et sonores
+7.2 Types d'Attaques
+Ping Flood : 4 spawn points actifs, 50 paquets/vague
+Botnet Attack : Tous les spawn points, 200 paquets/vague
+Attaque Progressive : Intensité qui augmente
+7.3 Connecter les Boutons UI
+Bouton "Ping Flood" → AttackManager.StartPingFlood()
+Bouton "Botnet" → AttackManager.StartBotnetAttack()
+Bouton "Stop Attack" → AttackManager.StopAttack()
+✅ Résultat attendu : Boutons qui déclenchent des attaques visuelles
+
+🛡️ ÉTAPE 8 : SYSTÈME DE DÉFENSE (60 min)
+Objectif : Implémenter les contre-mesures
+8.1 Script DefenseManager
+csharp
+// 4 systèmes de défense distincts
+// Calcul de réduction des dégâts
+// Gestion du budget
+// États visuels des défenses
+8.2 Les 4 Défenses
+Firewall ICMP (500€)
+Bloque 40% des paquets
+Réduit 40% des dégâts
+Effet visuel : Mur bleu devant le serveur
+Reverse Proxy (1500€)
+Filtre intelligent
+Réduit 60% des dégâts
+Effet : Bouclier rotatif autour du serveur
+Rate Limiting (800€)
+Limite le débit
+Réduit 30% des dégâts
+Effet : Ralentissement visible des paquets
+Infrastructure Robuste (3000€)
+Serveur plus résistant
+Réduit 70% des dégâts
+Effet : Serveur plus grand et blindé
+8.3 Connecter les Boutons de Défense
+Vérification du budget avant achat
+Activation visuelle des systèmes
+Cumul des effets défensifs
+✅ Résultat attendu : Défenses qui réduisent visiblement les attaques
+
+🎨 ÉTAPE 9 : AMÉLIORATIONS VISUELLES (45 min)
+Objectif : Rendre le jeu plus spectaculaire
+9.1 Script ServerController
+csharp
+// États visuels : Normal, Attaqué, Protégé
+// Animation de tremblement sous attaque
+// Changement de couleur dynamique
+// Effets de particules d'impact
+9.2 Systèmes de Particules
+Impact sur serveur : Explosion rouge
+Bouclier de protection : Particules bleues
+Traînées de paquets : Trails colorés
+Fumée de dégâts : Quand la vie est faible
+9.3 Matériaux Animés
+Serveur qui clignote en rouge sous attaque
+Émission qui varie avec la santé
+Spawn points qui pulsent
+✅ Résultat attendu : Feedback visuel spectaculaire
+
+🔊 ÉTAPE 10 : AUDIO ET POLISH (30 min)
+Objectif : Immersion sonore
+10.1 Sons d'Attaque
+Alarme quand attaque commence
+Sons d'impact des paquets
+Sirène d'urgence sous 25% de vie
+10.2 Sons de Défense
+"Bip" de confirmation d'achat
+Son de bouclier qui s'active
+Musique de fond électronique
+10.3 Feedback UI
+Animations des boutons
+Couleurs qui changent selon l'état
+Tooltips explicatifs
+✅ Résultat attendu : Expérience immersive complète
+
+📊 ÉTAPE 11 : SYSTÈME DE LOGS (20 min)
+Objectif : Journal d'événements en temps réel
+11.1 Script LogManager
+csharp
+// Affichage des événements en bas d'écran
+// Types : Info, Warning, Error, Success
+// Couleurs différentes par type
+// Auto-scroll et limitation du nombre
+11.2 Messages Types
+"🚨 ALERTE: Attaque Ping Flood détectée!"
+"🛡️ Firewall ICMP déployé"
+"💰 Budget insuffisant"
+"✅ Attaque repoussée avec succès"
+✅ Résultat attendu : Feedback informatif constant
+
+🎲 ÉTAPE 12 : MÉCANIQUES DE JEU AVANCÉES (40 min)
+Objectif : Équilibrage et profondeur
+12.1 Système de Scoring
+Points basés sur la survie
+Bonus pour efficacité budgétaire
+Malus pour ventes perdues
+Highscores sauvegardés
+12.2 Vagues d'Attaques Progressives
+csharp
+// Attaques qui s'intensifient avec le temps
+// Nouveaux types d'attaques débloqués
+// Pauses entre les vagues
+// Boss final : Méga-Botnet
+12.3 Économie Dynamique
+Revenus passifs basés sur l'uptime
+Coûts qui augmentent avec l'usage
+Bonus de combo pour défenses multiples
+✅ Résultat attendu : Jeu équilibré et rejouable
+
+🏁 ÉTAPE 13 : FINALISATION (30 min)
+Objectif : Polish final et debugging
+13.1 Menu Principal
+Écran titre
+Instructions/Tutorial
+Crédits
+Options audio
+13.2 Game Over Screen
+Statistiques de la partie
+Bouton "Rejouer"
+Conseils pour s'améliorer
+13.3 Optimisations
+Nettoyage du code
+Commentaires détaillés
+Tests de performance
+Build final
+
+⏱️ PLANNING GLOBAL
+Étape
+Temps
+Priorité
+Difficulté
+6 - Paquets
+30 min
+🔴 Critique
+⭐⭐
+7 - Attaques
+45 min
+🔴 Critique
+⭐⭐⭐
+8 - Défenses
+60 min
+🔴 Critique
+⭐⭐⭐⭐
+9 - Visuels
+45 min
+🟡 Important
+⭐⭐
+10 - Audio
+30 min
+🟡 Important
+⭐
+11 - Logs
+20 min
+🟢 Optionnel
+⭐
+12 - Avancé
+40 min
+🟢 Optionnel
+⭐⭐⭐⭐
+13 - Polish
+30 min
+🟡 Important
+⭐⭐
+
+📋 TOTAL : ~5h de développement
+
+🎯 PROCHAINE ÉTAPE RECOMMANDÉE
+Je recommande de commencer par l'ÉTAPE 6 - Création des Paquets car :
+✅ Progression logique naturelle
+✅ Résultat visuel immédiat
+✅ Base nécessaire pour les attaques
+✅ Difficulté modérée
+Voulez-vous que je vous guide étape par étape pour :
+ÉTAPE 6 - Créer les paquets d'attaque ?
+Vue d'ensemble d'une autre étape spécifique ?
+Détail technique d'un système particulier ?
+Dites-moi quelle approche vous préférez ! 🚀

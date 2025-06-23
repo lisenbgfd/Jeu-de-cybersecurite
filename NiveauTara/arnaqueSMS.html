@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arnaque SMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #007a0a 0%, #001407 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+        background: rgba(0, 0, 0, 0.9);
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgb(0, 255, 13);
+        transition: all 0.3s ease;
+        margin: 10px;
+        }
+
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .rules {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgb(255, 255, 255);
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .rules h2 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .rules p {
+            color: #ffffffda;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .game-container {
+        display: flex;
+        justify-content: center;
+        /* align-items: center;  <-- optionnel à retirer aussi si ça gêne */
+        margin-top: -90px;
+        margin-bottom: 0;
+        }
+
+
+        .phone {
+            width: 350px;
+            height: 700px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .status-bar {
+            background: #1a1a1a;
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .messages-header {
+            background: #009919;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .messages-list {
+            background: #f5f5f5;
+            height: calc(100% - 75px);
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message-item {
+            background: white;
+            margin-bottom: 8px;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #4ff436;
+        }
+
+        .message-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .message-item.scam {
+            border-left-color: #4ff436;
+        }
+
+        .message-sender {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .message-preview {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message-time {
+            color: #999;
+            font-size: 12px;
+            float: right;
+        }
+
+        .finish-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #010800;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(165, 253, 113, 0.551);
+            transition: all 0.3s ease;
+        }
+
+        .finish-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgb(207, 246, 213);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .modal p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .reply-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .ignore-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-modal .modal-content {
+            text-align: center;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #4ff436;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-btn" onclick="goBack()">← Retour</button>
+        <div class="rules">
+            <h2>Règles du Jeu</h2>
+            <p>Vous avez reçu 10 messages, certains sont des arnaques. Faites attention en répondant !</p>
+        </div>
+    </div>
+
+    <div class="score-display">
+        Score: <span id="score">0</span>/10
+    </div>
+
+    <div class="game-container">
+        <div class="phone">
+            <div class="phone-screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>🔋 90%</span>
+                </div>
+                <div class="messages-header">
+                    Messages (10)
+                </div>
+                <div class="messages-list" id="messagesList">
+                    <!-- Les messages seront générés par JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="finish-btn" onclick="finishGame()">Finir</button>
+
+    <!-- Modal pour répondre aux messages -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content">
+            <h3 id="modalSender"></h3>
+            <p id="modalContent"></p>
+            <div class="modal-buttons">
+                <button class="modal-btn reply-btn" onclick="replyToMessage()">Répondre</button>
+                <button class="modal-btn ignore-btn" onclick="ignoreMessage()">Ignorer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal des résultats -->
+    <div class="modal result-modal" id="resultModal">
+        <div class="modal-content">
+            <h3>Résultats du Jeu</h3>
+            <div class="result-score" id="finalScore">0/10</div>
+            <p id="resultMessage"></p>
+            <div class="modal-buttons">
+                <button class="modal-btn reply-btn" onclick="restartGame()">Rejouer</button>
+                <button class="modal-btn ignore-btn" onclick="goBack()">Quitter</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let messagesAnswered = 0;
+        let currentMessageIndex = -1;
+
+        const messages = [
+            {
+                sender: "Banque Populaire",
+                preview: "Urgent : Votre compte sera suspendu. Cliquez ici pour le réactiver immédiatement.",
+                content: "Urgent : Votre compte sera suspendu dans 2h. Cliquez sur ce lien pour le réactiver : www.banque-populaire-secure.com",
+                isScam: true,
+                type: "link"
+            },
+            {
+                sender: "Maman",
+                preview: "Tu peux passer ce soir ? J'ai préparé ton plat préféré !",
+                content: "Salut mon chéri ! Tu peux passer ce soir ? J'ai préparé ton plat préféré !",
+                isScam: false,
+                type: "family"
+            },
+            {
+                sender: "Netflix Support",
+                preview: "Votre abonnement expire demain. Renouvelez maintenant avec 50% de réduction !",
+                content: "Votre abonnement Netflix expire demain ! Profitez de 50% de réduction en renouvelant maintenant : netflix-renewal.net",
+                isScam: true,
+                type: "link"
+            },
+            {
+                sender: "Marie Dubois",
+                preview: "Bonjour, je travaille pour une ONG et j'ai besoin de votre aide urgente...",
+                content: "Bonjour, je suis Marie Dubois, je travaille pour une ONG. Nous avons besoin d'aide urgente pour des enfants malades. Pouvez-vous nous envoyer 50€ par virement ?",
+                isScam: true,
+                type: "personal"
+            },
+            {
+                sender: "Pierre - Travail",
+                preview: "Réunion reportée à 15h demain. Merci de confirmer ta présence.",
+                content: "Salut ! La réunion de demain est reportée à 15h au lieu de 14h. Merci de confirmer ta présence.",
+                isScam: false,
+                type: "work"
+            },
+            {
+                sender: "Amazon Livraison",
+                preview: "Votre colis est en attente. Frais de livraison impayés : 2.99€",
+                content: "Votre colis Amazon est en attente de livraison. Frais de livraison impayés : 2.99€. Payez maintenant pour recevoir votre commande.",
+                isScam: true,
+                type: "personal"
+            },
+            {
+                sender: "Dr. Martin",
+                preview: "Rappel : Rendez-vous demain 10h pour votre visite annuelle",
+                content: "Bonjour, je vous rappelle votre rendez-vous demain à 10h pour votre visite médicale annuelle.",
+                isScam: false,
+                type: "medical"
+            },
+            {
+                sender: "Sarah",
+                preview: "Ça te dit un ciné ce weekend ? Il y a le nouveau film Marvel !",
+                content: "Salut ! Ça te dit un ciné ce weekend ? Il y a le nouveau film Marvel qui sort !",
+                isScam: false,
+                type: "friend"
+            },
+            {
+                sender: "Pôle Emploi",
+                preview: "Nouvelle offre d'emploi correspondant à votre profil",
+                content: "Bonjour, nous avons trouvé une nouvelle offre d'emploi correspondant à votre profil. Consultez votre espace personnel.",
+                isScam: false,
+                type: "job"
+            },
+            {
+                sender: "Service Client",
+                preview: "Félicitations ! Vous avez gagné 500€. Réclamez votre prix maintenant !",
+                content: "Félicitations ! Vous êtes notre 1000ème visiteur ! Vous avez gagné 500€. Cliquez ici pour réclamer votre prix !",
+                isScam: false,
+                type: "prize"
+            }
+        ];
+
+        function initializeGame() {
+            const messagesList = document.getElementById('messagesList');
+            messagesList.innerHTML = '';
+
+            messages.forEach((message, index) => {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message-item ${message.isScam ? 'scam' : ''}`;
+                messageElement.onclick = () => openMessage(index);
+                
+                messageElement.innerHTML = `
+                    <div class="message-time">${getRandomTime()}</div>
+                    <div class="message-sender">${message.sender}</div>
+                    <div class="message-preview">${message.preview}</div>
+                `;
+                
+                messagesList.appendChild(messageElement);
+            });
+        }
+
+        function getRandomTime() {
+            const hours = Math.floor(Math.random() * 12) + 8;
+            const minutes = Math.floor(Math.random() * 60);
+            return `${hours}:${minutes.toString().padStart(2, '0')}`;
+        }
+
+        function openMessage(index) {
+            currentMessageIndex = index;
+            const message = messages[index];
+            
+            document.getElementById('modalSender').textContent = message.sender;
+            document.getElementById('modalContent').textContent = message.content;
+            document.getElementById('messageModal').style.display = 'block';
+        }
+
+        function replyToMessage() {
+            const message = messages[currentMessageIndex];
+            messagesAnswered++;
+            
+            // L'IA détecte si le joueur est tombé dans le panneau
+            if (message.isScam) {
+                // Le joueur a répondu à une arnaque (mauvais choix)
+                showFeedback("❌ Attention ! C'était une arnaque ! Ne répondez jamais à ce type de message.", false);
+            } else {
+                // Le joueur a répondu à un message légitime (bon choix)
+                score++;
+                showFeedback("✅ Bonne réponse ! Ce message était légitime.", true);
+            }
+            
+            closeModal();
+            updateScore();
+            markMessageAsAnswered(currentMessageIndex);
+        }
+
+        function ignoreMessage() {
+            const message = messages[currentMessageIndex];
+            messagesAnswered++;
+            
+            if (message.isScam) {
+                // Le joueur a ignoré une arnaque (bon choix)
+                score++;
+                showFeedback("✅ Excellent ! Vous avez bien fait d'ignorer cette arnaque.", true);
+            } else {
+                // Le joueur a ignoré un message légitime (mauvais choix)
+                showFeedback("❌ Dommage ! Ce message était légitime, il fallait répondre.", false);
+            }
+            
+            closeModal();
+            updateScore();
+            markMessageAsAnswered(currentMessageIndex);
+        }
+
+        function showFeedback(message, isCorrect) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${isCorrect ? '#4CAF50' : '#f44336'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                z-index: 1001;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                animation: fadeInOut 3s ease-in-out;
+            `;
+            feedback.textContent = message;
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                document.body.removeChild(feedback);
+            }, 3000);
+        }
+
+        function markMessageAsAnswered(index) {
+            const messageElements = document.querySelectorAll('.message-item');
+            messageElements[index].style.opacity = '0.6';
+            messageElements[index].style.pointerEvents = 'none';
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function closeModal() {
+            document.getElementById('messageModal').style.display = 'none';
+        }
+
+        function finishGame() {
+            let resultMessage = '';
+            const percentage = (score / 10) * 100;
+            
+            if (percentage >= 80) {
+                resultMessage = "🏆 Excellent ! Vous êtes un expert en détection d'arnaques !";
+            } else if (percentage >= 60) {
+                resultMessage = "👍 Bien joué ! Vous avez de bonnes bases en sécurité.";
+            } else if (percentage >= 40) {
+                resultMessage = "⚠️ Attention ! Vous devez être plus vigilant face aux arnaques.";
+            } else {
+                resultMessage = "🚨 Soyez très prudent ! Vous êtes vulnérable aux arnaques.";
+            }
+            
+            document.getElementById('finalScore').textContent = `${score}/10`;
+            document.getElementById('resultMessage').textContent = resultMessage;
+            document.getElementById('resultModal').style.display = 'block';
+        }
+
+        function restartGame() {
+            score = 0;
+            messagesAnswered = 0;
+            currentMessageIndex = -1;
+            updateScore();
+            document.getElementById('resultModal').style.display = 'none';
+            initializeGame();
+        }
+
+        function goBack() {
+            if (confirm('Êtes-vous sûr de vouloir quitter le jeu ?')) {
+                window.history.back();
+            }
+        }
+
+        // Initialiser le jeu au chargement
+        document.addEventListener('DOMContentLoaded', initializeGame);
+
+        // Fermer les modales en cliquant à l'extérieur
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Ajouter les animations CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+                20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
