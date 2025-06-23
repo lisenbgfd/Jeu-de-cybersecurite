@@ -359,6 +359,80 @@
             box-shadow: 0 0 40px rgba(0, 136, 255, 0.8);
         }
 
+.server-web { background: linear-gradient(45deg, #4a90e2, #357abd); }
+.server-database { background: linear-gradient(45deg, #f39c12, #e67e22); }
+.server-proxy { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+.server-backup { background: linear-gradient(45deg, #95a5a6, #7f8c8d); }
+
+.server {
+    width: 120px;
+    height: 80px;
+    border-radius: 8px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.server-name {
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.server-health {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+
+.health-bar-mini {
+    width: 60px;
+    height: 6px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.health-fill-mini {
+    height: 100%;
+    background: #00ff00;
+    transition: all 0.3s ease;
+}
+
+.server-load, .server-services {
+    font-size: 8px;
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+}
+
+.network-connection {
+    stroke: rgba(255,255,255,0.3);
+    stroke-width: 2;
+    stroke-dasharray: 5,5;
+}
+
+.server.selected {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255,255,0,0.8);
+}
+
+.server.under-attack {
+    animation: serverAttackPulse 0.5s infinite alternate;
+}
+
+@keyframes serverAttackPulse {
+    from { box-shadow: 0 0 10px rgba(255,0,0,0.5); }
+    to { box-shadow: 0 0 30px rgba(255,0,0,1); }
+}
+
         @keyframes shake {
             0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
             25% { transform: translate(-48%, -52%) rotate(1deg); }
@@ -645,21 +719,97 @@
 
     <script>
         // État du jeu
-        let gameState = {
-            phase: 'learning', // 'learning' ou 'challenge'
-            serverHealth: 100,
-            budget: 5000,
-            score: 0,
-            currentTraffic: 45,
+        let networkState = {
+    phase: 'learning',
+    budget: 10000, // Budget augmenté pour gérer plusieurs serveurs
+    score: 0,
+    wave: 0,
+    // Configuration réseau d'entreprise
+    servers: {
+        webServer: {
+            id: 'webServer',
+            name: 'Serveur Web',
+            type: 'web',
+            health: 100,
+            maxHealth: 100,
+            position: { x: 40, y: 30 },
+            services: ['HTTP', 'HTTPS'],
+            connections: ['loadBalancer', 'database'],
             isUnderAttack: false,
-            wave: 0,
-            defenses: {
-                firewall: { active: false, cost: 500, damageReduction: 0.4, blockChance: 0.4 },
-                reverseProxy: { active: false, cost: 1500, damageReduction: 0.6, blockChance: 0.3 },
-                rateLimiting: { active: false, cost: 800, damageReduction: 0.3, blockChance: 0.2 },
-                infrastructure: { active: false, cost: 3000, damageReduction: 0.7, blockChance: 0 }
-            }
-        };
+            currentLoad: 45,
+            normalLoad: 45,
+            priority: 'high' // Serveur critique
+        },
+        database: {
+            id: 'database',
+            name: 'Base de Données',
+            type: 'database',
+            health: 100,
+            maxHealth: 100,
+            position: { x: 70, y: 60 },
+            services: ['MySQL', 'Redis'],
+            connections: ['webServer', 'backupServer'],
+            isUnderAttack: false,
+            currentLoad: 30,
+            normalLoad: 30,
+            priority: 'critical'
+        },
+        loadBalancer: {
+            id: 'loadBalancer',
+            name: 'Load Balancer',
+            type: 'proxy',
+            health: 100,
+            maxHealth: 100,
+            position: { x: 20, y: 30 },
+            services: ['HAProxy', 'Nginx'],
+            connections: ['webServer', 'backupWeb'],
+            isUnderAttack: false,
+            currentLoad: 60,
+            normalLoad: 60,
+            priority: 'high'
+        },
+        backupServer: {
+            id: 'backupServer',
+            name: 'Serveur Backup',
+            type: 'backup',
+            health: 100,
+            maxHealth: 100,
+            position: { x: 80, y: 80 },
+            services: ['Backup', 'Archive'],
+            connections: ['database'],
+            isUnderAttack: false,
+            currentLoad: 15,
+            normalLoad: 15,
+            priority: 'medium'
+        },
+        backupWeb: {
+            id: 'backupWeb',
+            name: 'Serveur Web Backup',
+            type: 'web',
+            health: 100,
+            maxHealth: 100,
+            position: { x: 40, y: 70 },
+            services: ['HTTP Backup'],
+            connections: ['loadBalancer', 'database'],
+            isUnderAttack: false,
+            currentLoad: 0, // Inactif par défaut
+            normalLoad: 0,
+            priority: 'medium'
+        }
+    },
+    // Défenses globales et par serveur
+    globalDefenses: {
+        firewall: { active: false, cost: 800, protection: 0.4 },
+        ddosProtection: { active: false, cost: 2000, protection: 0.6 },
+        cdn: { active: false, cost: 1500, protection: 0.5 }
+    },
+    serverDefenses: {
+        // Défenses spécifiques par serveur
+        rateLimiting: { cost: 500, protection: 0.3 },
+        reverseProxy: { cost: 1000, protection: 0.5 },
+        clustering: { cost: 2500, protection: 0.7 }
+    }
+};
 
         let attackInterval = null;
         let normalTrafficInterval = null;
@@ -1609,7 +1759,297 @@
             
             // Appeler la fonction originale
             originalResetToLearning();
-        };
+        }
+        class NetworkTopology {
+    static propagateAttack(sourceServerId, attackType, intensity) {
+        const sourceServer = networkState.servers[sourceServerId];
+        if (!sourceServer) return;
+
+        // Propagation selon les connexions réseau
+        sourceServer.connections.forEach(targetId => {
+            const targetServer = networkState.servers[targetId];
+            if (targetServer && !targetServer.isUnderAttack) {
+                
+                // Calcul de la propagation basé sur le type de serveur
+                let propagationChance = 0;
+                let delayMs = 0;
+
+                switch (sourceServer.type + '->' + targetServer.type) {
+                    case 'web->database':
+                        propagationChance = 0.8; // Forte connexion
+                        delayMs = 500;
+                        break;
+                    case 'proxy->web':
+                        propagationChance = 0.9; // Très forte connexion
+                        delayMs = 200;
+                        break;
+                    case 'database->backup':
+                        propagationChance = 0.4; // Connexion modérée
+                        delayMs = 1000;
+                        break;
+                    default:
+                        propagationChance = 0.3;
+                        delayMs = 800;
+                }
+
+                // Effet domino si le serveur source est très endommagé
+                if (sourceServer.health < 30) {
+                    propagationChance += 0.3;
+                }
+
+                if (Math.random() < propagationChance) {
+                    setTimeout(() => {
+                        this.cascadeAttack(targetId, attackType, intensity * 0.6);
+                        addLog(`📡 Attaque propagée: ${sourceServer.name} → ${targetServer.name}`, 'warning');
+                    }, delayMs);
+                }
+            }
+        });
+    }
+
+    static cascadeAttack(serverId, attackType, intensity) {
+        const server = networkState.servers[serverId];
+        if (!server || server.isUnderAttack) return;
+
+        addLog(`⚠️ ${server.name} impacté par propagation`, 'error');
+        executeServerAttack(serverId, attackType, intensity);
+    }
+
+    static activateFailover(failedServerId) {
+        const failedServer = networkState.servers[failedServerId];
+        
+        // Activation du serveur de backup web si le serveur principal tombe
+        if (failedServerId === 'webServer' && networkState.servers.backupWeb.health > 50) {
+            networkState.servers.backupWeb.currentLoad = failedServer.currentLoad;
+            addLog(`🔄 Failover activé: ${networkState.servers.backupWeb.name} prend le relais`, 'success');
+            return true;
+        }
+        
+        // Répartition de charge sur les serveurs connectés
+        failedServer.connections.forEach(connectedId => {
+            const connectedServer = networkState.servers[connectedId];
+            if (connectedServer && connectedServer.health > 30) {
+                connectedServer.currentLoad += failedServer.currentLoad * 0.3;
+                addLog(`📊 Charge redistribuée vers ${connectedServer.name}`, 'info');
+            }
+        });
+        
+        return false;
+    }
+}
+
+// 3. ATTAQUES RÉALISTES MULTI-SERVEURS
+
+const realisticAttacks = {
+    distributedPingFlood: {
+        name: "Ping Flood Distribué",
+        description: "Attaque ICMP coordonnée sur plusieurs serveurs",
+        targets: ['webServer', 'loadBalancer'], // Serveurs frontaux
+        baseDamage: 3,
+        duration: 15000,
+        propagationRate: 0.7,
+        execute: function(intensity = 1.0) {
+            addLog(`🚨 ATTAQUE DISTRIBUÉE: Ping Flood coordonné détecté!`, 'error');
+            
+            this.targets.forEach((serverId, index) => {
+                setTimeout(() => {
+                    executeServerAttack(serverId, 'pingFlood', intensity);
+                    // Propagation automatique après 3 secondes
+                    setTimeout(() => {
+                        NetworkTopology.propagateAttack(serverId, 'pingFlood', intensity);
+                    }, 3000);
+                }, index * 1000); // Attaques échelonnées
+            });
+        }
+    },
+
+    botnetSwarm: {
+        name: "Essaim Botnet",
+        description: "Attaque massive coordonnée visant l'infrastructure complète",
+        targets: ['loadBalancer', 'webServer', 'database'],
+        baseDamage: 5,
+        duration: 25000,
+        propagationRate: 0.9,
+        execute: function(intensity = 1.0) {
+            addLog(`💀 ATTAQUE MASSIVE: Essaim Botnet déployé sur toute l'infrastructure!`, 'error');
+            
+            // Attaque simultanée sur tous les serveurs critiques
+            this.targets.forEach(serverId => {
+                executeServerAttack(serverId, 'botnet', intensity);
+            });
+            
+            // Propagation en cascade après 5 secondes
+            setTimeout(() => {
+                Object.keys(networkState.servers).forEach(serverId => {
+                    if (!this.targets.includes(serverId)) {
+                        NetworkTopology.cascadeAttack(serverId, 'botnet', intensity * 0.4);
+                    }
+                });
+            }, 5000);
+        }
+    },
+
+    targetedAssault: {
+        name: "Assaut Ciblé",
+        description: "Attaque focalisée sur un serveur critique avec propagation",
+        execute: function(targetId, intensity = 1.0) {
+            const target = networkState.servers[targetId];
+            addLog(`🎯 ATTAQUE CIBLÉE: ${target.name} dans le viseur!`, 'error');
+            
+            executeServerAttack(targetId, 'focused', intensity * 1.5);
+            
+            // Propagation retardée mais intense
+            setTimeout(() => {
+                NetworkTopology.propagateAttack(targetId, 'focused', intensity);
+            }, 4000);
+        }
+    }
+};
+
+// 4. FONCTION D'ATTAQUE PAR SERVEUR
+
+function executeServerAttack(serverId, attackType, intensity) {
+    const server = networkState.servers[serverId];
+    if (!server || server.isUnderAttack) return;
+
+    server.isUnderAttack = true;
+    const originalLoad = server.currentLoad;
+    
+    // Calcul de la charge d'attaque selon le type de serveur
+    let attackLoad = 0;
+    let damage = 0;
+    
+    switch (attackType) {
+        case 'pingFlood':
+            attackLoad = (500 + Math.random() * 300) * intensity;
+            damage = 2 * intensity;
+            break;
+        case 'botnet':
+            attackLoad = (1200 + Math.random() * 800) * intensity;
+            damage = 4 * intensity;
+            break;
+        case 'focused':
+            attackLoad = (800 + Math.random() * 400) * intensity;
+            damage = 3 * intensity;
+            break;
+    }
+    
+    // Ajustement selon le type de serveur
+    switch (server.type) {
+        case 'web':
+            damage *= 1.2; // Serveurs web plus vulnérables
+            break;
+        case 'database':
+            damage *= 1.5; // Base de données critique
+            attackLoad *= 0.8; // Mais gère mieux la charge
+            break;
+        case 'proxy':
+            damage *= 0.8; // Load balancer plus résistant
+            attackLoad *= 1.3; // Mais plus de trafic
+            break;
+        case 'backup':
+            damage *= 0.6; // Serveurs backup moins sollicités
+            break;
+    }
+    
+    server.currentLoad = attackLoad;
+    
+    // Animation visuelle pour ce serveur
+    animateServerUnderAttack(serverId);
+    
+    // Dégâts continus
+    const attackInterval = setInterval(() => {
+        let actualDamage = damage;
+        
+        // Application des défenses
+        actualDamage = applyServerDefenses(serverId, actualDamage);
+        
+        server.health -= actualDamage;
+        
+        if (server.health <= 0) {
+            server.health = 0;
+            serverCompromised(serverId);
+            clearInterval(attackInterval);
+        }
+        
+        updateServerUI(serverId);
+        
+    }, 200);
+    
+    // Fin d'attaque automatique
+    setTimeout(() => {
+        clearInterval(attackInterval);
+        server.isUnderAttack = false;
+        server.currentLoad = originalLoad;
+        stopServerAttackAnimation(serverId);
+        updateServerUI(serverId);
+    }, realisticAttacks[attackType]?.duration || 15000);
+}
+
+// 5. INTERFACE UTILISATEUR MULTI-SERVEURS
+
+function createMultiServerUI() {
+    const gameArea = document.getElementById('gameArea');
+    
+    // Supprimer l'ancien serveur unique
+    const oldServer = document.getElementById('server');
+    if (oldServer) oldServer.remove();
+    
+    // Créer les serveurs dans l'interface
+    Object.values(networkState.servers).forEach(server => {
+        const serverElement = document.createElement('div');
+        serverElement.id = server.id;
+        serverElement.className = `server server-${server.type}`;
+        serverElement.style.left = server.position.x + '%';
+        serverElement.style.top = server.position.y + '%';
+        serverElement.innerHTML = `
+            <div class="server-name">${server.name}</div>
+            <div class="server-health">
+                <div class="health-bar-mini">
+                    <div class="health-fill-mini" style="width: 100%"></div>
+                </div>
+                <span class="health-text-mini">100%</span>
+            </div>
+            <div class="server-load">${Math.round(server.currentLoad)} req/s</div>
+            <div class="server-services">${server.services.join(', ')}</div>
+        `;
+        
+        // Click handler pour sélectionner/cibler un serveur
+        serverElement.addEventListener('click', () => selectServer(server.id));
+        
+        gameArea.appendChild(serverElement);
+    });
+    
+    // Créer les connexions visuelles
+    createNetworkConnections();
+}
+
+function createNetworkConnections() {
+    const gameArea = document.getElementById('gameArea');
+    
+    // Créer un SVG pour les connexions
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.id = 'networkConnections';
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    svg.style.pointerEvents = 'none';
+    svg.style.zIndex = '1';
+    
+    gameArea.appendChild(svg);
+    
+    // Dessiner les connexions
+    Object.values(networkState.servers).forEach(server => {
+        server.connections.forEach(targetId => {
+            const targetServer = networkState.servers[targetId];
+            if (targetServer) {
+                drawConnection(svg, server, targetServer);
+            }
+        });
+    });
+}
     </script>
 </body>
 </html>
