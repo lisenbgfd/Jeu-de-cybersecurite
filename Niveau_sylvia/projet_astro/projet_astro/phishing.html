@@ -352,7 +352,7 @@ Conseils pour un phishing efficace:
 - Imitez une marque connue
 - Incluez des éléments personnalisés basés sur son profil
 - Ajoutez un appel à l'action clair (télécharger, cliquer, répondre)"></textarea>
-                            <button class="send-btn" onclick="analyzePhishing()">Envoyer et Analyser 🔍</button>
+                            <button class="send-btn" onclick="analyzePhishing()">Envoyer et Analyser </button>
                         </div>
                         <div id="ai-analysis"></div>
                     </div>
@@ -533,10 +533,10 @@ Claire`,
                 </div>
                 <div class="phishing-actions">
                     <button class="action-btn safe-btn" onclick="markEmail('${emailId}', true)">
-                        ✅ Email légitime
+                        Email légitime
                     </button>
                     <button class="action-btn danger-btn" onclick="markEmail('${emailId}', false)">
-                        ⚠️ Phishing suspect
+                        Phishing suspect
                     </button>
                 </div>
                 <div id="email-feedback-${emailId}"></div>
@@ -549,10 +549,10 @@ Claire`,
             
             let message, className;
             if ((email.safe && markedAsSafe) || (!email.safe && !markedAsSafe)) {
-                message = "✅ Bonne analyse ! Vous avez correctement identifié cet email.";
+                message = "Bonne analyse ! Vous avez correctement identifié cet email.";
                 className = "ai-result success";
             } else {
-                message = "❌ Attention ! Vous vous êtes trompé sur cet email.";
+                message = "Attention ! Vous vous êtes trompé sur cet email.";
                 className = "ai-result failure";
                 
                 if (email.safe && !markedAsSafe) {
