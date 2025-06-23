@@ -1977,7 +1977,7 @@ function startAttackMode() {
         if (gameState.attackActive) return;
         
         if (gameState.attackResources.botnet < 10 || gameState.attackResources.bandwidth < 50) {
-            addLog('❌ Ressources insuffisantes (besoin: 10 bots, 50 Mbps)', 'error');
+            addLog(' Ressources insuffisantes (besoin: 10 bots, 50 Mbps)', 'error');
             return;
         }
         
@@ -1988,14 +1988,14 @@ function startAttackMode() {
         
         // Lancer l'attaque originale
         gameState.originalAttackFunctions.startPingFlood();
-        addLog('🔥 Ping Flood lancé (-10 bots, -50 Mbps)', 'error');
+        addLog(' Ping Flood lancé (-10 bots, -50 Mbps)', 'error');
     };
     
     window.startBotnetAttack = function() {
         if (gameState.attackActive) return;
         
         if (gameState.attackResources.botnet < 30 || gameState.attackResources.bandwidth < 200) {
-            addLog('❌ Ressources insuffisantes (besoin: 30 bots, 200 Mbps)', 'error');
+            addLog(' Ressources insuffisantes (besoin: 30 bots, 200 Mbps)', 'error');
             return;
         }
         
@@ -2006,19 +2006,19 @@ function startAttackMode() {
         
         // Lancer l'attaque originale
         gameState.originalAttackFunctions.startBotnetAttack();
-        addLog('🤖 Attaque Botnet lancée (-30 bots, -200 Mbps)', 'error');
+        addLog(' Attaque Botnet lancée (-30 bots, -200 Mbps)', 'error');
     };
     
     window.startTargetedAttack = function() {
         if (gameState.attackActive) return;
         
         if (gameState.attackResources.botnet < 20 || gameState.attackResources.bandwidth < 100 || gameState.attackResources.exploits < 1) {
-            addLog('❌ Ressources insuffisantes (besoin: 20 bots, 100 Mbps, 1 exploit)', 'error');
+            addLog(' Ressources insuffisantes (besoin: 20 bots, 100 Mbps, 1 exploit)', 'error');
             return;
         }
         
         if (!gameState.selectedServer) {
-            addLog('❌ Sélectionnez un serveur cible', 'error');
+            addLog(' Sélectionnez un serveur cible', 'error');
             return;
         }
         
@@ -2030,7 +2030,7 @@ function startAttackMode() {
         
         // Lancer l'attaque originale
         gameState.originalAttackFunctions.startTargetedAttack();
-        addLog('🎯 Attaque ciblée lancée (-20 bots, -100 Mbps, -1 exploit)', 'error');
+        addLog('Attaque ciblée lancée (-20 bots, -100 Mbps, -1 exploit)', 'error');
     };
     
     // Ajouter une attaque ultime
@@ -2040,7 +2040,7 @@ function startAttackMode() {
             const ultimateBtn = document.createElement('button');
             ultimateBtn.id = 'ultimateAttackBtn';
             ultimateBtn.className = 'btn attack-btn';
-            ultimateBtn.innerHTML = '💀 ATTAQUE ULTIME';
+            ultimateBtn.innerHTML = ' ATTAQUE ULTIME';
             ultimateBtn.style.backgroundColor = '#660000';
             ultimateBtn.style.borderColor = '#990000';
             ultimateBtn.onclick = startUltimateAttack;
@@ -2048,9 +2048,9 @@ function startAttackMode() {
         }
     }
     
-    addLog('⚔️ MODE ATTAQUE ACTIVÉ', 'warning');
-    addLog('🎯 Objectif: Percer toutes les défenses avec vos ressources limitées', 'info');
-    addLog('📊 Ressources: 100 bots, 1000 Mbps, 5 exploits', 'info');
+    addLog(' MODE ATTAQUE ACTIVÉ', 'warning');
+    addLog(' Objectif: Percer toutes les défenses avec vos ressources limitées', 'info');
+    addLog('Ressources: 100 bots, 1000 Mbps, 5 exploits', 'info');
 }
 
 // Fonction pour mettre à jour l'affichage des ressources
@@ -2065,7 +2065,7 @@ function updateAttackResourcesDisplay() {
     
     // Vérifier si les ressources sont épuisées
     if (gameState.attackResources.botnet <= 0 && gameState.attackResources.bandwidth <= 0) {
-        addLog('💔 RESSOURCES ÉPUISÉES - Retour au mode apprentissage', 'error');
+        addLog(' RESSOURCES ÉPUISÉES - Retour au mode apprentissage', 'error');
         setTimeout(() => {
             resetToLearning();
         }, 3000);
@@ -2077,7 +2077,7 @@ function startUltimateAttack() {
     if (gameState.attackActive) return;
     
     if (gameState.attackResources.botnet < 50 || gameState.attackResources.bandwidth < 500 || gameState.attackResources.exploits < 3) {
-        addLog('❌ Ressources insuffisantes pour l\'attaque ultime (besoin: 50 bots, 500 Mbps, 3 exploits)', 'error');
+        addLog('Ressources insuffisantes pour l\'attaque ultime (besoin: 50 bots, 500 Mbps, 3 exploits)', 'error');
         return;
     }
     
@@ -2090,13 +2090,13 @@ function startUltimateAttack() {
     gameState.attackResources.exploits -= 3;
     updateAttackResourcesDisplay();
     
-    showInfoComment('💀 ATTAQUE ULTIME', 
+    showInfoComment(' ATTAQUE ULTIME', 
         'Déploiement de toutes les techniques d\'attaque simultanément. ' +
         'Utilise des exploits zero-day, du trafic massif distribué et des techniques d\'évasion avancées. ' +
         'Cette attaque ignore 80% des défenses et cause des dégâts dévastateurs. ' +
         'Coût: 50 bots, 500 Mbps, 3 exploits. Durée: 20 secondes.');
     
-    addLog('💀 ATTAQUE ULTIME DÉCLENCHÉE - TOUS LES SYSTÈMES SOUS STRESS MAXIMAL', 'error');
+    addLog(' ATTAQUE ULTIME DÉCLENCHÉE - TOUS LES SYSTÈMES SOUS STRESS MAXIMAL', 'error');
     
     attackInterval = setInterval(() => {
         Object.keys(gameState.servers).forEach(serverId => {
@@ -2107,7 +2107,7 @@ function startUltimateAttack() {
     
     setTimeout(() => {
         stopAttack();
-        addLog('💥 Attaque ultime terminée - Infrastructure critique', 'error');
+        addLog(' Attaque ultime terminée - Infrastructure critique', 'error');
     }, 20000);
 }
 
@@ -2145,7 +2145,7 @@ function attackServerUltimate(serverId, intensity) {
         
         if (server.health <= 0) {
             gameState.activeServers--;
-            addLog(`💀 ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
+            addLog(` ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
         }
     }
     
@@ -2155,7 +2155,7 @@ function attackServerUltimate(serverId, intensity) {
     
     // Vérifier la victoire de l'attaquant
     if (gameState.health <= 10) {
-        addLog('🏆 VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');
+        addLog(' VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');
         setTimeout(() => {
             resetToLearning();
         }, 3000);
