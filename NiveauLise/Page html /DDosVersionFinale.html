@@ -1464,26 +1464,75 @@
         }
 
         function deployRedundancy() {
-            const cost = 3500;
-            if (gameState.budget < cost) {
-                addLog(' Budget insuffisant pour la Redondance', 'error');
-                return;
+    const cost = 3500;
+    if (gameState.budget < cost) {
+        addLog('❌ Budget insuffisant pour la Redondance', 'error');
+        return;
+    }
+    
+    gameState.budget -= cost;
+    gameState.defenses.redundancy = true;
+    gameState.score += 350;
+    
+    showInfoComment('Redondance', 
+        'Déploie des serveurs de backup et des systèmes de failover automatique. ' +
+        'Si un serveur tombe, le trafic est automatiquement redirigé vers les backups. ' +
+        'Assure une continuité de service même en cas d\'attaque réussie sur certains serveurs.', 
+        'defense');
+    
+    document.getElementById('redundancyBtn').disabled = true;
+    
+    // Ajouter un effet visuel de redondance sur tous les serveurs
+    Object.keys(gameState.servers).forEach(serverId => {
+        const serverEl = document.getElementById(serverId);
+        if (serverEl) {
+            // Ajouter une classe CSS pour l'effet de redondance
+            serverEl.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
+            serverEl.style.border = '2px solid rgba(0, 255, 255, 0.5)';
+            
+            // Créer un indicateur de backup visuel
+            if (!serverEl.querySelector('.backup-indicator')) {
+                const backupIndicator = document.createElement('div');
+                backupIndicator.className = 'backup-indicator';
+                backupIndicator.style.cssText = `
+                    position: absolute;
+                    top: -8px;
+                    right: -8px;
+                    width: 16px;
+                    height: 16px;
+                    background: radial-gradient(circle, #00ffff, #0088cc);
+                    border-radius: 50%;
+                    animation: backupPulse 2s infinite;
+                    font-size: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: black;
+                    font-weight: bold;
+                `;
+                backupIndicator.textContent = 'B';
+                serverEl.appendChild(backupIndicator);
             }
-            
-            gameState.budget -= cost;
-            gameState.defenses.redundancy = true;
-            gameState.score += 350;
-            
-            showInfoComment('Redondance', 
-                'Déploie des serveurs de backup et des systèmes de failover automatique. ' +
-                'Si un serveur tombe, le trafic est automatiquement redirigé vers les backups. ' +
-                'Assure une continuité de service même en cas d\'attaque réussie sur certains serveurs.', 
-                'defense');
-            
-            document.getElementById('redundancyBtn').disabled = true;
-            addLog(' Système de redondance activé', 'success');
-            updateUI();
         }
+    });
+    
+    // Ajouter l'animation CSS si elle n'existe pas déjà
+    if (!document.querySelector('#backup-animation-style')) {
+        const style = document.createElement('style');
+        style.id = 'backup-animation-style';
+        style.textContent = `
+            @keyframes backupPulse {
+                0%, 100% { opacity: 0.7; transform: scale(1); }
+                50% { opacity: 1; transform: scale(1.2); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    addLog('✅ Système de redondance activé', 'success');
+    addLog('🔄 Serveurs de backup déployés', 'info');
+    updateUI();
+}
 
         // Fonctions visuelles
         function createAttackPackets(targetServerId, blocked) {
