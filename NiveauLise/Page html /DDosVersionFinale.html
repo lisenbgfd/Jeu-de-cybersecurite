@@ -89,22 +89,23 @@
         }
 
         .wave-announcement {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 0, 0, 0.95);
-            border: 3px solid #ff0000;
-            border-radius: 20px;
-            padding: 30px;
-            z-index: 1002;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            opacity: 0;
-            animation: waveAlert 3s ease-in-out;
-            pointer-events: none;
-        }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 0, 0, 0.95);
+    border: 3px solid #ff0000;
+    border-radius: 20px;
+    padding: 30px;
+    z-index: 1002;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    display: none; 
+    animation: waveAlert 3s ease-in-out;
+    pointer-events: none;
+}
 
         @keyframes waveAlert {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
@@ -1417,7 +1418,7 @@
         function deployRateLimiting() {
             const cost = 1200;
             if (gameState.budget < cost) {
-                addLog('❌ Budget insuffisant pour le Rate Limiting', 'error');
+                addLog(' Budget insuffisant pour le Rate Limiting', 'error');
                 return;
             }
             
@@ -1466,7 +1467,7 @@
         function deployRedundancy() {
     const cost = 3500;
     if (gameState.budget < cost) {
-        addLog('❌ Budget insuffisant pour la Redondance', 'error');
+        addLog('Budget insuffisant pour la Redondance', 'error');
         return;
     }
     
@@ -1529,8 +1530,8 @@
         document.head.appendChild(style);
     }
     
-    addLog('✅ Système de redondance activé', 'success');
-    addLog('🔄 Serveurs de backup déployés', 'info');
+    addLog(' Système de redondance activé', 'success');
+    addLog(' Serveurs de backup déployés', 'info');
     updateUI();
 }
 
@@ -1735,8 +1736,8 @@ function startAttackMode() {
     document.getElementById('targetedAttackCost').textContent = '20 bots - 100 Mbps';
     
     updateAttackResources();
-    addLog('🔥 Mode attaque activé - Ressources disponibles', 'warning');
-    addLog('📊 Botnet: 100 bots, Bande passante: 1000 Mbps', 'info');
+    addLog(' Mode attaque activé - Ressources disponibles', 'warning');
+    addLog(' Botnet: 100 bots, Bande passante: 1000 Mbps', 'info');
 }
 
 // Fonction pour mettre à jour l'affichage des ressources
@@ -1777,7 +1778,7 @@ function consumeAttackResources(botsUsed, bandwidthUsed) {
     if (gameState.phase !== 'attack') return true;
     
     if (gameState.botnetCount < botsUsed || gameState.bandwidthCount < bandwidthUsed) {
-        addLog('❌ Ressources insuffisantes pour cette attaque', 'error');
+        addLog(' Ressources insuffisantes pour cette attaque', 'error');
         return false;
     }
     
@@ -1803,7 +1804,7 @@ function startAdvancedAttack() {
         'Coût: 30 bots, 150 Mbps. Durée: 8 secondes.', 
         'attack');
     
-    addLog('🚀 Attaque avancée initiée', 'error');
+    addLog(' Attaque avancée initiée', 'error');
     
     attackInterval = setInterval(() => {
         Object.keys(gameState.servers).forEach(serverId => {
@@ -1831,7 +1832,7 @@ function startSocialEngineering() {
         'Coût: 15 bots, 75 Mbps. Durée: 6 secondes.', 
         'attack');
     
-    addLog('🎭 Attaque par ingénierie sociale lancée', 'error');
+    addLog(' Attaque par ingénierie sociale lancée', 'error');
     
     attackInterval = setInterval(() => {
         Object.keys(gameState.servers).forEach(serverId => {
@@ -1879,7 +1880,7 @@ function attackServerAdvanced(serverId, intensity) {
         
         if (server.health <= 0) {
             gameState.activeServers--;
-            addLog(`💀 ${server.type} neutralisé par attaque avancée`, 'error');
+            addLog(` ${server.type} neutralisé par attaque avancée`, 'error');
         }
     }
     
@@ -1909,7 +1910,7 @@ function attackServerSocial(serverId, intensity) {
     
     if (server.health <= 0) {
         gameState.activeServers--;
-        addLog(`🎯 ${server.type} compromis par ingénierie sociale`, 'error');
+        addLog(` ${server.type} compromis par ingénierie sociale`, 'error');
     }
     
     createAttackPackets(serverId, false);
@@ -1953,7 +1954,7 @@ function startAttackMode() {
         resourcesDiv.id = 'attackResourcesDisplay';
         resourcesDiv.innerHTML = `
             <div style="background: #2a0a0a; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #ff4444;">
-                <h4 style="color: #ff4444; margin: 0 0 10px 0;">🔥 RESSOURCES D'ATTAQUE</h4>
+                <h4 style="color: #ff4444; margin: 0 0 10px 0;"> RESSOURCES D'ATTAQUE</h4>
                 <div style="display: flex; justify-content: space-between; color: white; font-size: 12px;">
                     <span>Botnet: <span id="botnetDisplay">${gameState.attackResources.botnet}</span></span>
                     <span>Bande passante: <span id="bandwidthDisplay">${gameState.attackResources.bandwidth}</span> Mbps</span>
@@ -1976,7 +1977,7 @@ function startAttackMode() {
         if (gameState.attackActive) return;
         
         if (gameState.attackResources.botnet < 10 || gameState.attackResources.bandwidth < 50) {
-            addLog('❌ Ressources insuffisantes (besoin: 10 bots, 50 Mbps)', 'error');
+            addLog(' Ressources insuffisantes (besoin: 10 bots, 50 Mbps)', 'error');
             return;
         }
         
@@ -1987,14 +1988,14 @@ function startAttackMode() {
         
         // Lancer l'attaque originale
         gameState.originalAttackFunctions.startPingFlood();
-        addLog('🔥 Ping Flood lancé (-10 bots, -50 Mbps)', 'error');
+        addLog(' Ping Flood lancé (-10 bots, -50 Mbps)', 'error');
     };
     
     window.startBotnetAttack = function() {
         if (gameState.attackActive) return;
         
         if (gameState.attackResources.botnet < 30 || gameState.attackResources.bandwidth < 200) {
-            addLog('❌ Ressources insuffisantes (besoin: 30 bots, 200 Mbps)', 'error');
+            addLog(' Ressources insuffisantes (besoin: 30 bots, 200 Mbps)', 'error');
             return;
         }
         
@@ -2005,19 +2006,19 @@ function startAttackMode() {
         
         // Lancer l'attaque originale
         gameState.originalAttackFunctions.startBotnetAttack();
-        addLog('🤖 Attaque Botnet lancée (-30 bots, -200 Mbps)', 'error');
+        addLog(' Attaque Botnet lancée (-30 bots, -200 Mbps)', 'error');
     };
     
     window.startTargetedAttack = function() {
         if (gameState.attackActive) return;
         
         if (gameState.attackResources.botnet < 20 || gameState.attackResources.bandwidth < 100 || gameState.attackResources.exploits < 1) {
-            addLog('❌ Ressources insuffisantes (besoin: 20 bots, 100 Mbps, 1 exploit)', 'error');
+            addLog(' Ressources insuffisantes (besoin: 20 bots, 100 Mbps, 1 exploit)', 'error');
             return;
         }
         
         if (!gameState.selectedServer) {
-            addLog('❌ Sélectionnez un serveur cible', 'error');
+            addLog(' Sélectionnez un serveur cible', 'error');
             return;
         }
         
@@ -2029,7 +2030,7 @@ function startAttackMode() {
         
         // Lancer l'attaque originale
         gameState.originalAttackFunctions.startTargetedAttack();
-        addLog('🎯 Attaque ciblée lancée (-20 bots, -100 Mbps, -1 exploit)', 'error');
+        addLog('Attaque ciblée lancée (-20 bots, -100 Mbps, -1 exploit)', 'error');
     };
     
     // Ajouter une attaque ultime
@@ -2039,7 +2040,7 @@ function startAttackMode() {
             const ultimateBtn = document.createElement('button');
             ultimateBtn.id = 'ultimateAttackBtn';
             ultimateBtn.className = 'btn attack-btn';
-            ultimateBtn.innerHTML = '💀 ATTAQUE ULTIME';
+            ultimateBtn.innerHTML = ' ATTAQUE ULTIME';
             ultimateBtn.style.backgroundColor = '#660000';
             ultimateBtn.style.borderColor = '#990000';
             ultimateBtn.onclick = startUltimateAttack;
@@ -2047,9 +2048,9 @@ function startAttackMode() {
         }
     }
     
-    addLog('⚔️ MODE ATTAQUE ACTIVÉ', 'warning');
-    addLog('🎯 Objectif: Percer toutes les défenses avec vos ressources limitées', 'info');
-    addLog('📊 Ressources: 100 bots, 1000 Mbps, 5 exploits', 'info');
+    addLog(' MODE ATTAQUE ACTIVÉ', 'warning');
+    addLog(' Objectif: Percer toutes les défenses avec vos ressources limitées', 'info');
+    addLog('Ressources: 100 bots, 1000 Mbps, 5 exploits', 'info');
 }
 
 // Fonction pour mettre à jour l'affichage des ressources
@@ -2064,7 +2065,7 @@ function updateAttackResourcesDisplay() {
     
     // Vérifier si les ressources sont épuisées
     if (gameState.attackResources.botnet <= 0 && gameState.attackResources.bandwidth <= 0) {
-        addLog('💔 RESSOURCES ÉPUISÉES - Retour au mode apprentissage', 'error');
+        addLog(' RESSOURCES ÉPUISÉES - Retour au mode apprentissage', 'error');
         setTimeout(() => {
             resetToLearning();
         }, 3000);
@@ -2076,7 +2077,7 @@ function startUltimateAttack() {
     if (gameState.attackActive) return;
     
     if (gameState.attackResources.botnet < 50 || gameState.attackResources.bandwidth < 500 || gameState.attackResources.exploits < 3) {
-        addLog('❌ Ressources insuffisantes pour l\'attaque ultime (besoin: 50 bots, 500 Mbps, 3 exploits)', 'error');
+        addLog('Ressources insuffisantes pour l\'attaque ultime (besoin: 50 bots, 500 Mbps, 3 exploits)', 'error');
         return;
     }
     
@@ -2089,13 +2090,13 @@ function startUltimateAttack() {
     gameState.attackResources.exploits -= 3;
     updateAttackResourcesDisplay();
     
-    showInfoComment('💀 ATTAQUE ULTIME', 
+    showInfoComment(' ATTAQUE ULTIME', 
         'Déploiement de toutes les techniques d\'attaque simultanément. ' +
         'Utilise des exploits zero-day, du trafic massif distribué et des techniques d\'évasion avancées. ' +
         'Cette attaque ignore 80% des défenses et cause des dégâts dévastateurs. ' +
         'Coût: 50 bots, 500 Mbps, 3 exploits. Durée: 20 secondes.');
     
-    addLog('💀 ATTAQUE ULTIME DÉCLENCHÉE - TOUS LES SYSTÈMES SOUS STRESS MAXIMAL', 'error');
+    addLog(' ATTAQUE ULTIME DÉCLENCHÉE - TOUS LES SYSTÈMES SOUS STRESS MAXIMAL', 'error');
     
     attackInterval = setInterval(() => {
         Object.keys(gameState.servers).forEach(serverId => {
@@ -2106,7 +2107,7 @@ function startUltimateAttack() {
     
     setTimeout(() => {
         stopAttack();
-        addLog('💥 Attaque ultime terminée - Infrastructure critique', 'error');
+        addLog(' Attaque ultime terminée - Infrastructure critique', 'error');
     }, 20000);
 }
 
@@ -2144,7 +2145,7 @@ function attackServerUltimate(serverId, intensity) {
         
         if (server.health <= 0) {
             gameState.activeServers--;
-            addLog(`💀 ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
+            addLog(` ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
         }
     }
     
@@ -2154,7 +2155,7 @@ function attackServerUltimate(serverId, intensity) {
     
     // Vérifier la victoire de l'attaquant
     if (gameState.health <= 10) {
-        addLog('🏆 VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');
+        addLog(' VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');
         setTimeout(() => {
             resetToLearning();
         }, 3000);
