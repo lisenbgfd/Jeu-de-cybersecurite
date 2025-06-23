@@ -1104,7 +1104,7 @@
 
         // Gestion des phases
         function startChallengePhase() {
-            gameState.phase = 'challenge';
+            .phase = 'challenge';
             gameState.waveNumber = 0;
             currentWave = 0;
             waveInProgress = false;
@@ -1125,6 +1125,30 @@
 
         function resetToLearning() {
             gameState.phase = 'learning';
+               // Reset des ressources d'attaque
+    gameState.botnetCount = 100;
+    gameState.bandwidthCount = 1000;
+    
+    // Cacher les ressources d'attaque
+    document.getElementById('attackResources').style.display = 'none';
+    
+    // Réactiver le panel de défense
+    document.querySelector('.defense-panel').classList.remove('disabled');
+    
+    // Remettre les textes originaux des boutons
+    document.getElementById('pingFloodCost').textContent = 'Attaque modérée';
+    document.getElementById('botnetAttackCost').textContent = 'Attaque massive';
+    document.getElementById('targetedAttackCost').textContent = 'Serveur sélectionné';
+    
+    // Cacher les attaques avancées
+    document.getElementById('advancedAttackBtn').style.display = 'none';
+    document.getElementById('socialEngineeringBtn').style.display = 'none';
+    
+    // Retirer la classe attack-mode
+    document.getElementById('phaseIndicator').classList.remove('attack-mode');
+    
+    // Réafficher le bouton mode attaque
+    document.getElementById('attackModeBtn').style.display = 'inline-block';
             gameState.health = 100;
             gameState.budget = 8000;
             gameState.score = 0;
@@ -1233,6 +1257,8 @@
         // Fonctions d'attaque
         function startPingFlood() {
             if (gameState.attackActive) return;
+            if (gameState.phase === 'attack' && !consumeAttackResources(10, 50)) return;
+    
             
             gameState.attackActive = true;
             document.getElementById('stopBtn').disabled = false;
@@ -1257,6 +1283,7 @@
 
         function startBotnetAttack() {
             if (gameState.attackActive) return;
+            if (gameState.phase === 'attack' && !consumeAttackResources(50, 200)) return;
             
             gameState.attackActive = true;
             document.getElementById('stopBtn').disabled = false;
@@ -1283,6 +1310,7 @@
             if (gameState.attackActive || !gameState.selectedServer) {
                 addLog(' Sélectionnez un serveur cible', 'error');
                 return;
+            if (gameState.phase === 'attack' && !consumeAttackResources(20, 100)) return;
             }
             
             gameState.attackActive = true;
@@ -1654,219 +1682,6 @@
                 logs.removeChild(logs.firstChild);
             }
         }
-
-        // Fonction à ajouter dans votre script JavaScript
-function startAttackMode() {
-    gameState.phase = 'attack';
-    gameState.botnetCount = 100;
-    gameState.bandwidthCount = 1000;
-    
-    // Modifier l'interface pour le mode attaque
-    document.getElementById('phaseIndicator').textContent = 'MODE ATTAQUE - Utilisez vos ressources pour attaquer l\'infrastructure';
-    document.getElementById('phaseIndicator').classList.add('attack-mode');
-    
-    // Afficher les ressources d'attaque
-    document.getElementById('attackResources').style.display = 'block';
-    
-    // Désactiver le panel de défense
-    document.querySelector('.defense-panel').classList.add('disabled');
-    
-    // Modifier les boutons de contrôle
-    document.getElementById('challengeBtn').style.display = 'none';
-    document.getElementById('attackModeBtn').style.display = 'none';
-    document.getElementById('resetBtn').style.display = 'inline-block';
-    
-    // Activer les attaques avancées
-    document.getElementById('advancedAttackBtn').style.display = 'inline-block';
-    document.getElementById('socialEngineeringBtn').style.display = 'inline-block';
-    
-    // Modifier les textes des boutons d'attaque pour montrer le coût en ressources
-    document.getElementById('pingFloodCost').textContent = '10 bots - 50 Mbps';
-    document.getElementById('botnetAttackCost').textContent = '50 bots - 200 Mbps';
-    document.getElementById('targetedAttackCost').textContent = '20 bots - 100 Mbps';
-    
-    updateAttackResources();
-    addLog('🔥 Mode attaque activé - Ressources disponibles', 'warning');
-    addLog('📊 Botnet: 100 bots, Bande passante: 1000 Mbps', 'info');
-}
-
-// Fonction pour mettre à jour l'affichage des ressources
-function updateAttackResources() {
-    document.getElementById('botnetCount').textContent = gameState.botnetCount || 0;
-    document.getElementById('bandwidthCount').textContent = gameState.bandwidthCount || 0;
-    
-    // Mettre à jour les barres de progression
-    const botnetPercentage = (gameState.botnetCount / 100) * 100;
-    const bandwidthPercentage = (gameState.bandwidthCount / 1000) * 100;
-    
-    document.getElementById('botnetBar').style.width = botnetPercentage + '%';
-    document.getElementById('bandwidthBar').style.width = bandwidthPercentage + '%';
-    
-    // Changer la couleur des barres selon le niveau
-    const botnetBar = document.getElementById('botnetBar');
-    const bandwidthBar = document.getElementById('bandwidthBar');
-    
-    if (botnetPercentage < 20) {
-        botnetBar.style.backgroundColor = '#ff4444';
-    } else if (botnetPercentage < 50) {
-        botnetBar.style.backgroundColor = '#ffaa00';
-    } else {
-        botnetBar.style.backgroundColor = '#44ff44';
-    }
-    
-    if (bandwidthPercentage < 20) {
-        bandwidthBar.style.backgroundColor = '#ff4444';
-    } else if (bandwidthPercentage < 50) {
-        bandwidthBar.style.backgroundColor = '#ffaa00';
-    } else {
-        bandwidthBar.style.backgroundColor = '#44ff44';
-    }
-}
-
-// Fonction pour consommer des ressources lors d'une attaque
-function consumeAttackResources(botsUsed, bandwidthUsed) {
-    if (gameState.phase !== 'attack') return true;
-    
-    if (gameState.botnetCount < botsUsed || gameState.bandwidthCount < bandwidthUsed) {
-        addLog('❌ Ressources insuffisantes pour cette attaque', 'error');
-        return false;
-    }
-    
-    gameState.botnetCount -= botsUsed;
-    gameState.bandwidthCount -= bandwidthUsed;
-    
-    updateAttackResources();
-    return true;
-}
-
-// Nouvelles fonctions d'attaque avancées
-function startAdvancedAttack() {
-    if (gameState.attackActive) return;
-    
-    if (!consumeAttackResources(30, 150)) return;
-    
-    gameState.attackActive = true;
-    document.getElementById('stopBtn').disabled = false;
-    
-    showInfoComment('Attaque Avancée', 
-        'Utilise des techniques d\'évasion sophistiquées et des exploits zero-day. ' +
-        'Contourne 70% des défenses traditionnelles grâce à des méthodes de camouflage avancées. ' +
-        'Coût: 30 bots, 150 Mbps. Durée: 8 secondes.', 
-        'attack');
-    
-    addLog('🚀 Attaque avancée initiée', 'error');
-    
-    attackInterval = setInterval(() => {
-        Object.keys(gameState.servers).forEach(serverId => {
-            // Attaque qui ignore en partie les défenses
-            attackServerAdvanced(serverId, 5);
-        });
-    }, 250);
-    
-    setTimeout(() => {
-        stopAttack();
-    }, 8000);
-}
-
-function startSocialEngineering() {
-    if (gameState.attackActive) return;
-    
-    if (!consumeAttackResources(15, 75)) return;
-    
-    gameState.attackActive = true;
-    document.getElementById('stopBtn').disabled = false;
-    
-    showInfoComment('Social Engineering', 
-        'Attaque qui exploite le facteur humain pour contourner les défenses techniques. ' +
-        'Ignore les firewalls et rate limiting en utilisant des comptes légitimes compromis. ' +
-        'Coût: 15 bots, 75 Mbps. Durée: 6 secondes.', 
-        'attack');
-    
-    addLog('🎭 Attaque par ingénierie sociale lancée', 'error');
-    
-    attackInterval = setInterval(() => {
-        Object.keys(gameState.servers).forEach(serverId => {
-            // Attaque qui ignore firewall et rate limiting
-            attackServerSocial(serverId, 3);
-        });
-    }, 400);
-    
-    setTimeout(() => {
-        stopAttack();
-    }, 6000);
-}
-
-// Fonction d'attaque avancée qui contourne partiellement les défenses
-function attackServerAdvanced(serverId, intensity) {
-    const server = gameState.servers[serverId];
-    if (!server || server.health <= 0) return;
-    
-    let damage = intensity * 2;
-    let blocked = false;
-    
-    // L'attaque avancée contourne 70% des défenses
-    if (gameState.defenses.firewall && Math.random() > 0.7) {
-        if (Math.random() < 0.4) {
-            blocked = true;
-            damage = 0;
-        }
-    }
-    
-    if (gameState.defenses.reverseProxy && !blocked && Math.random() > 0.7) {
-        damage *= 0.4;
-    }
-    
-    if (gameState.defenses.rateLimiting && !blocked && Math.random() > 0.7) {
-        damage *= 0.7;
-    }
-    
-    if (gameState.defenses.infrastructure && !blocked) {
-        damage *= 0.5; // Infrastructure reste partiellement efficace
-    }
-    
-    if (!blocked) {
-        server.health = Math.max(0, server.health - damage);
-        updateServerVisual(serverId);
-        
-        if (server.health <= 0) {
-            gameState.activeServers--;
-            addLog(`💀 ${server.type} neutralisé par attaque avancée`, 'error');
-        }
-    }
-    
-    createAttackPackets(serverId, blocked);
-    updateGlobalHealth();
-    updateUI();
-}
-
-// Fonction d'attaque sociale qui ignore certaines défenses
-function attackServerSocial(serverId, intensity) {
-    const server = gameState.servers[serverId];
-    if (!server || server.health <= 0) return;
-    
-    let damage = intensity * 2;
-    
-    // L'ingénierie sociale ignore firewall et rate limiting
-    if (gameState.defenses.reverseProxy) {
-        damage *= 0.6;
-    }
-    
-    if (gameState.defenses.infrastructure) {
-        damage *= 0.4;
-    }
-    
-    server.health = Math.max(0, server.health - damage);
-    updateServerVisual(serverId);
-    
-    if (server.health <= 0) {
-        gameState.activeServers--;
-        addLog(`🎯 ${server.type} compromis par ingénierie sociale`, 'error');
-    }
-    
-    createAttackPackets(serverId, false);
-    updateGlobalHealth();
-    updateUI();
-}
 
         // Initialisation finale
         updateUI();
