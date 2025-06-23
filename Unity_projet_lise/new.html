@@ -532,17 +532,17 @@
     <div class="wave-announcement" id="waveAnnouncement"></div>
 
     <div class="game-container">
-        <div class="phase-controls" id="phaseControls">
-            <button class="phase-btn" onclick="startChallengePhase()" id="challengeBtn">
-                Mode Défense 
-            </button>
-            <button class="phase-btn" onclick="startAttackerPhase()" id="attackerBtn">
-                Mode Attaquant
-            </button>
-            <button class="phase-btn" onclick="resetToLearning()" id="resetBtn" style="display: none;">
-                Retour Apprentissage
-            </button>
-        </div>        
+        <!-- Panel d'Attaque -->
+        <div class="panel attack-panel" id="attackPanel">
+            <h3> ATTAQUES</h3>
+            <div class="phase-controls" id="phaseControls">
+                <button class="phase-btn" onclick="startChallengePhase()" id="challengeBtn">
+                    Mode Défense 
+                </button>
+                <button class="phase-btn" onclick="resetToLearning()" id="resetBtn" style="display: none;">
+                    Retour Apprentissage
+                </button>
+            </div>
             <button class="btn btn-attack" onclick="startPingFlood()">
                 Ping Flood
                 <span class="cost">Attaque modérée</span>
@@ -1610,7 +1610,6 @@
             // Appeler la fonction originale
             originalResetToLearning();
         };
-
     </script>
 </body>
 </html>
