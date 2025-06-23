@@ -636,9 +636,9 @@
         <!-- Panel de Logs -->
         <div class="panel logs-panel" id="logsPanel">
             <div id="logs">
-                <div class="log-entry log-info">🟢 Système initialisé - Serveur opérationnel</div>
-                <div class="log-entry log-info">👁️ Surveillance du trafic activée</div>
-                <div class="log-entry log-warning">📚 Mode apprentissage - Explorez les attaques et défenses</div>
+                <div class="log-entry log-info">Système initialisé - Serveur opérationnel</div>
+                <div class="log-entry log-info"> Surveillance du trafic activée</div>
+                <div class="log-entry log-warning"> Mode apprentissage - Explorez les attaques et défenses</div>
             </div>
         </div>
     </div>
@@ -891,7 +891,7 @@
                     spawnAttackPacket(blocked);
                 } else {
                     spawnAttackPacket(true);
-                    addLog('🛡️ Attaque bloquée par les défenses', 'success');
+                    addLog(' Attaque bloquée par les défenses', 'success');
                 }
 
                 if (gameState.serverHealth <= 0) {
@@ -1214,9 +1214,9 @@
             
             // Clear logs et ajouter message de reset
             document.getElementById('logs').innerHTML = `
-                <div class="log-entry log-info">🟢 Système réinitialisé - Retour en mode apprentissage</div>
-                <div class="log-entry log-info">👁️ Surveillance du trafic activée</div>
-                <div class="log-entry log-warning">📚 Mode apprentissage - Explorez les attaques et défenses</div>
+                <div class="log-entry log-info"> Système réinitialisé - Retour en mode apprentissage</div>
+                <div class="log-entry log-info"> Surveillance du trafic activée</div>
+                <div class="log-entry log-warning"> Mode apprentissage - Explorez les attaques et défenses</div>
             `;
 
             updateUI();
@@ -1368,7 +1368,7 @@
 
             const wave = defenseWaves[currentDefenseWave];
             showWaveAnnouncement(wave.warning);
-            addLog(`🛡️ ${wave.warning}`, 'warning');
+            addLog(` ${wave.warning}`, 'warning');
             
             // Activer les défenses de cette vague
             wave.defenses.forEach(defenseKey => {
@@ -1384,7 +1384,7 @@
             }
             
             updateAttackerUI();
-            addLog(`💡 ${wave.tip}`, 'info');
+            addLog(` ${wave.tip}`, 'info');
         }
 
         function launchAttackerPingFlood() {
