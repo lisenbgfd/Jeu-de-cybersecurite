@@ -37,6 +37,7 @@ Nous nous sommes toutes rendues sur le site de l'ANSII et nous nous sommes répa
 Nous avons consacré les trente dernières minutes de la séance à mettre en commun nos idées de scénario pour notre jeu 
 
 
+
 Mardi 8 avril :
 Nous avons finalisé nos idées de scénario et nous nous sommes réparties un scénario chacune.
 
