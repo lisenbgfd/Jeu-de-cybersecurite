@@ -681,7 +681,7 @@
                 attack: "pingFlood",
                 intensity: 1.0,
                 duration: 15000,
-                warning: "⚡ VAGUE 2: Intensification - Ping Flood massif!",
+                warning: "VAGUE 2: Intensification - Ping Flood massif!",
                 tip: "Combinez plusieurs défenses pour plus d'efficacité."
             },
             {
@@ -1611,15 +1611,6 @@
             originalResetToLearning();
         };
 
-        // Ajouter le bouton Mode Attaquant à l'initialisation
-        window.addEventListener('load', function() {
-            const challengeBtn = document.getElementById('challengeBtn');
-            challengeBtn.insertAdjacentHTML('afterend', `
-                <button class="phase-btn" onclick="startAttackerPhase()" id="attackerBtn">
-                    Mode Attaquant
-                </button>
-            `);
-        });
     </script>
 </body>
 </html>
