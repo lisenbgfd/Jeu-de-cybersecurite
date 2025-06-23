@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Phishing</title>
+  <title>Phishing Game - Cybersécurité</title>
   <style>
         * {
             margin: 0;
@@ -513,32 +513,107 @@
             margin-right: 8px;
         }
 
-        .scenarios-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
-        gap: 20px;
-        justify-items: center;
-        padding: 20px;
-    }
+        .documentation {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 20px;
+            border: 2px solid #4ecdc4;
+            display: none;
+        }
 
-    .scenario-card {
-        background-color: #f0f0f0;
-        padding: 20px;
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-        border-radius: 12px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
+        .doc-section {
+            margin-bottom: 30px;
+        }
 
-    .scenario-card:hover {
-        transform: scale(1.05);
-    }
+        .doc-title {
+            color: #4ecdc4;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .doc-content {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .doc-content ul {
+            margin-left: 20px;
+        }
+
+        .doc-content li {
+            padding: 5px 0;
+        }
+
+        .success-message {
+            background: rgba(76, 205, 196, 0.2);
+            border: 2px solid #4ecdc4;
+            color: #4ecdc4;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        .failure-message {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analysis-score {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .mode-selector {
+                flex-direction: column;
+            }
+        }
   </style>
+</head>
+<body>
+    <div class="matrix-bg" id="matrixBg"></div>
+    
+    <div class="container">
+        <!-- Écran d'accueil -->
+        <div id="homeScreen">
+            <div class="header">
+                <h1 class="title">🎣 PHISHING SIMULATOR</h1>
+                <p class="subtitle">Apprenez à détecter et créer des emails de phishing</p>
+            </div>
 
-<!-- Écran de jeu -->
+            <div class="scenarios-grid">
+                <div class="scenario-card" data-scenario="phishing">
+                    <span class="scenario-icon">📧</span>
+                    <h3 class="scenario-title">Phishing Email</h3>
+                    <p class="scenario-desc">Testez vos compétences en détection de phishing et apprenez à créer des emails malveillants</p>
+                </div>
+                
+                <div class="scenario-card" data-scenario="documentation">
+                    <span class="scenario-icon">📚</span>
+                    <h3 class="scenario-title">Documentation</h3>
+                    <p class="scenario-desc">Guides et conseils pour se protéger du phishing et comprendre les techniques</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran de jeu -->
         <div id="gameScreen" class="game-screen">
             <div class="game-header">
                 <button class="back-btn" onclick="backToHome()">← Retour</button>
@@ -551,11 +626,8 @@
             <div class="mode-selector">
                 <button class="mode-btn active" id="victimMode" onclick="setMode('victim')">Mode Hackée</button>
                 <button class="mode-btn" id="hackerMode" onclick="setMode('hacker')">Mode Hackeuse</button>
-                <button class="mode-btn docu-btn" onclick="ouvrirDocu()"> Documentation</button>
-                
+                <button class="mode-btn" id="docMode" onclick="setMode('documentation')">Documentation</button>
             </div>
-
-            
 
             <!-- Profil de la créatrice -->
             <div class="profile-info">
@@ -650,9 +722,51 @@
                 </div>
 
                 <div class="ai-analysis" id="aiAnalysis" style="display: none;">
-                    <h3>Évaluation de votre phishing</h3>
+                    <h3>🤖 Analyse IA de votre phishing</h3>
                     <div class="analysis-content" id="analysisContent">
                         <!-- L'analyse sera générée ici -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation -->
+            <div class="documentation" id="documentationInterface">
+                <div class="doc-section">
+                    <h3 class="doc-title">🛡️ Comment reconnaître un phishing ?</h3>
+                    <div class="doc-content">
+                        <ul>
+                            <li><strong>Vérifiez l'expéditeur :</strong> Méfiez-vous des adresses suspectes ou des fautes de frappe</li>
+                            <li><strong>Urgence artificielle :</strong> Les phrases comme "urgent", "expire demain" sont des signaux d'alarme</li>
+                            <li><strong>Pièces jointes :</strong> Ne téléchargez jamais de fichiers .exe ou .zip suspects</li>
+                            <li><strong>Liens suspects :</strong> Vérifiez toujours l'URL avant de cliquer</li>
+                            <li><strong>Personnalisation :</strong> Les vrais emails professionnels utilisent votre nom</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3 class="doc-title">🎯 Techniques de social engineering</h3>
+                    <div class="doc-content">
+                        <ul>
+                            <li><strong>Autorité :</strong> Se faire passer pour une grande marque</li>
+                            <li><strong>Urgence :</strong> Créer un sentiment de pression temporelle</li>
+                            <li><strong>Peur :</strong> Menacer de suspendre un compte</li>
+                            <li><strong>Avidité :</strong> Proposer des offres trop belles pour être vraies</li>
+                            <li><strong>Curiosité :</strong> Inciter à cliquer sur des liens</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3 class="doc-title">🔒 Bonnes pratiques de sécurité</h3>
+                    <div class="doc-content">
+                        <ul>
+                            <li>Toujours vérifier l'URL d'un site avant de saisir des informations</li>
+                            <li>Utiliser l'authentification à deux facteurs</li>
+                            <li>Maintenir ses logiciels à jour</li>
+                            <li>Utiliser un antivirus à jour</li>
+                            <li>Former régulièrement les équipes aux risques</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -733,452 +847,3 @@
                     id: 5,
                     sender: 'Adobe Creative <noreply@adobe.com>',
                     subject: 'Votre facture Adobe Creative Cloud',
-                    preview: 'Votre abonnement a été renouvelé automatiquement...',
-                    type: 'safe',
-                    content: `
-                        <h3>Facture Adobe Creative Cloud</h3>
-                        <p>Bonjour,</p>
-                        <p>Votre abonnement Adobe Creative Cloud a été renouvelé automatiquement pour 52,99€/mois.</p>
-                        <p>Retrouvez votre facture dans votre espace client.</p>
-                        <p>Équipe Adobe</p>
-                    `
-                }
-            ] 
-        };
-
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', function() {
-            initMatrixBackground();
-            loadEmails();
-            
-            // Event listeners pour les scénarios
-            document.querySelectorAll('.scenario-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const scenario = this.dataset.scenario;
-                    startScenario(scenario);
-                });
-            });
-        });
-
-        function initMatrixBackground() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            document.getElementById('matrixBg').appendChild(canvas);
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            const drops = Array(Math.floor(columns)).fill(1);
-            
-            function draw() {
-                ctx.fillStyle = 'rgba(15, 15, 35, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#00ff00';
-                ctx.font = fontSize + 'px monospace';
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            
-            setInterval(draw, 35);
-        }
-
-        function startScenario(scenario) {
-            document.getElementById('homeScreen').style.display = 'none';
-            document.getElementById('gameScreen').style.display = 'block';
-            
-            if (scenario === 'phishing') {
-                setMode('victim'); // On commence par le mode hackée pour le phishing
-            }
-        }
-
-        function backToHome() {
-            document.getElementById('homeScreen').style.display = 'block';
-            document.getElementById('gameScreen').style.display = 'none';
-            document.getElementById('emailDetail').style.display = 'none';
-            document.getElementById('feedback').style.display = 'none';
-            score = 0;
-            updateScore();
-        }
-
-        function setMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(mode === 'victim' ? 'victimMode' : 'hackerMode').classList.add('active');
-            
-            // Afficher/masquer les interfaces selon le mode
-            if (mode === 'victim') {
-                document.getElementById('victimInterface').style.display = 'block';
-                document.getElementById('hackerInterface').style.display = 'none';
-                loadEmails();
-            } else {
-                document.getElementById('victimInterface').style.display = 'none';
-                document.getElementById('hackerInterface').style.display = 'block';
-                document.getElementById('aiAnalysis').style.display = 'none';
-            }
-        }
-
-        function loadEmails() {
-            const emailList = document.getElementById('emailList');
-            emailList.innerHTML = '';
-            
-            gameData.emails.forEach(email => {
-                const emailDiv = document.createElement('div');
-                emailDiv.className = `email-item ${email.type}`;
-                emailDiv.innerHTML = `
-                    <div class="email-content">
-                        <div class="email-sender">${email.sender}</div>
-                        <div class="email-subject">${email.subject}</div>
-                        <div class="email-preview">${email.preview}</div>
-                    </div>
-                    <div class="email-actions">
-                        <button class="action-btn delete-btn" onclick="deleteEmail(${email.id})">🗑️</button>
-                        <button class="action-btn open-btn" onclick="openEmail(${email.id})">📖</button>
-                    </div>
-                `;
-                emailList.appendChild(emailDiv);
-            });
-        }
-
-        let currentEmail = null;
-
-function openEmail(emailId) {
-    console.log("Ouverture email ID:", emailId); // Debug
-    
-    const email = gameData.emails.find(e => e.id === emailId);
-    if (!email) {
-        console.log("Email non trouvé!"); // Debug
-        return;
-    }
-    
-    console.log("Email trouvé:", email); // Debug
-    currentEmail = email;
-    
-    const emailDetail = document.getElementById('emailDetail');
-    emailDetail.innerHTML = `
-        <div style="border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px;">
-            <strong>De:</strong> ${email.sender}<br>
-            <strong>Sujet:</strong> ${email.subject}
-        </div>
-        ${email.content}
-        <div style="margin-top: 20px;">
-            <button class="action-btn delete-btn" onclick="deleteEmail(${email.id})">Supprimer</button>
-            <button class="action-btn" style="background: #666;" onclick="closeEmail()">Fermer</button>
-        </div>
-    `;
-    emailDetail.style.display = 'block';
-}
-
-function closeEmail() {
-    console.log("Fermeture email"); // Debug
-    console.log("Current email:", currentEmail); // Debug
-    
-    document.getElementById('emailDetail').style.display = 'none';
-    
-    if (!currentEmail) {
-        console.log("Pas d'email actuel!"); // Debug
-        return;
-    }
-    
-    let feedbackText, feedbackClass;
-    
-    console.log("Type d'email:", currentEmail.type); // Debug
-    
-    if (currentEmail.type === 'safe') {
-        score += 2;
-        feedbackText = '✅ Excellent ! Le mail était légitime et vous avez eu raison de ne pas le supprimer.';
-        feedbackClass = 'correct';
-        console.log("Email safe - score +2"); // Debug
-    } else {
-        score = Math.max(0, score - 1);
-        feedbackText = '❌ Attention ! Vous auriez dû supprimer cet email suspect.';
-        feedbackClass = 'incorrect';
-        console.log("Email suspect - score -1"); // Debug
-    }
-    
-    console.log("Nouveau score:", score); // Debug
-    
-    // Vérifier si ces fonctions existent
-    if (typeof showFeedback === 'function') {
-        showFeedback(feedbackText, feedbackClass);
-    } else {
-        console.log("showFeedback n'existe pas"); // Debug
-        alert(feedbackText); // Temporaire pour voir le message
-    }
-    
-    if (typeof updateScore === 'function') {
-        updateScore();
-    } else {
-        console.log("updateScore n'existe pas"); // Debug
-        // Mise à jour manuelle temporaire
-        const scoreElement = document.getElementById('score');
-        if (scoreElement) {
-            scoreElement.textContent = score;
-        }
-    }
-    
-    currentEmail = null;
-}
-
-
-        function deleteEmail(emailId) {
-            const email = gameData.emails.find(e => e.id === emailId);
-            if (!email) return;
-            
-            let feedbackText, feedbackClass;
-            
-            if (email.type === 'suspicious') {
-                score += 2;
-                feedbackText = '✅ Excellent ! Vous avez correctement identifié et supprimé un email suspect.';
-                feedbackClass = 'correct';
-            } else {
-                score = Math.max(0, score - 1);
-                feedbackText = '❌ Attention ! Vous avez supprimé un email légitime.';
-                feedbackClass = 'incorrect';
-            }
-            
-            showFeedback(feedbackText, feedbackClass);
-            updateScore();
-            
-            // Retirer l'email de la liste
-            gameData.emails = gameData.emails.filter(e => e.id !== emailId);
-            loadEmails();
-        }
-
-        function downloadFile(emailId) {
-            // Simulation du téléchargement du fichier piégé
-            score -= 3;
-            showFeedback('🚨 ALERTE ! Vous avez téléchargé un fichier malveillant ! Votre ordinateur est maintenant infecté par un virus. Le fichier .exe était un piège !', 'incorrect');
-            updateScore();
-            
-            // Effet visuel de "hack"
-            document.body.style.animation = 'none';
-            document.body.style.background = '#ff0000';
-            setTimeout(() => {
-                document.body.style.background = 'linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e)';
-            }, 1000);
-        }
-
-        function showFeedback(message, type) {
-            const feedback = document.getElementById('feedback');
-            feedback.textContent = message;
-            feedback.className = `feedback ${type}`;
-            feedback.style.display = 'block';
-            
-            setTimeout(() => {
-                feedback.style.display = 'none';
-            }, 5000);
-        }
-
-        function updateScore() {
-            document.getElementById('scoreValue').textContent = Math.max(0, score);
-        }
-
-        function sendPhishingEmail() {
-            const sender = document.getElementById('senderInput').value;
-            const subject = document.getElementById('subjectInput').value;
-            const body = document.getElementById('bodyInput').value;
-            const attachment = document.getElementById('attachmentInput').value;
-            const link = document.getElementById('linkInput').value;
-
-            if (!sender || !subject || !body) {
-                alert('Veuillez remplir au minimum l\'expéditeur, le sujet et le corps du message.');
-                return;
-            }
-
-            // Analyser l'email avec l'IA simulée
-            analyzePhishingEmail({
-                sender,
-                subject,
-                body,
-                attachment,
-                link
-            });
-        }
-
-        function analyzePhishingEmail(emailData) {
-            // Simulation d'analyse IA
-            let credibilityScore = 0;
-            let socialEngineeringScore = 0;
-            let technicalScore = 0;
-            let overallScore = 0;
-
-            const analysis = {
-                strengths: [],
-                weaknesses: [],
-                improvements: [],
-                redFlags: []
-            };
-
-            // Analyse de la crédibilité
-            if (emailData.sender.includes('@sony') || emailData.sender.includes('@canon') || emailData.sender.includes('@nikon')) {
-                credibilityScore += 20;
-                analysis.strengths.push('Utilisation d\'un domaine de marque connue');
-            } else if (emailData.sender.includes('.net') || emailData.sender.includes('-') || emailData.sender.includes('partnership')) {
-                credibilityScore += 10;
-                analysis.strengths.push('Domaine professionnel plausible');
-            }
-
-            // Analyse de l'ingénierie sociale
-            if (emailData.subject.toLowerCase().includes('urgent') || emailData.subject.includes('!')) {
-                socialEngineeringScore += 15;
-                analysis.strengths.push('Création d\'urgence artificielle');
-            }
-
-            if (emailData.body.toLowerCase().includes('sélectionn') || emailData.body.toLowerCase().includes('exclusif')) {
-                socialEngineeringScore += 20;
-                analysis.strengths.push('Flatterie et sentiment d\'exclusivité');
-            }
-
-            if (emailData.body.toLowerCase().includes('collaboration') || emailData.body.toLowerCase().includes('partenariat')) {
-                socialEngineeringScore += 15;
-                analysis.strengths.push('Ciblage des intérêts professionnels');
-            }
-
-            // Analyse technique
-            if (emailData.attachment && emailData.attachment.includes('.exe')) {
-                technicalScore += 25;
-                analysis.strengths.push('Pièce jointe malveillante (.exe)');
-                analysis.redFlags.push('Extension .exe très suspecte');
-            }
-
-            if (emailData.link && !emailData.link.includes('sony.com') && !emailData.link.includes('canon.com')) {
-                technicalScore += 15;
-                analysis.strengths.push('Lien vers domaine externe');
-            }
-
-            // Points négatifs pour les erreurs
-            if (emailData.body.includes('Bonjour Emma')) {
-                credibilityScore += 10;
-            } else {
-                analysis.weaknesses.push('Manque de personnalisation avec le prénom');
-            }
-
-            if (emailData.sender.includes('no-reply') || emailData.sender.includes('noreply')) {
-                credibilityScore -= 5;
-                analysis.redFlags.push('Adresse no-reply suspecte pour un partenariat');
-            }
-
-            // Calcul du score global
-            overallScore = Math.min(100, (credibilityScore + socialEngineeringScore + technicalScore) / 3);
-
-            // Suggestions d'amélioration
-            if (overallScore < 30) {
-                analysis.improvements.push('Utiliser une adresse email plus crédible');
-                analysis.improvements.push('Ajouter plus de personnalisation');
-                analysis.improvements.push('Créer un sentiment d\'urgence');
-            } else if (overallScore < 60) {
-                analysis.improvements.push('Ajouter des détails techniques convaincants');
-                analysis.improvements.push('Utiliser des références aux travaux récents d\'Emma');
-            } else {
-                analysis.improvements.push('Excellent travail ! Cet email pourrait tromper de nombreuses victimes');
-            }
-
-            displayAnalysis({
-                credibilityScore: Math.round(credibilityScore),
-                socialEngineeringScore: Math.round(socialEngineeringScore),
-                technicalScore: Math.round(technicalScore),
-                overallScore: Math.round(overallScore),
-                ...analysis
-            });
-        }
-
-        function displayAnalysis(analysisData) {
-            const analysisDiv = document.getElementById('analysisContent');
-            
-            let scoreColor = '#ff6b6b';
-            if (analysisData.overallScore > 60) scoreColor = '#ffd700';
-            if (analysisData.overallScore > 80) scoreColor = '#4ecdc4';
-
-            analysisDiv.innerHTML = `
-                <div class="analysis-score">
-                    <div class="score-item">
-                        <span class="score-value" style="color: #4ecdc4;">${analysisData.credibilityScore}/30</span>
-                        <span class="score-label">Crédibilité</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-value" style="color: #ffd700;">${analysisData.socialEngineeringScore}/35</span>
-                        <span class="score-label">Ingénierie Sociale</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-value" style="color: #ff6b6b;">${analysisData.technicalScore}/35</span>
-                        <span class="score-label">Technique</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-value" style="color: ${scoreColor}; font-size: 2.5rem;">${analysisData.overallScore}/100</span>
-                        <span class="score-label">Score Global</span>
-                    </div>
-                </div>
-
-                <div class="analysis-details">
-                    ${analysisData.strengths.length > 0 ? `
-                    <div class="analysis-section">
-                        <div class="section-title">✅ Points Forts</div>
-                        <ul class="tips-list">
-                            ${analysisData.strengths.map(s => `<li>${s}</li>`).join('')}
-                        </ul>
-                    </div>
-                    ` : ''}
-
-                    ${analysisData.weaknesses.length > 0 ? `
-                    <div class="analysis-section">
-                        <div class="section-title">⚠️ Points Faibles</div>
-                        <ul class="tips-list">
-                            ${analysisData.weaknesses.map(w => `<li>${w}</li>`).join('')}
-                        </ul>
-                    </div>
-                    ` : ''}
-
-                    ${analysisData.redFlags.length > 0 ? `
-                    <div class="analysis-section">
-                        <div class="section-title">🚩 Signaux d'Alarme</div>
-                        <ul class="tips-list">
-                            ${analysisData.redFlags.map(r => `<li>${r}</li>`).join('')}
-                        </ul>
-                    </div>
-                    ` : ''}
-
-                    <div class="analysis-section">
-                        <div class="section-title">💡 Suggestions d'Amélioration</div>
-                        <ul class="tips-list">
-                            ${analysisData.improvements.map(i => `<li>${i}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('aiAnalysis').style.display = 'block';
-            
-            // Scroll vers l'analyse
-            document.getElementById('aiAnalysis').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
-            });
-
-            // Mettre à jour le score du joueur
-            score += Math.floor(analysisData.overallScore / 10);
-            updateScore();
-        }
-
-        // Responsive
-        window.addEventListener('resize', function() {
-            const canvas = document.querySelector('#matrixBg canvas');
-            if (canvas) {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-        });
-    </script>
-</body>
-</html>
