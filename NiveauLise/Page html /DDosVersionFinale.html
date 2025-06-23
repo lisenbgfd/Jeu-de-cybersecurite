@@ -1867,7 +1867,288 @@ function attackServerSocial(serverId, intensity) {
     updateGlobalHealth();
     updateUI();
 }
+// Fonction pour démarrer le mode attaque - à ajouter à la fin de votre script
+function startAttackMode() {
+    // Changer l'état du jeu
+    gameState.phase = 'attack';
+    gameState.attackResources = {
+        botnet: 100,
+        bandwidth: 1000,
+        exploits: 5
+    };
+    
+    // Modifier l'interface
+    document.getElementById('phaseIndicator').textContent = 'MODE ATTAQUE - Percez les défenses de l\'infrastructure';
+    document.getElementById('phaseIndicator').classList.add('attack-mode');
+    document.getElementById('phaseIndicator').style.backgroundColor = '#cc0000';
+    document.getElementById('phaseIndicator').style.color = 'white';
+    
+    // Désactiver le panel de défense
+    const defensePanel = document.querySelector('.defense-panel');
+    if (defensePanel) {
+        defensePanel.style.opacity = '0.3';
+        defensePanel.style.pointerEvents = 'none';
+    }
+    
+    // Modifier les boutons de contrôle
+    const challengeBtn = document.getElementById('challengeBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    if (challengeBtn) challengeBtn.style.display = 'none';
+    if (resetBtn) resetBtn.style.display = 'inline-block';
+    
+    // Ajouter des ressources d'attaque dans l'interface
+    const statsPanel = document.querySelector('.stats-panel');
+    if (statsPanel && !document.getElementById('attackResourcesDisplay')) {
+        const resourcesDiv = document.createElement('div');
+        resourcesDiv.id = 'attackResourcesDisplay';
+        resourcesDiv.innerHTML = `
+            <div style="background: #2a0a0a; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #ff4444;">
+                <h4 style="color: #ff4444; margin: 0 0 10px 0;">🔥 RESSOURCES D'ATTAQUE</h4>
+                <div style="display: flex; justify-content: space-between; color: white; font-size: 12px;">
+                    <span>Botnet: <span id="botnetDisplay">${gameState.attackResources.botnet}</span></span>
+                    <span>Bande passante: <span id="bandwidthDisplay">${gameState.attackResources.bandwidth}</span> Mbps</span>
+                    <span>Exploits: <span id="exploitsDisplay">${gameState.attackResources.exploits}</span></span>
+                </div>
+            </div>
+        `;
+        statsPanel.appendChild(resourcesDiv);
+    }
+    
+    // Modifier les attaques existantes pour consommer des ressources
+    gameState.originalAttackFunctions = {
+        startPingFlood: window.startPingFlood,
+        startBotnetAttack: window.startBotnetAttack,
+        startTargetedAttack: window.startTargetedAttack
+    };
+    
+    // Redéfinir les fonctions d'attaque avec consommation de ressources
+    window.startPingFlood = function() {
+        if (gameState.attackActive) return;
+        
+        if (gameState.attackResources.botnet < 10 || gameState.attackResources.bandwidth < 50) {
+            addLog('❌ Ressources insuffisantes (besoin: 10 bots, 50 Mbps)', 'error');
+            return;
+        }
+        
+        // Consommer les ressources
+        gameState.attackResources.botnet -= 10;
+        gameState.attackResources.bandwidth -= 50;
+        updateAttackResourcesDisplay();
+        
+        // Lancer l'attaque originale
+        gameState.originalAttackFunctions.startPingFlood();
+        addLog('🔥 Ping Flood lancé (-10 bots, -50 Mbps)', 'error');
+    };
+    
+    window.startBotnetAttack = function() {
+        if (gameState.attackActive) return;
+        
+        if (gameState.attackResources.botnet < 30 || gameState.attackResources.bandwidth < 200) {
+            addLog('❌ Ressources insuffisantes (besoin: 30 bots, 200 Mbps)', 'error');
+            return;
+        }
+        
+        // Consommer les ressources
+        gameState.attackResources.botnet -= 30;
+        gameState.attackResources.bandwidth -= 200;
+        updateAttackResourcesDisplay();
+        
+        // Lancer l'attaque originale
+        gameState.originalAttackFunctions.startBotnetAttack();
+        addLog('🤖 Attaque Botnet lancée (-30 bots, -200 Mbps)', 'error');
+    };
+    
+    window.startTargetedAttack = function() {
+        if (gameState.attackActive) return;
+        
+        if (gameState.attackResources.botnet < 20 || gameState.attackResources.bandwidth < 100 || gameState.attackResources.exploits < 1) {
+            addLog('❌ Ressources insuffisantes (besoin: 20 bots, 100 Mbps, 1 exploit)', 'error');
+            return;
+        }
+        
+        if (!gameState.selectedServer) {
+            addLog('❌ Sélectionnez un serveur cible', 'error');
+            return;
+        }
+        
+        // Consommer les ressources
+        gameState.attackResources.botnet -= 20;
+        gameState.attackResources.bandwidth -= 100;
+        gameState.attackResources.exploits -= 1;
+        updateAttackResourcesDisplay();
+        
+        // Lancer l'attaque originale
+        gameState.originalAttackFunctions.startTargetedAttack();
+        addLog('🎯 Attaque ciblée lancée (-20 bots, -100 Mbps, -1 exploit)', 'error');
+    };
+    
+    // Ajouter une attaque ultime
+    if (!document.getElementById('ultimateAttackBtn')) {
+        const attackPanel = document.getElementById('attackPanel');
+        if (attackPanel) {
+            const ultimateBtn = document.createElement('button');
+            ultimateBtn.id = 'ultimateAttackBtn';
+            ultimateBtn.className = 'btn attack-btn';
+            ultimateBtn.innerHTML = '💀 ATTAQUE ULTIME';
+            ultimateBtn.style.backgroundColor = '#660000';
+            ultimateBtn.style.borderColor = '#990000';
+            ultimateBtn.onclick = startUltimateAttack;
+            attackPanel.appendChild(ultimateBtn);
+        }
+    }
+    
+    addLog('⚔️ MODE ATTAQUE ACTIVÉ', 'warning');
+    addLog('🎯 Objectif: Percer toutes les défenses avec vos ressources limitées', 'info');
+    addLog('📊 Ressources: 100 bots, 1000 Mbps, 5 exploits', 'info');
+}
 
+// Fonction pour mettre à jour l'affichage des ressources
+function updateAttackResourcesDisplay() {
+    const botnetDisplay = document.getElementById('botnetDisplay');
+    const bandwidthDisplay = document.getElementById('bandwidthDisplay');
+    const exploitsDisplay = document.getElementById('exploitsDisplay');
+    
+    if (botnetDisplay) botnetDisplay.textContent = gameState.attackResources.botnet;
+    if (bandwidthDisplay) bandwidthDisplay.textContent = gameState.attackResources.bandwidth;
+    if (exploitsDisplay) exploitsDisplay.textContent = gameState.attackResources.exploits;
+    
+    // Vérifier si les ressources sont épuisées
+    if (gameState.attackResources.botnet <= 0 && gameState.attackResources.bandwidth <= 0) {
+        addLog('💔 RESSOURCES ÉPUISÉES - Retour au mode apprentissage', 'error');
+        setTimeout(() => {
+            resetToLearning();
+        }, 3000);
+    }
+}
+
+// Attaque ultime qui coûte toutes les ressources restantes
+function startUltimateAttack() {
+    if (gameState.attackActive) return;
+    
+    if (gameState.attackResources.botnet < 50 || gameState.attackResources.bandwidth < 500 || gameState.attackResources.exploits < 3) {
+        addLog('❌ Ressources insuffisantes pour l\'attaque ultime (besoin: 50 bots, 500 Mbps, 3 exploits)', 'error');
+        return;
+    }
+    
+    gameState.attackActive = true;
+    document.getElementById('stopBtn').disabled = false;
+    
+    // Consommer massivement les ressources
+    gameState.attackResources.botnet -= 50;
+    gameState.attackResources.bandwidth -= 500;
+    gameState.attackResources.exploits -= 3;
+    updateAttackResourcesDisplay();
+    
+    showInfoComment('💀 ATTAQUE ULTIME', 
+        'Déploiement de toutes les techniques d\'attaque simultanément. ' +
+        'Utilise des exploits zero-day, du trafic massif distribué et des techniques d\'évasion avancées. ' +
+        'Cette attaque ignore 80% des défenses et cause des dégâts dévastateurs. ' +
+        'Coût: 50 bots, 500 Mbps, 3 exploits. Durée: 20 secondes.');
+    
+    addLog('💀 ATTAQUE ULTIME DÉCLENCHÉE - TOUS LES SYSTÈMES SOUS STRESS MAXIMAL', 'error');
+    
+    attackInterval = setInterval(() => {
+        Object.keys(gameState.servers).forEach(serverId => {
+            // Attaque qui ignore la plupart des défenses
+            attackServerUltimate(serverId, 8);
+        });
+    }, 100);
+    
+    setTimeout(() => {
+        stopAttack();
+        addLog('💥 Attaque ultime terminée - Infrastructure critique', 'error');
+    }, 20000);
+}
+
+// Fonction d'attaque ultime
+function attackServerUltimate(serverId, intensity) {
+    const server = gameState.servers[serverId];
+    if (!server || server.health <= 0) return;
+    
+    let damage = intensity * 3;
+    let blocked = false;
+    
+    // L'attaque ultime ignore 80% des défenses
+    if (gameState.defenses.firewall && Math.random() > 0.8) {
+        if (Math.random() < 0.4) {
+            blocked = true;
+            damage = 0;
+        }
+    }
+    
+    if (gameState.defenses.reverseProxy && !blocked && Math.random() > 0.8) {
+        damage *= 0.4;
+    }
+    
+    if (gameState.defenses.rateLimiting && !blocked && Math.random() > 0.8) {
+        damage *= 0.7;
+    }
+    
+    if (gameState.defenses.infrastructure && !blocked && Math.random() > 0.5) {
+        damage *= 0.3;
+    }
+    
+    if (!blocked) {
+        server.health = Math.max(0, server.health - damage);
+        updateServerVisual(serverId);
+        
+        if (server.health <= 0) {
+            gameState.activeServers--;
+            addLog(`💀 ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
+        }
+    }
+    
+    createAttackPackets(serverId, blocked);
+    updateGlobalHealth();
+    updateUI();
+    
+    // Vérifier la victoire de l'attaquant
+    if (gameState.health <= 10) {
+        addLog('🏆 VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');
+        setTimeout(() => {
+            resetToLearning();
+        }, 3000);
+    }
+}
+
+// Modifier la fonction resetToLearning pour restaurer les fonctions originales
+const originalResetToLearning = resetToLearning;
+resetToLearning = function() {
+    // Restaurer les fonctions d'attaque originales si elles existent
+    if (gameState.originalAttackFunctions) {
+        window.startPingFlood = gameState.originalAttackFunctions.startPingFlood;
+        window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack;
+        window.startTargetedAttack = gameState.originalAttackFunctions.startTargetedAttack;
+        delete gameState.originalAttackFunctions;
+    }
+    
+    // Supprimer l'affichage des ressources d'attaque
+    const attackResourcesDisplay = document.getElementById('attackResourcesDisplay');
+    if (attackResourcesDisplay) {
+        attackResourcesDisplay.remove();
+    }
+    
+    // Supprimer le bouton d'attaque ultime
+    const ultimateBtn = document.getElementById('ultimateAttackBtn');
+    if (ultimateBtn) {
+        ultimateBtn.remove();
+    }
+    
+    // Restaurer l'interface
+    document.getElementById('phaseIndicator').classList.remove('attack-mode');
+    document.getElementById('phaseIndicator').style.backgroundColor = '';
+    document.getElementById('phaseIndicator').style.color = '';
+    
+    const defensePanel = document.querySelector('.defense-panel');
+    if (defensePanel) {
+        defensePanel.style.opacity = '';
+        defensePanel.style.pointerEvents = '';
+    }
+    
+    // Appeler la fonction de reset originale
+    originalResetToLearning();
+};
         // Initialisation finale
         updateUI();
     </script>
