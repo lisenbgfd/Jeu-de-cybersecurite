@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Jeu Cyber Sécurité - Messages</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #e5e5ea;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .phone {
+      background-color: #fff;
+      width: 360px;
+      max-width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: #007aff;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .chat {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #f2f2f7;
+    }
+
+    .bubble {
+      max-width: 75%;
+      padding: 10px 14px;
+      margin: 8px 0;
+      border-radius: 20px;
+      position: relative;
+      word-wrap: break-word;
+    }
+
+    .incoming {
+      background-color: #e5e5ea;
+      align-self: flex-start;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      margin-top: 5px;
+    }
+
+    .options button {
+      margin: 3px 0;
+      padding: 6px;
+      border-radius: 8px;
+      border: none;
+      background-color: #007aff;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .options button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .status-bar {
+      background-color: #fff;
+      text-align: center;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      font-size: 16px;
+    }
+
+    .correct {
+      background-color: #d4edda !important;
+    }
+
+    .wrong {
+      background-color: #f8d7da !important;
+    }
+
+    .hearts {
+      font-size: 20px;
+      color: red;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="header">Messages</div>
+    <div class="chat" id="chat"></div>
+    <div class="status-bar">
+      <div class="hearts" id="hearts">❤️❤️❤️</div>
+      Vies restantes : <span id="lives">3</span>
+    </div>
+  </div>
+
+  <script>
+    const messages = [
+      { text: "Maman c'est moi, je suis à l'hôpital et j'ai perdu mon téléphone peux-tu me faire un virement de 300 euros à cet IBAN maintenant c'est urgent !!! FR76 3000 4031 8400 0087 8327 258", isScam: true },
+      { text: "Salut c'est Julien, tu viens ce week-end ?", isScam: false },
+      { text: "Papa : tu peux passer à la maison ce soir ?", isScam: false },
+      { text: "Pauline Dubois vous avez gagné une semaine de vacances dans le sud ! https://adzm.me/8ex7os", isScam: true },
+      { text: "Emma : N'oublie pas notre rendez-vous demain !", isScam: false },
+      { text: "Lucas : Tu peux m'envoyer la photo du projet ?", isScam: false },
+      { text: "Camille : Je t'ai envoyé les documents.", isScam: false },
+      { text: "C'est le livreur j'ai un colis pour à votre nom qui ne rentrait pas dans la boite aux lettres veuillez choisir un relais https://mondial-livraison.com", isScam: true },
+      { text: "Le prof : Le cours est déplacé à lundi.", isScam: false },
+      { text: "Banque : Votre relevé est disponible dans l'application.", isScam: false }
+    ];
+
+    let lives = 3;
+
+    function updateLives() {
+      document.getElementById('lives').innerText = lives;
+      const hearts = "❤️".repeat(lives) + "🖤".repeat(3 - lives);
+      document.getElementById('hearts').innerText = hearts;
+
+      if (lives <= 0) {
+        alert("Tu as perdu toutes tes vies. Partie terminée !");
+        document.querySelectorAll("button").forEach(btn => btn.disabled = true);
+      }
+    }
+
+    function renderMessages() {
+      const chat = document.getElementById("chat");
+
+      messages.forEach((msg, index) => {
+        const bubble = document.createElement("div");
+        bubble.className = "bubble incoming";
+        bubble.innerHTML = msg.text;
+
+        const options = document.createElement("div");
+        options.className = "options";
+
+        const choices = [
+          "Signaler comme arnaque",
+          "Répondre",
+          "Ignorer",
+          "Envoyer à la police"
+        ];
+
+        choices.forEach(choice => {
+          const btn = document.createElement("button");
+          btn.textContent = choice;
+
+          btn.addEventListener("click", () => {
+            if (msg.responded || lives <= 0) return;
+
+            msg.responded = true;
+            const correct =
+              (msg.isScam && (choice === "Signaler comme arnaque" || choice === "Envoyer à la police")) ||
+              (!msg.isScam && choice === "Répondre");
+
+            if (correct) {
+              bubble.classList.add("correct");
+            } else {
+              bubble.classList.add("wrong");
+              lives--;
+              updateLives();
+            }
+
+            Array.from(options.children).forEach(b => b.disabled = true);
+          });
+
+          options.appendChild(btn);
+        });
+
+        chat.appendChild(bubble);
+        chat.appendChild(options);
+      });
+    }
+
+    renderMessages();
+    updateLives();
+  </script>
+</body>
+</html>

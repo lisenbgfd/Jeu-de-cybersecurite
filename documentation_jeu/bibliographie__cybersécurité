@@ -1,0 +1,74 @@
+BIBLIOGRAPHIE SUR LA CYBERSECURITE
+
+
+I] Rapport de cybermenace : rapport de cybermenaces: tendances en cybersécurité de 2024 
+
+
+(https://www.splashtop.com/fr/blog/cybersecurity-trends-and-predictions-2024#:~:text=En%202024%2C%20l'IA%20et,les%20syst%C3%A8mes%20de%20d%C3%A9tection%20pr%C3%A9coce.)
+
+
+- IA de plus en plus présente dans les cybermenaces mais aussi dans leur détéction : 
+utilisation de l'intelligence artificielle pour créer des deepfakes, phishings personalisés... 
+- l'IoT présente des défis pour la cybersécurité : utilisation de la technologie blockchain et formation des utilisateurs (https://exed.centralesupelec.fr/actualites/cybersecurite-et-iot-enjeux-menaces-et-solutions-partie-1-2/)
+- expansion du télétravail (accès à distance sécurisé)
+- essor de l'informatique quantique : défis et opportunités pour la cybersécurité : déchiffrement quantique émergent (https://www.cyber-securite.fr/2025-lannee-cle-pour-la-cybersecurite-quantique/#:~:text=Avec%20l'essor%20de%20l,cruciale%20pour%20tous%20les%20secteurs.)
+- attaques de phishing modernes : techniques plus personnalisées et techniques plus avancées : liens vers des URLs identiques à des sites officiels + clickbait: encourager à cliquer en promettant par exemple un téléphone gratuit 
+- attaque de spear phising : a pour but de convaincre un collaborateur d'une entreprise ou d'un secteur $
+véritable cible, l'entreprise elle-même
+- attaque de whaling : cible une personne spécifique, afin de voler de l'argent ou d'obtenir des informa$
+
+
+
+II] Bonnes pratiques en cybersécurité :
+
+Utilisation de mots de passe forts et uniques
+
+1  Bonne pratique : Utiliser un gestionnaire de mots de passe, activer l’authentification multifactorielle (MFA).
+Référence : NIST Password Guidelines (National Institute of Standards and Technology).
+Mise à jour régulière des logiciels et systèmes
+
+2  Bonne pratique : Activer les mises à jour automatiques, appliquer rapidement les correctifs de sécurité.
+Référence : ANSSI - Guide d’hygiène informatique (ANSSI).
+Sensibilisation aux attaques d’ingénierie sociale
+
+3  Bonne pratique : Vérifier l’identité des interlocuteurs, ne pas cliquer sur des liens suspects.
+Référence : Kevin Mitnick - The Art of Deception.
+Chiffrement des données sensibles
+
+4  Bonne pratique : Utiliser des protocoles de chiffrement comme TLS, chiffrer les disques durs et les emails.
+Référence : Bruce Schneier - Applied Cryptography.
+Sécurité du Wi-Fi et des connexions réseau
+
+5  Bonne pratique : Utiliser WPA3, désactiver le WPS, éviter les réseaux Wi-Fi publics sans VPN.
+Référence : OWASP Secure Configuration Guide (OWASP).
+Sauvegarde régulière des données
+
+6  Bonne pratique : Appliquer la règle du 3-2-1 : 3 copies, sur 2 supports différents, dont 1 hors ligne.
+Référence : NIST Data Protection Guidelines.
+Mauvaises pratiques en cybersécurité :
+Utilisation de mots de passe faibles ou réutilisés
+
+1  Mauvaise pratique : Utiliser « 123456 » ou « password », partager son mot de passe.
+Référence : Have I Been Pwned (HIBP).
+Cliquer sur des liens ou pièces jointes non vérifiés
+
+2  Mauvaise pratique : Ouvrir des emails suspects sans vérifier l’expéditeur.
+Référence : FBI Internet Crime Report (FBI).
+Ne pas mettre à jour ses logiciels et systèmes
+
+3  Mauvaise pratique : Reporter les mises à jour, utiliser des versions obsolètes.
+Référence : CVE Database (MITRE CVE).
+Utiliser des réseaux Wi-Fi publics sans protection
+
+4  Mauvaise pratique : Se connecter à des réseaux ouverts sans VPN, laisser le Wi-Fi activé en permanence.
+Référence : Cybersecurity & Infrastructure Security Agency (CISA).
+Télécharger des applications ou logiciels de sources non fiables
+
+5  Mauvaise pratique : Installer des logiciels piratés ou provenant de sites douteux.
+Référence : VirusTotal (VirusTotal).
+Ne pas sécuriser l’accès aux comptes et appareils
+
+6  Mauvaise pratique : Ne pas verrouiller son smartphone, ne pas activer l’authentification forte.
+Référence : Google Security Blog (Google Security).
+
+

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #01290D;
+            min-height: 100vh;
+            color: #256837;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: #00ff00;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #181c18;
+            font-size: 3rem;
+            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 15px 30px;
+            background: rgb(58, 81, 66);
+            color : #00ff00
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .mode-btn.active {
+            background: #074a07;
+            color: #00ff00;
+        }
+
+        .game-area {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 600px;
+        }
+
+        .mode-content {
+            display: none;
+        }
+
+        .mode-content.active {
+            display: block;
+        }
+
+        /* Mode Hackée - Interface Email */
+        .email-interface {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .email-sidebar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .email-list {
+            list-style: none;
+        }
+
+        .email-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .email-item:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+
+        .email-item.suspicious {
+            border-left-color: #000F05;
+        }
+
+        .email-item.safe {
+            border-left-color: #000F05;
+        }
+
+        .email-content {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .email-header {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .phishing-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .safe-btn {
+            background: #4caf50;
+            color: white;
+        }
+
+        .danger-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Mode Hackeuse */
+        .hacker-interface {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .profile-section, .compose-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .profile-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .compose-form textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .compose-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .send-btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+
+        /* Documentation */
+        .doc-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .doc-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        /* Résultat IA */
+        .ai-result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .ai-result.success {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #ef5350;
+        }
+
+        .ai-result.failure {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #66bb6a;
+        }
+
+        .score-feedback {
+            margin-top: 10px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Phishing</h1>
+        </div>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="switchMode('hackee')">Mode Hackée </button>
+            <button class="mode-btn" onclick="switchMode('hacker')">Mode Hackeuse </button>
+            <button class="mode-btn" onclick="switchMode('documentation')">Documentation </button>
+        </div>
+
+        <div class="game-area">
+            <!-- Mode Hackée -->
+            <div id="hackee-mode" class="mode-content active">
+                <h2>Boîte mail d'Emma Photography</h2>
+                <div class="email-interface">
+                    <div class="email-sidebar">
+                        <h3>Boîte de réception</h3>
+                        <ul class="email-list">
+                            <li class="email-item safe" onclick="showEmail('welcome')">
+                                <strong>YouTube</strong><br>
+                                <small>Félicitations pour vos 100k abonnés!</small>
+                            </li>
+                            <li class="email-item suspicious" onclick="showEmail('sony-fake')">
+                                <strong>Sony Partnership</strong><br>
+                                <small>Opportunité de partenariat exclusive</small>
+                            </li>
+                            <li class="email-item safe" onclick="showEmail('adobe')">
+                                <strong>Julie Martin</strong><br>
+                                <small>Adobe souhaite collaborer avec vous</small>
+                            </li>
+                            <li class="email-item suspicious" onclick="showEmail('urgent-bank')">
+                                <strong>Banque Sécurisée</strong><br>
+                                <small>URGENT: Vérification de compte</small>
+                            </li>
+                            <li class="email-item safe" onclick="showEmail('alerte')">
+                                <strong>Alerte Sécurité - Youtube</strong><br>
+                                <small>Une activité inhabituelle a été détectée sur votre compte YouTube.</small>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="email-content" id="email-display">
+                        <p>Sélectionnez un email pour le lire...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mode Hackeuse -->
+            <div id="hacker-mode" class="mode-content">
+                <h2>Interface Hackeuse</h2>
+                <div class="hacker-interface">
+                    <div class="profile-section">
+                        <h3>Profil d'Emma Photography</h3>
+                        <div class="profile-info">
+                            <h4>Informations publiques:</h4>
+                            <p><strong>Nom:</strong> Emma Dubois</p>
+                            <p><strong>Chaîne:</strong> Emma Photography (127k abonnés)</p>
+                            <p><strong>Spécialité:</strong> Photographie urbaine et portraits</p>
+                            <p><strong>Équipement:</strong> Canon EOS R5, Sony A7R IV</p>
+                            <p><strong>Partenariats actuels:</strong> Adobe, Manfrotto</p>
+                        </div>
+                        <div class="profile-info">
+                            <h4>Activité récente:</h4>
+                            <p>• Recherche de nouveaux partenariats</p>
+                            <p>• Vidéo sur les objectifs Sony sortie la semaine dernière</p>
+                            <p>• Collaboration avec des marques tech</p>
+                            <p>• Voyage photo prévu au Japon</p>
+                        </div>
+                        <div class="profile-info">
+                            <h4>Points faibles potentiels:</h4>
+                            <p>• Enthousiaste pour les nouvelles opportunités</p>
+                            <p>• Répond rapidement aux emails professionnels</p>
+                            <p>• Partage beaucoup sur les réseaux sociaux</p>
+                        </div>
+                    </div>
+                    <div class="compose-section">
+                        <h3>Composer un email de phishing</h3>
+                        <div class="compose-form">
+                            <input type="text" id="sender-name" placeholder="Nom de l'expéditeur (ex: Sony France)">
+                            <input type="text" id="email-subject" placeholder="Objet de l'email">
+                            <textarea id="email-body" placeholder="Rédigez votre email de phishing ici...
+
+Conseils pour un phishing efficace:
+- Utilisez ses intérêts (photographie, équipement)
+- Créez un sentiment d'urgence ou d'exclusivité
+- Imitez une marque connue
+- Incluez des éléments personnalisés basés sur son profil
+- Ajoutez un appel à l'action clair (télécharger, cliquer, répondre)"></textarea>
+                            <button class="send-btn" onclick="analyzePhishing()">Envoyer et Analyser 🔍</button>
+                        </div>
+                        <div id="ai-analysis"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation -->
+            <div id="documentation-mode" class="mode-content">
+                <h2>Guide de Cybersécurité</h2>
+                
+                <div class="doc-section">
+                    <h3>Qu'est-ce que le Phishing ?</h3>
+                    <p>Le phishing est une technique de cyberattaque qui consiste à tromper les victimes pour qu'elles révèlent des informations sensibles (mots de passe, données bancaires) ou téléchargent des logiciels malveillants.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h3>Signaux d'alarme à repérer</h3>
+                    <ul>
+                        <li><strong>Urgence artificielle:</strong> "Urgent", "Votre compte sera fermé"</li>
+                        <li><strong>Expéditeur suspect:</strong> Adresses email étranges ou mal orthographiées</li>
+                        <li><strong>Demandes d'informations personnelles:</strong> Mots de passe, numéros de carte</li>
+                        <li><strong>Liens suspects:</strong> URLs raccourcies ou domaines étranges</li>
+                        <li><strong>Pièces jointes inattendues:</strong> Fichiers .exe, .zip non sollicités</li>
+                        <li><strong>Offres trop belles:</strong> Gains, prix, opportunités exceptionnelles</li>
+                    </ul>
+                </div>
+
+                <div class="doc-section">
+                    <h3>Bonnes pratiques de défense</h3>
+                    <ul>
+                        <li><strong>Vérifiez l'expéditeur:</strong> Contactez directement l'organisation</li>
+                        <li><strong>Analysez les URLs:</strong> Survolez sans cliquer</li>
+                        <li><strong>Méfiez-vous des urgences:</strong> Les vraies urgences sont rares</li>
+                        <li><strong>Utilisez l'authentification à deux facteurs</strong></li>
+                        <li><strong>Maintenez vos logiciels à jour</strong></li>
+                        <li><strong>Sauvegardez régulièrement vos données</strong></li>
+                    </ul>
+                </div>
+
+                <div class="doc-section">
+                    <h3>Techniques de Phishing Ciblé</h3>
+                    <p>Le <strong>spear phishing</strong> utilise des informations personnelles pour paraître plus crédible:</p>
+                    <ul>
+                        <li><strong>Recherche préalable:</strong> Réseaux sociaux, sites web, actualités</li>
+                        <li><strong>Personnalisation:</strong> Utilisation du nom, fonction, entreprise</li>
+                        <li><strong>Contextualisation:</strong> Référence à des événements récents</li>
+                        <li><strong>Ingénierie sociale:</strong> Exploitation des émotions et relations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const emails = {
+            'welcome': {
+                from: 'noreply@youtube.com',
+                subject: 'Félicitations pour vos 100 000 abonnés !',
+                body: `Chère Emma,
+
+Félicitations ! Votre chaîne "Emma Photography" vient d'atteindre les 100 000 abonnés !
+
+C'est un accomplissement remarquable qui témoigne de la qualité de votre contenu et de l'engagement de votre communauté.
+
+Continuez ainsi !
+
+L'équipe YouTube`,
+                safe: true
+            },
+            'sony-fake': {
+                from: 'partnerships@sony-france.com',
+                subject: 'Opportunité de partenariat exclusive - Sony France',
+                body: `Bonjour Emma,
+
+Nous avons découvert votre excellent travail sur YouTube et sommes impressionnés par vos vidéos sur l'équipement photo !
+
+Sony France souhaiterait vous proposer un partenariat exclusif. Nous vous offrons:
+- 5000€ de matériel Sony gratuit
+- Accès en avant-première à nos nouveaux produits
+- Rémunération de 2000€ par vidéo
+
+Pour finaliser ce partenariat, merci de télécharger notre catalogue produits sécurisé et de remplir le formulaire de partenariat.
+
+ATTENTION: Cette offre expire dans 48h !
+
+Télécharger le catalogue (catalogue-sony-2024.exe - 2.3MB)
+
+Cordialement,
+Marie Dubois
+Responsable Partenariats Sony France`,
+                safe: false
+            },
+            'adobe': {
+                from: 'julie.martin@adobe.fr',
+                subject: 'Adobe souhaite collaborer avec vous',
+                body: `Bonjour Emma,
+
+Je suis Julie, chargée des partenariats chez Adobe France. Nous avons suivi votre contenu avec beaucoup d’intérêt.
+
+Nous aimerions vous proposer une collaboration pour notre prochaine campagne sur Lightroom.
+
+Pourrions-nous convenir d’un appel cette semaine ?
+
+Bien à vous,
+Julie Martin
+Adobe France`,
+                safe: true
+            },
+            'urgent-bank': {
+                from: 'security@banque-securisee.fr',
+                subject: 'URGENT - Vérification de sécurité requise',
+                body: `ALERTE SÉCURITÉ
+
+Madame Dubois,
+
+Nous avons détecté une activité suspecte sur votre compte bancaire n°****1247.
+
+ACTIONS REQUISES IMMÉDIATEMENT:
+- Connexions depuis l'étranger détectées
+- Tentatives d'accès non autorisées
+- Votre compte sera SUSPENDU dans 2 heures
+
+Pour sécuriser votre compte, cliquez ici: https://secure-bank-verification.net/urgent
+
+Vous devrez confirmer:
+- Vos identifiants bancaires
+- Votre code secret
+- Les 3 dernières transactions
+
+Ne tardez pas, votre argent est en danger !
+
+Service Sécurité Banque Sécurisée`,
+                safe: false
+            },
+            'alerte': {
+                from: 'alert@support-youtub3.com',
+                subject: 'Sortie photo ce weekend?',
+                body: `Salut Emma !
+
+Ça te dit une sortie photo samedi ? Il fait super beau et j'ai repéré un spot génial près de la Seine.
+
+On pourrait tester tes nouveaux objectifs ! Et après on pourrait aller boire un verre.
+
+Dis-moi si ça te va !
+
+Bisous,
+Claire`,
+                safe: false
+            }
+
+        };
+
+        function switchMode(mode) {
+            // Retirer la classe active de tous les boutons
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            // Cacher tous les contenus
+            document.querySelectorAll('.mode-content').forEach(content => content.classList.remove('active'));
+            
+            // Activer le mode sélectionné
+            event.target.classList.add('active');
+            document.getElementById(mode + '-mode').classList.add('active');
+        }
+
+        function showEmail(emailId) {
+            const email = emails[emailId];
+            const display = document.getElementById('email-display');
+            
+            const safetyClass = email.safe ? 'safe' : 'suspicious';
+            const safetyIcon = email.safe ? '✅' : '⚠️';
+            
+            display.innerHTML = `
+                <div class="email-header">
+                    <p><strong>De:</strong> ${email.from}</p>
+                    <p><strong>Objet:</strong> ${email.subject}</p>
+                </div>
+                <div class="email-body">
+                    ${email.body.replace(/\n/g, '<br>')}
+                </div>
+                <div class="phishing-actions">
+                    <button class="action-btn safe-btn" onclick="markEmail('${emailId}', true)">
+                        ✅ Email légitime
+                    </button>
+                    <button class="action-btn danger-btn" onclick="markEmail('${emailId}', false)">
+                        ⚠️ Phishing suspect
+                    </button>
+                </div>
+                <div id="email-feedback-${emailId}"></div>
+            `;
+        }
+
+        function markEmail(emailId, markedAsSafe) {
+            const email = emails[emailId];
+            const feedback = document.getElementById(`email-feedback-${emailId}`);
+            
+            let message, className;
+            if ((email.safe && markedAsSafe) || (!email.safe && !markedAsSafe)) {
+                message = "✅ Bonne analyse ! Vous avez correctement identifié cet email.";
+                className = "ai-result success";
+            } else {
+                message = "❌ Attention ! Vous vous êtes trompé sur cet email.";
+                className = "ai-result failure";
+                
+                if (email.safe && !markedAsSafe) {
+                    message += " Cet email était légitime.";
+                } else {
+                    message += " Cet email était un phishing !";
+                }
+            }
+            
+            feedback.innerHTML = `<div class="${className}" style="margin-top: 15px; padding: 10px; border-radius: 5px;">${message}</div>`;
+        }
+
+        function analyzePhishing() {
+            const sender = document.getElementById('sender-name').value.toLowerCase();
+            const subject = document.getElementById('email-subject').value.toLowerCase();
+            const body = document.getElementById('email-body').value.toLowerCase();
+            
+            let score = 0;
+            let feedback = [];
+            
+            // Analyse du contenu
+            const urgencyWords = ['urgent', 'immédiat', 'expire', '48h', '24h', 'maintenant', 'rapidement'];
+            const trustWords = ['sony', 'canon', 'adobe', 'partenariat', 'collaboration', 'officiel'];
+            const personalWords = ['emma', 'photography', 'youtube', 'photo', 'abonnés', 'vidéo'];
+            const actionWords = ['télécharger', 'cliquer', 'confirmer', 'vérifier', 'répondre'];
+            const exclusiveWords = ['exclusif', 'limité', 'spécial', 'gratuit', 'offre'];
+            
+            // Points pour l'urgence
+            if (urgencyWords.some(word => subject.includes(word) || body.includes(word))) {
+                score += 20;
+                feedback.push("Utilisation de l'urgence (+20)");
+            }
+            
+            // Points pour imiter une marque de confiance
+            if (trustWords.some(word => sender.includes(word) || body.includes(word))) {
+                score += 25;
+                feedback.push("Imitation de marque connue (+25)");
+            }
+            
+            // Points pour la personnalisation
+            if (personalWords.some(word => body.includes(word))) {
+                score += 20;
+                feedback.push("Personnalisation basée sur le profil (+20)");
+            }
+            
+            // Points pour l'appel à l'action
+            if (actionWords.some(word => body.includes(word))) {
+                score += 15;
+                feedback.push("Appel à l'action clair (+15)");
+            }
+            
+            // Points pour l'exclusivité
+            if (exclusiveWords.some(word => subject.includes(word) || body.includes(word))) {
+                score += 10;
+                feedback.push("Sentiment d'exclusivité (+10)");
+            }
+            
+            // Points pour la longueur et structure
+            if (body.length > 200) {
+                score += 5;
+                feedback.push("Message bien structuré (+5)");
+            }
+            
+            // Bonus pour des éléments spécifiques d'Emma
+            if (body.includes('100') && body.includes('abonnés')) {
+                score += 15;
+                feedback.push("Référence aux 100k abonnés (+15)");
+            }
+            
+            let resultMessage, resultClass;
+            if (score >= 50) {
+                resultMessage = "Bravo ! Emma est tombée dans le piège. Votre email était très crédible !";
+                resultClass = "success";
+            } else {
+                resultMessage = "Emma a repéré le phishing. Votre email manquait de crédibilité.";
+                resultClass = "failure";
+            }
+            
+            document.getElementById('ai-analysis').innerHTML = `
+                <div class="ai-result ${resultClass}">
+                    ${resultMessage}
+                    <div class="score-feedback">
+                        Score: ${score}/100<br>
+                        ${feedback.join('<br>')}
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

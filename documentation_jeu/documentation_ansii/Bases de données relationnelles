@@ -1,0 +1,12 @@
+file:///C:/Users/ec/Downloads/anssi_essentiels_bdd_relationnelles_1.0.pdf
+file:///C:/Users/ec/Downloads/fr_np_linux_configuration-v2.0.pdf
+Bonnes pratiques: 
+- mettre à jour le logiciel de gestion de la BDD (mesures : R58 : n'installer que les paquets strictement nécessaires, R59: utiliser des dépôts de paquets de confiance, R60 : utiliser des dépôts de paquets durcis, R61: effectuer des mises à jours régulières)
+- principes de sécurité : 
+principe de minimisation (éviter la compexité inutile qui rend difficile la sécurisation et augmente la surface d'attaque)
+principe du moindre privilège ( tout objet ou entité gérée par un système ne dispose que des droits strictement nécessaires à son exécution, et rien de plus)
+principe de défense en profondeur (plusieurs couches de sécurité inépendantes)
+- sécuriser l'administration: 
+cloisonement des socles physiques PROD et ADMIN, configurer le  BIOS/UEFI (entrées sorties), activer le démarrage sécurisé, remplacer les clées préchargées si nécassaires 
+configurer le mot de passe du démarrage du noyau, l'IOMMU, paramétrer la compilation, utiliser un poste d'administrateur 
+authentification PAM, Name Service Switch
