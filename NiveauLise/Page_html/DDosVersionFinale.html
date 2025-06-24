@@ -526,24 +526,24 @@
 
         .stat-label { 
             font-size: 9px; 
-            opacity: 0.8;  
-            margin-bottom: 3px;  
+            opacity: 0.8;   
+            margin-bottom: 3px;   
         }
 
-        .stat-value {
-            font-size: 12px; 
-            font-weight: bold; 
+        .stat-value { 
+            font-size: 12px;  
+            font-weight: bold;  
+        } 
+
+        .log-entry {  
+            margin: 2px 0;  
+            padding: 3px;  
+            border-radius: 3px;  
+            font-size: 9px;  
+            animation: slideIn 0.3s ease;  
         }
 
-        .log-entry { 
-            margin: 2px 0; 
-            padding: 3px; 
-            border-radius: 3px; 
-            font-size: 9px; 
-            animation: slideIn 0.3s ease; 
-        }
-
-        .log-error {
+        .log-error { 
             background: rgba(255, 0, 0, 0.2); 
             border-left: 3px solid #ff0000; 
         }
@@ -566,68 +566,68 @@
         @keyframes slideIn {
             from { transform: translateX(-100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        } 
+
+        .defense-system { 
+            position: absolute; 
+            opacity: 0; 
+            transition: all 0.5s ease; 
+            pointer-events: none; 
         }
 
-        .defense-system {
-            position: absolute;
-            opacity: 0;
-            transition: all 0.5s ease;
-            pointer-events: none;
-        }
-
-        .defense-system.active {
+        .defense-system.active { 
             opacity: 1;
-        }
+        } 
 
-        .firewall {
-            width: 100px;
-            height: 2px;
+        .firewall { 
+            width: 100px; 
+            height: 2px; 
             background: linear-gradient(90deg, transparent, #0088ff, transparent);
-            box-shadow: 0 0 8px rgba(0, 136, 255, 0.8);
-            border-radius: 1px;
+            box-shadow: 0 0 8px rgba(0, 136, 255, 0.8); 
+            border-radius: 1px; 
         }
 
         .shield {
             width: 80px;
             height: 80px;
             border: 2px solid rgba(0, 136, 255, 0.6);
-            border-radius: 50%;
-            animation: rotate 3s linear infinite;
+            border-radius: 50%; 
+            animation: rotate 3s linear infinite; 
         }
 
         @keyframes rotate {
             from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            to { transform: rotate(360deg); } 
         }
 
-        .panel h3 {
-            text-align: center;
+        .panel h3 { 
+            text-align: center; 
             margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 8px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
             font-size: 12px;
-        }
+        } 
 
         .cost {
-            font-size: 9px;
+            font-size: 9px; 
             opacity: 0.8;
             display: block;
-            margin-top: 1px;
+            margin-top: 1px; 
         }
 
-        .countdown {
+        .countdown { 
             font-size: 14px;
             color: #ff6600;
-            font-weight: bold;
+            font-weight: bold; 
             margin: 10px 0;
-            text-align: center;
+            text-align: center; 
         }
 
         .network-line {
-            position: absolute;
+            position: absolute; 
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.3), transparent);
-            opacity: 0.5;
+            opacity: 0.5; 
             animation: dataFlow 2s linear infinite;
         }
 
@@ -649,100 +649,100 @@
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease;
-        }
+        } 
 
         .selected-server-info.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0); 
         }
 
-        .server-info-header {
-            font-size: 12px;
+        .server-info-header { 
+            font-size: 12px; 
             font-weight: bold;
-            color: #00ff00;
+            color: #00ff00; 
             margin-bottom: 8px;
             text-align: center;
         }
 
         .server-info-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 4px 0;
-            font-size: 10px;
+            display: flex; 
+            justify-content: space-between; 
+            margin: 4px 0; 
+            font-size: 10px; 
         }
 
-        .server-info-label {
-            color: #cccccc;
+        .server-info-label { 
+            color: #cccccc; 
         }
 
-        .server-info-value {
-            color: #ffffff;
-            font-weight: bold;
+        .server-info-value { 
+            color: #ffffff; 
+            font-weight: bold; 
         }
 
         .attack-target-btn {
-            background: linear-gradient(45deg, #ff4444, #cc0000);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin: 5px 0;
-            font-size: 10px;
-            cursor: pointer;
-            width: 100%;
+            background: linear-gradient(45deg, #ff4444, #cc0000); 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            padding: 5px 10px; 
+            margin: 5px 0; 
+            font-size: 10px; 
+            cursor: pointer; 
+            width: 100%; 
         }
 
-        .attack-target-btn:hover {
-            background: linear-gradient(45deg, #ff6666, #ff4444);
-        }
+        .attack-target-btn:hover { 
+            background: linear-gradient(45deg, #ff6666, #ff4444); 
+        } 
 
         .attack-target-btn:disabled {
             opacity: 0.5;
-            cursor: not-allowed;
-        }
+            cursor: not-allowed; 
+        } 
 
-        .attack-resource {
-            background: rgba(255, 0, 0, 0.2);
-            border: 1px solid rgba(255, 0, 0, 0.4);
+        .attack-resource { 
+            background: rgba(255, 0, 0, 0.2); 
+            border: 1px solid rgba(255, 0, 0, 0.4); 
             border-radius: 8px;
-            padding: 8px;
-            margin: 8px 0;
-            font-size: 10px;
+            padding: 8px;  ;
+            margin: 8px 0; 
+            font-size: 10px;  
         }
 
-        .resource-bar {
+        .resource-bar {  
             width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
+            height: 8px; 
+            background: rgba(255, 255, 255, 0.2); 
             border-radius: 4px;
             margin: 4px 0;
-            overflow: hidden;
+            overflow: hidden; 
         }
 
-        .resource-fill {
+        .resource-fill { 
             height: 100%;
             background: linear-gradient(90deg, #ff0000, #ff6600);
-            transition: width 0.3s ease;
+            transition: width 0.3s ease; 
             border-radius: 4px;
-        }
+        } 
 
         .defense-status {
             background: rgba(0, 255, 0, 0.2);
             border: 1px solid rgba(0, 255, 0, 0.4);
             border-radius: 8px;
-            padding: 8px;
-            margin: 8px 0;
+            padding: 8px; 
+            margin: 8px 0; 
             font-size: 10px;
         }
 
-        .auto-defense {
-            position: absolute;
+        .auto-defense { 
+            position: absolute; 
             width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, #00ff00, #008800);
-            border-radius: 50%;
+            height: 20px; 
+            background: radial-gradient(circle, #00ff00, #008800); 
+            border-radius: 50%; 
             animation: autoDefensePulse 2s infinite;
-            pointer-events: none;
+            pointer-events: none; 
         }
 
         @keyframes autoDefensePulse {
