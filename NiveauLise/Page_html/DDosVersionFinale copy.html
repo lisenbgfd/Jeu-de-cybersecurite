@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,27 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDoS Defense Simulator - Multi-Modes</title>
     <style>
-
-.attack-badge {
-    position: absolute;
-    top: -30px;
-    right: -10px;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, #ff0000, #cc0000);
-    border-radius: 50%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    animation: attackBlink 1s infinite;
-    z-index: 10;
-}
-
-@keyframes attackBlink {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.1); }
-}
         * {
             margin: 0;
             padding: 0;
@@ -41,6 +19,176 @@
             height: 100vh;  
             overflow: hidden;
         }
+        .tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.tutorial-overlay.visible {
+    display: flex;
+    opacity: 1;
+}
+
+.tutorial-content {
+    position: absolute;
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border: 2px solid #00ff00;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    min-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 255, 0, 0.3);
+    animation: tutorialSlide 0.5s ease-out;
+}
+
+@keyframes tutorialSlide {
+    from { transform: scale(0.8) translateY(-50px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.tutorial-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.tutorial-title {
+    color: #00ff00;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.tutorial-step {
+    color: #cccccc;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.tutorial-text {
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.tutorial-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tutorial-btn {
+    background: linear-gradient(45deg, #00aa00, #008800);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tutorial-btn:hover {
+    background: linear-gradient(45deg, #00cc00, #00aa00);
+    transform: translateY(-2px);
+}
+
+.tutorial-btn.secondary {
+    background: linear-gradient(45deg, #666666, #444444);
+}
+
+.tutorial-btn.secondary:hover {
+    background: linear-gradient(45deg, #888888, #666666);
+}
+
+.tutorial-progress {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+    background: #00ff00;
+    transform: scale(1.2);
+}
+
+.tutorial-highlight {
+    position: absolute;
+    border: 3px solid #00ff00;
+    border-radius: 15px;
+    background: rgba(0, 255, 0, 0.1);
+    pointer-events: none;
+    z-index: 1999;
+    opacity: 0;
+    transition: all 0.5s ease;
+    animation: tutorialPulse 2s infinite;
+}
+
+.tutorial-highlight.visible {
+    opacity: 1;
+}
+
+@keyframes tutorialPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+    50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.8); }
+}
+
+.tutorial-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1999;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.tutorial-arrow.visible {
+    opacity: 1;
+}
+
+.tutorial-arrow.up {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 20px solid #00ff00;
+}
+
+.tutorial-arrow.down {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid #00ff00;
+}
+
+.tutorial-arrow.left {
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 20px solid #00ff00;
+}
+
+.tutorial-arrow.right {
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 20px solid #00ff00;
+}
 
         .phase-indicator {
             position: absolute;
@@ -111,23 +259,23 @@
         }
 
         .wave-announcement {
-            position: absolute;
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            background: rgba(255, 0, 0, 0.95); 
-            border: 3px solid #ff0000; 
-            border-radius: 20px;
-            padding: 30px; 
-            z-index: 1002; 
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            opacity: 0;
-            display: none; 
-            animation: waveAlert 3s ease-in-out;
-            pointer-events: none;
-        }
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: rgba(255, 0, 0, 0.95); 
+    border: 3px solid #ff0000; 
+    border-radius: 20px;
+    padding: 30px; 
+    z-index: 1002; 
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    display: none; 
+    animation: waveAlert 3s ease-in-out;
+    pointer-events: none;
+}
 
         @keyframes waveAlert { 
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } 
@@ -436,61 +584,6 @@
             box-shadow: 0 0 30px rgba(153, 0, 0, 0.8); 
         }
 
-        /* Icônes de défense sur les serveurs */
-        .server-defenses {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 3px;
-            pointer-events: none;
-        }
-
-        .defense-icon {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            font-size: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            animation: defenseGlow 2s infinite;
-        }
-
-        .defense-icon.firewall {
-            background: linear-gradient(45deg, #ff6600, #cc4400);
-            box-shadow: 0 0 8px rgba(255, 102, 0, 0.6);
-        }
-
-        .defense-icon.proxy {
-            background: linear-gradient(45deg, #0088ff, #0066cc);
-            box-shadow: 0 0 8px rgba(0, 136, 255, 0.6);
-        }
-
-        .defense-icon.rate-limit {
-            background: linear-gradient(45deg, #8800ff, #6600cc);
-            box-shadow: 0 0 8px rgba(136, 0, 255, 0.6);
-        }
-
-        .defense-icon.infrastructure {
-            background: linear-gradient(45deg, #00ffaa, #00cc88);
-            box-shadow: 0 0 8px rgba(0, 255, 170, 0.6);
-        }
-
-        .defense-icon.redundancy {
-            background: linear-gradient(45deg, #ffaa00, #cc8800);
-            box-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
-        }
-
-        @keyframes defenseGlow {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.1); }
-        }
-
         @keyframes shake {
             0%, 100% { transform: rotate(0deg); } 
             25% { transform: rotate(1deg); } 
@@ -559,86 +652,25 @@
             50% { transform: scale(1.3); }
         }
 
-        /* Différents types d'attaques visuelles */
         .packet {
             position: absolute; 
             width: 6px; 
             height: 6px; 
+            background: radial-gradient(circle, #ff0000, #cc0000); 
             border-radius: 50%;  
+            box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);  
             transition: all 0.1s linear;  
             pointer-events: none;  
         }
 
-        /* Ping Flood - petits points rouges rapides */
-        .packet.ping-flood {
-            background: radial-gradient(circle, #ff4444, #cc0000); 
-            box-shadow: 0 0 6px rgba(255, 68, 68, 0.8);
-            width: 4px;
-            height: 4px;
-        }
-
-        /* Botnet Attack - points violets plus gros */
-        .packet.botnet {
-            background: radial-gradient(circle, #ff00ff, #cc00cc); 
-            box-shadow: 0 0 10px rgba(255, 0, 255, 0.9);
-            width: 8px;
-            height: 8px;
-            animation: botnetPulse 0.5s infinite;
-        }
-
-        @keyframes botnetPulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-        }
-
-        /* Attaque ciblée - forme triangulaire orange */
-        .packet.targeted {
-            background: linear-gradient(45deg, #ff6600, #cc4400);
-            box-shadow: 0 0 12px rgba(255, 102, 0, 1);
-            width: 0;
-            height: 0;
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-bottom: 8px solid #ff6600;
-            border-radius: 0;
-            animation: targetedSpin 1s linear infinite;
-        }
-
-        @keyframes targetedSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Attaque avancée - étoile jaune */
-        .packet.advanced {
-            background: radial-gradient(circle, #ffff00, #cccc00);
-            box-shadow: 0 0 15px rgba(255, 255, 0, 1);
-            width: 10px;
-            height: 10px;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: advancedGlow 0.3s infinite;
-        }
-
-        @keyframes advancedGlow {
-            0%, 100% { opacity: 0.7; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        /* Paquets bloqués - gris avec X */
         .packet.blocked { 
             background: radial-gradient(circle, #666666, #333333);  
-            box-shadow: 0 0 4px rgba(102, 102, 102, 0.6);
-            opacity: 0.5;
+            box-shadow: 0 0 4px rgba(102, 102, 102, 0.6);  
         }
 
-        .packet.blocked::after {
-            content: '×';
-            color: white;
-            font-size: 6px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .packet.advanced { 
+            background: radial-gradient(circle, #ff00ff, #cc00cc);  
+            box-shadow: 0 0 8px rgba(255, 0, 255, 0.8);  
         }
 
         .health-bar { 
@@ -843,7 +875,7 @@
             background: rgba(255, 0, 0, 0.2); 
             border: 1px solid rgba(255, 0, 0, 0.4); 
             border-radius: 8px;
-            padding: 8px;
+            padding: 8px;  ;
             margin: 8px 0; 
             font-size: 10px;  
         }
@@ -902,6 +934,31 @@
     </div>
 
     <div class="wave-announcement" id="waveAnnouncement"></div>
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-content" id="tutorialContent">
+            <div class="tutorial-header">
+                <h3 class="tutorial-title" id="tutorialTitle">Bienvenue dans le Simulateur DDoS</h3>
+                <div class="tutorial-step" id="tutorialStep">Étape 1 sur 6</div>
+            </div>
+            <div class="tutorial-text" id="tutorialText">
+                <!-- Le contenu sera injecté dynamiquement -->
+            </div>
+            <div class="tutorial-controls">
+                <button class="tutorial-btn secondary" onclick="skipTutorial()" id="skipBtn">Passer</button>
+                <div class="tutorial-progress" id="tutorialProgress">
+                    <!-- Les points de progression seront générés dynamiquement -->
+                </div>
+                <div>
+                    <button class="tutorial-btn secondary" onclick="previousTutorialStep()" id="prevBtn" style="display: none;">Précédent</button>
+                    <button class="tutorial-btn" onclick="nextTutorialStep()" id="nextBtn">Suivant</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Surbrillance et flèches pour le tutoriel -->
+    <div class="tutorial-highlight" id="tutorialHighlight"></div>
+    <div class="tutorial-arrow" id="tutorialArrow"></div>
 
     <div class="game-container">
         <!-- Panel d'Attaque -->
@@ -916,6 +973,9 @@
                 </button>
                 <button class="phase-btn" onclick="resetToLearning()" id="resetBtn" style="display: none;">
                     Retour Apprentissage
+                </button>
+                <button class="phase-btn" onclick="startTutorial()" id="tutorialBtn">
+                    🎓 Tutoriel
                 </button>
             </div>
 
@@ -1122,6 +1182,156 @@
 
     <script>
         // Variables globales
+        // Ajoutez ces variables globales avec les autres variables
+let tutorialActive = false;
+let currentTutorialStep = 0;
+let tutorialSteps = [];
+
+// Ajoutez ces fonctions à votre JavaScript
+
+function initializeTutorial() {
+    tutorialSteps = [
+        {
+            title: "Bienvenue dans le Simulateur DDoS",
+            text: "Ce simulateur vous permet d'apprendre les attaques DDoS et les défenses cybersécurité. Vous pouvez tester différentes stratégies en toute sécurité.",
+            highlight: null,
+            position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
+        },
+        {
+            title: "Zone d'Attaque",
+            text: "Ici vous pouvez lancer différents types d'attaques : Ping Flood (modéré), Botnet Attack (massif), ou Attaque Ciblée (sur un serveur spécifique). Chaque attaque a ses propres caractéristiques.",
+            highlight: "#attackPanel",
+            position: { top: "20%", left: "70%", transform: "translateX(-50%)" },
+            arrow: { direction: "left", top: "50%", left: "65%" }
+        },
+        {
+            title: "Infrastructure Réseau",
+            text: "Voici vos serveurs : Web Server, DB Server, API Server, CDN Node et Cache Server. Chacun a sa propre santé et peut être ciblé individuellement. Cliquez sur un serveur pour le sélectionner.",
+            highlight: "#gameArea",
+            position: { top: "20%", left: "50%", transform: "translateX(-50%)" },
+            arrow: { direction: "down", top: "15%", left: "50%" }
+        },
+        {
+            title: "Systèmes de Défense",
+            text: "Déployez des défenses pour protéger votre infrastructure : Firewall (bloque 40%), Load Balancer (réduit 60%), Rate Limiting (réduit 30%), Infrastructure+ (réduit 70%), ou Redondance (failover).",
+            highlight: "#defensePanel",
+            position: { top: "20%", left: "30%", transform: "translateX(-50%)" },
+            arrow: { direction: "right", top: "50%", left: "35%" }
+        },
+        {
+            title: "Surveillance du Système",
+            text: "Surveillez la santé globale, votre budget, le nombre de serveurs actifs et votre score. Ces métriques vous aident à évaluer l'efficacité de vos défenses.",
+            highlight: ".status-bar",
+            position: { top: "30%", left: "50%", transform: "translateX(-50%)" },
+            arrow: { direction: "up", top: "25%", left: "50%" }
+        },
+        {
+            title: "Modes de Jeu",
+            text: "Trois modes disponibles :<br>• <strong>Apprentissage</strong> : Testez librement<br>• <strong>Mode Défense</strong> : Survivez à 5 vagues d'attaques<br>• <strong>Mode Attaque</strong> : Lancez vos propres offensives<br><br>Bonne chance !",
+            highlight: null,
+            position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
+        }
+    ];
+    
+    // Créer les points de progression
+    const progressContainer = document.getElementById('tutorialProgress');
+    progressContainer.innerHTML = '';
+    tutorialSteps.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot';
+        if (index === 0) dot.classList.add('active');
+        progressContainer.appendChild(dot);
+    });
+}
+
+function startTutorial() {
+    tutorialActive = true;
+    currentTutorialStep = 0;
+    initializeTutorial();
+    showTutorialStep(0);
+    document.getElementById('tutorialOverlay').classList.add('visible');
+    addLog('🎓 Tutoriel démarré', 'info');
+}
+
+function showTutorialStep(stepIndex) {
+    const step = tutorialSteps[stepIndex];
+    const overlay = document.getElementById('tutorialOverlay');
+    const content = document.getElementById('tutorialContent');
+    const highlight = document.getElementById('tutorialHighlight');
+    const arrow = document.getElementById('tutorialArrow');
+    
+    // Mettre à jour le contenu
+    document.getElementById('tutorialTitle').textContent = step.title;
+    document.getElementById('tutorialStep').textContent = `Étape ${stepIndex + 1} sur ${tutorialSteps.length}`;
+    document.getElementById('tutorialText').innerHTML = step.text;
+    
+    // Positionner le contenu
+    Object.assign(content.style, step.position);
+    
+    // Gérer la surbrillance
+    if (step.highlight) {
+        const targetElement = document.querySelector(step.highlight);
+        if (targetElement) {
+            const rect = targetElement.getBoundingClientRect();
+            highlight.style.top = rect.top + 'px';
+            highlight.style.left = rect.left + 'px';
+            highlight.style.width = rect.width + 'px';
+            highlight.style.height = rect.height + 'px';
+            highlight.classList.add('visible');
+        }
+    } else {
+        highlight.classList.remove('visible');
+    }
+    
+    // Gérer la flèche
+    if (step.arrow) {
+        arrow.className = `tutorial-arrow ${step.arrow.direction} visible`;
+        arrow.style.top = step.arrow.top;
+        arrow.style.left = step.arrow.left;
+    } else {
+        arrow.classList.remove('visible');
+    }
+    
+    // Mettre à jour les points de progression
+    const dots = document.querySelectorAll('.progress-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === stepIndex);
+    });
+    
+    // Gérer les boutons
+    document.getElementById('prevBtn').style.display = stepIndex > 0 ? 'inline-block' : 'none';
+    document.getElementById('nextBtn').textContent = stepIndex === tutorialSteps.length - 1 ? 'Terminer' : 'Suivant';
+}
+
+function nextTutorialStep() {
+    if (currentTutorialStep < tutorialSteps.length - 1) {
+        currentTutorialStep++;
+        showTutorialStep(currentTutorialStep);
+    } else {
+        endTutorial();
+    }
+}
+
+function previousTutorialStep() {
+    if (currentTutorialStep > 0) {
+        currentTutorialStep--;
+        showTutorialStep(currentTutorialStep);
+    }
+}
+
+function skipTutorial() {
+    if (confirm('Êtes-vous sûr de vouloir passer le tutoriel ?')) {
+        endTutorial();
+    }
+}
+
+function endTutorial() {
+    tutorialActive = false;
+    document.getElementById('tutorialOverlay').classList.remove('visible');
+    document.getElementById('tutorialHighlight').classList.remove('visible');
+    document.getElementById('tutorialArrow').classList.remove('visible');
+    addLog('🎓 Tutoriel terminé - Amusez-vous bien !', 'success');
+}
         let gameState = {
             phase: 'learning', // 'learning' ou 'challenge'
             health: 100,
@@ -1198,47 +1408,6 @@
                 gameArea.style.cursor = 'grab';
             });
         }
-
-        function updateServerDefenseBadges(serverId, defenses) {
-    const server = document.getElementById(serverId);
-    let defensesDiv = server.querySelector('.server-defenses');
-    
-    if (!defensesDiv) {
-        defensesDiv = document.createElement('div');
-        defensesDiv.className = 'server-defenses';
-        server.appendChild(defensesDiv);
-    }
-    
-    defensesDiv.innerHTML = '';
-    
-    defenses.forEach(defense => {
-        const badge = document.createElement('div');
-        badge.className = `defense-icon ${defense.type}`;
-        badge.textContent = defense.symbol;
-        badge.title = defense.name;
-        defensesDiv.appendChild(badge);
-    });
-}
-function addAttackBadge(serverId, attackType) {
-    const server = document.getElementById(serverId);
-    let attackBadge = server.querySelector('.attack-badge');
-    
-    if (!attackBadge) {
-        attackBadge = document.createElement('div');
-        attackBadge.className = 'attack-badge';
-        server.appendChild(attackBadge);
-    }
-    
-    const badges = {
-        'ping-flood': '⚡',
-        'botnet': '🤖',
-        'targeted': '🎯',
-        'advanced': '💀'
-    };
-    
-    attackBadge.textContent = badges[attackType] || '⚠';
-    attackBadge.style.display = 'block';
-}
 
         function generateChallengeWaves() {
             challengeWaves = [
