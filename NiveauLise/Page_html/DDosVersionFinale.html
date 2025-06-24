@@ -498,69 +498,69 @@
             box-shadow: 0 0 4px rgba(102, 102, 102, 0.6); 
         }
 
-        .packet.advanced {
-            background: radial-gradient(circle, #ff00ff, #cc00cc);
-            box-shadow: 0 0 8px rgba(255, 0, 255, 0.8);
+        .packet.advanced { 
+            background: radial-gradient(circle, #ff00ff, #cc00cc); 
+            box-shadow: 0 0 8px rgba(255, 0, 255, 0.8); 
         }
 
-        .health-bar {
-            width: 150px;
-            height: 15px;
+        .health-bar { 
+            width: 150px; 
+            height: 15px; 
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
+            border-radius: 8px; 
+            overflow: hidden; 
+            position: relative; 
         }
 
         .health-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff0000, #ffaa00, #00ff00);
-            transition: width 0.5s ease;
-            border-radius: 8px;
+            height: 100%; 
+            background: linear-gradient(90deg, #ff0000, #ffaa00, #00ff00); 
+            transition: width 0.5s ease; 
+            border-radius: 8px; 
         }
 
         .stat {
-            text-align: center;
-            font-size: 11px;
+            text-align: center; 
+            font-size: 11px; 
         }
 
         .stat-label {
-            font-size: 9px;
-            opacity: 0.8;
-            margin-bottom: 3px;
+            font-size: 9px; 
+            opacity: 0.8; 
+            margin-bottom: 3px; 
         }
 
         .stat-value {
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 12px; 
+            font-weight: bold; 
         }
 
-        .log-entry {
-            margin: 2px 0;
-            padding: 3px;
-            border-radius: 3px;
-            font-size: 9px;
-            animation: slideIn 0.3s ease;
+        .log-entry { 
+            margin: 2px 0; 
+            padding: 3px; 
+            border-radius: 3px; 
+            font-size: 9px; 
+            animation: slideIn 0.3s ease; 
         }
 
         .log-error {
-            background: rgba(255, 0, 0, 0.2);
-            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.2); 
+            border-left: 3px solid #ff0000; 
         }
 
         .log-success {
-            background: rgba(0, 255, 0, 0.2);
-            border-left: 3px solid #00ff00;
+            background: rgba(0, 255, 0, 0.2); 
+            border-left: 3px solid #00ff00; 
         }
 
         .log-info {
-            background: rgba(0, 136, 255, 0.2);
-            border-left: 3px solid #0088ff;
+            background: rgba(0, 136, 255, 0.2); 
+            border-left: 3px solid #0088ff; 
         }
 
         .log-warning {
-            background: rgba(255, 165, 0, 0.2);
-            border-left: 3px solid #ffa500;
+            background: rgba(255, 165, 0, 0.2); 
+            border-left: 3px solid #ffa500; 
         }
 
         @keyframes slideIn {
@@ -2149,16 +2149,16 @@ function attackServerUltimate(serverId, intensity) {
         }
     }
     
-    createAttackPackets(serverId, blocked);
-    updateGlobalHealth();
-    updateUI();
+    createAttackPackets(serverId, blocked); 
+    updateGlobalHealth(); 
+    updateUI(); 
     
     // Vérifier la victoire de l'attaquant
     if (gameState.health <= 10) {
-        addLog(' VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');
-        setTimeout(() => {
-            resetToLearning();
-        }, 3000);
+        addLog(' VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error'); 
+        setTimeout(() => { 
+            resetToLearning(); 
+        }, 3000); 
     }
 }
 
@@ -2166,29 +2166,29 @@ function attackServerUltimate(serverId, intensity) {
 const originalResetToLearning = resetToLearning;
 resetToLearning = function() {
     // Restaurer les fonctions d'attaque originales si elles existent
-    if (gameState.originalAttackFunctions) {
-        window.startPingFlood = gameState.originalAttackFunctions.startPingFlood;
-        window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack;
-        window.startTargetedAttack = gameState.originalAttackFunctions.startTargetedAttack;
-        delete gameState.originalAttackFunctions;
+    if (gameState.originalAttackFunctions) { 
+        window.startPingFlood = gameState.originalAttackFunctions.startPingFlood; 
+        window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack; 
+        window.startTargetedAttack = gameState.originalAttackFunctions.startTargetedAttack; 
+        delete gameState.originalAttackFunctions; 
     }
     
     // Supprimer l'affichage des ressources d'attaque
-    const attackResourcesDisplay = document.getElementById('attackResourcesDisplay');
-    if (attackResourcesDisplay) {
-        attackResourcesDisplay.remove();
+    const attackResourcesDisplay = document.getElementById('attackResourcesDisplay'); 
+    if (attackResourcesDisplay) { 
+        attackResourcesDisplay.remove(); 
     }
     
     // Supprimer le bouton d'attaque ultime
-    const ultimateBtn = document.getElementById('ultimateAttackBtn');
-    if (ultimateBtn) {
-        ultimateBtn.remove();
+    const ultimateBtn = document.getElementById('ultimateAttackBtn'); 
+    if (ultimateBtn) { 
+        ultimateBtn.remove(); 
     }
     
     // Restaurer l'interface
-    document.getElementById('phaseIndicator').classList.remove('attack-mode');
-    document.getElementById('phaseIndicator').style.backgroundColor = '';
-    document.getElementById('phaseIndicator').style.color = '';
+    document.getElementById('phaseIndicator').classList.remove('attack-mode'); 
+    document.getElementById('phaseIndicator').style.backgroundColor = ''; 
+    document.getElementById('phaseIndicator').style.color = ''; 
     
     const defensePanel = document.querySelector('.defense-panel');
     if (defensePanel) {
@@ -2197,7 +2197,7 @@ resetToLearning = function() {
     }
     
     // Appeler la fonction de reset originale
-    originalResetToLearning();
+    originalResetToLearning(); 
 };
         // Initialisation finale
         updateUI();
