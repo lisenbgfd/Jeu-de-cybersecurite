@@ -36,68 +36,68 @@
             min-width: 300px; 
         }
 
-        .phase-indicator.challenge {
-            border-color: #ff6600;
-            background: rgba(255, 102, 0, 0.1);
+        .phase-indicator.challenge { 
+            border-color: #ff6600; 
+            background: rgba(255, 102, 0, 0.1); 
         }
 
-        .phase-indicator.attack-mode {
-            border-color: #cc0000;
-            background: rgba(204, 0, 0, 0.1);
-            color: #ffcccc;
+        .phase-indicator.attack-mode { 
+            border-color: #cc0000; 
+            background: rgba(204, 0, 0, 0.1); 
+            color: #ffcccc; 
         }
 
-        .zoom-controls {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
+        .zoom-controls { 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            display: flex;  
             flex-direction: column;
-            gap: 5px;
+            gap: 5px; 
             z-index: 1001;
         }
 
         .zoom-btn {
             background: rgba(0, 0, 0, 0.8);
             border: 2px solid #00ff00;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
+            color: white; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 18px; 
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; 
         }
 
-        .zoom-btn:hover {
-            background: rgba(0, 255, 0, 0.2);
-            transform: scale(1.1);
+        .zoom-btn:hover { 
+            background: rgba(0, 255, 0, 0.2); 
+            transform: scale(1.1); 
         }
 
         .zoom-level {
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid #00ff00;
-            color: #00ff00;
-            padding: 5px 10px;
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.8); 
+            border: 1px solid #00ff00; 
+            color: #00ff00; 
+            padding: 5px 10px; 
+            border-radius: 15px; 
             font-size: 10px;
-            text-align: center;
+            text-align: center; 
         }
 
         .wave-announcement {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 0, 0, 0.95);
-    border: 3px solid #ff0000;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: rgba(255, 0, 0, 0.95); 
+    border: 3px solid #ff0000; 
     border-radius: 20px;
-    padding: 30px;
-    z-index: 1002;
+    padding: 30px; 
+    z-index: 1002; 
     font-size: 18px;
     font-weight: bold;
     text-align: center;
@@ -107,11 +107,11 @@
     pointer-events: none;
 }
 
-        @keyframes waveAlert {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+        @keyframes waveAlert { 
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } 
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } 
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } 
         }
 
         .game-container {
