@@ -2515,9 +2515,7 @@ function updateDefenseIndicators() {
         let indicatorCount = 0;
         
         // Vérifier chaque type de défense
-        if (gameState.defenses.firewall) {
-            addDefenseIndicator(serverEl, 'F', 'firewall', indicatorCount++);
-        }
+        
         
         if (gameState.defenses.reverseProxy) {
             addDefenseIndicator(serverEl, 'P', 'reverseProxy', indicatorCount++);
