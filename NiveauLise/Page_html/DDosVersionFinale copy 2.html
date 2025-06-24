@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- ... (le reste du head reste inchangé) ... -->
+    <style>
+        /* ... (styles existants) ... */
+
+        /* Nouveaux styles pour les différents types de paquets */
+        .packet.ping {
+            background: radial-gradient(circle, #ff0000, #cc0000);
+            box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
+        }
+
+        .packet.botnet {
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ff6600, #cc4400);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.8);
+        }
+
+        .packet.targeted {
+            width: 10px;
+            height: 4px;
+            background: linear-gradient(to right, #ff0000, #cc0000);
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+        }
+
+        .packet.advanced {
+            background: radial-gradient(circle, #ff00ff, #cc00cc);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+        }
+
+        .packet.social {
+            background: radial-gradient(circle, #00ff00, #00cc00);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+        }
+
+        .packet.ultimate {
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #ffff00, #ff6600);
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.9);
+            animation: ultimatePulse 0.5s infinite alternate;
+        }
+
+        @keyframes ultimatePulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.5); }
+        }
+
+        /* Icônes de défense sur les serveurs */
+        .defense-icon {
+            position: absolute;
+            font-size: 8px;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            z-index: 10;
+        }
+
+        .defense-icon.firewall {
+            bottom: 2px;
+            left: 2px;
+            background: rgba(255, 0, 0, 0.7);
+        }
+
+        .defense-icon.proxy {
+            bottom: 2px;
+            right: 2px;
+            background: rgba(0, 100, 255, 0.7);
+        }
+
+        .defense-icon.ratelimit {
+            top: 2px;
+            left: 2px;
+            background: rgba(255, 165, 0, 0.7);
+        }
+
+        .defense-icon.infra {
+            top: 2px;
+            right: 2px;
+            background: rgba(0, 200, 0, 0.7);
+        }
+
+        .defense-icon.redundancy {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 200, 200, 0.7);
+            font-size: 6px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ... (le reste du HTML reste inchangé) ... -->
+    
+    <script>
+        // ... (code existant) ...
+
+        function createAttackPackets(targetServerId, blocked, attackType = 'ping') {
+            const spawnPoint = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
+            const targetServer = document.getElementById(targetServerId);
+            
+            if (!spawnPoint || !targetServer) return;
+            
+            const packet = document.createElement('div');
+            packet.className = `packet ${attackType}` + (blocked ? ' blocked' : '');
+            
+            const spawnRect = spawnPoint.getBoundingClientRect();
+            const targetRect = targetServer.getBoundingClientRect();
+            const gameRect = document.getElementById('gameArea').getBoundingClientRect();
+            
+            const startX = ((spawnRect.left + spawnRect.width/2) - gameRect.left) / gameRect.width * 100;
+            const startY = ((spawnRect.top + spawnRect.height/2) - gameRect.top) / gameRect.height * 100;
+            const endX = ((targetRect.left + targetRect.width/2) - gameRect.left) / gameRect.width * 100;
+            const endY = ((targetRect.top + targetRect.height/2) - gameRect.top) / gameRect.height * 100;
+            
+            packet.style.left = startX + '%';
+            packet.style.top = startY + '%';
+            
+            document.getElementById('gameWorld').appendChild(packet);
+            
+            // Animer le paquet
+            setTimeout(() => {
+                packet.style.left = endX + '%';
+                packet.style.top = endY + '%';
+                
+                setTimeout(() => {
+                    if (packet.parentNode) {
+                        packet.parentNode.removeChild(packet);
+                    }
+                }, 1000);
+            }, 50);
+            
+            // Activer le spawn point
+            spawnPoint.classList.add('active');
+            setTimeout(() => {
+                spawnPoint.classList.remove('active');
+            }, 500);
+        }
+
+        function addDefenseIcon(serverId, defenseType) {
+            const serverEl = document.getElementById(serverId);
+            if (!serverEl) return;
+            
+            // Vérifier si l'icône est déjà présente
+            const existingIcon = serverEl.querySelector(`.defense-icon.${defenseType}`);
+            if (existingIcon) return;
+            
+            const icon = document.createElement('div');
+            icon.className = `defense-icon ${defenseType}`;
+            
+            // Texte de l'icône en fonction du type
+            switch(defenseType) {
+                case 'firewall': 
+                    icon.textContent = 'F';
+                    break;
+                case 'proxy':
+                    icon.textContent = 'LB';
+                    break;
+                case 'ratelimit':
+                    icon.textContent = 'RL';
+                    break;
+                case 'infra':
+                    icon.textContent = 'UP';
+                    break;
+                case 'redundancy':
+                    icon.textContent = 'R';
+                    break;
+                default:
+                    icon.textContent = '?';
+            }
+            
+            serverEl.appendChild(icon);
+        }
+
+        // Fonctions de défense modifiées pour ajouter les icônes
+        function deployFirewall() {
+            // ... (code existant) ...
+            
+            // Ajouter l'icône sur tous les serveurs
+            Object.keys(gameState.servers).forEach(serverId => {
+                addDefenseIcon(serverId, 'firewall');
+            });
+            
+            // ... (suite du code) ...
+        }
+
+        function deployReverseProxy() {
+            // ... (code existant) ...
+            
+            // Ajouter l'icône sur tous les serveurs
+            Object.keys(gameState.servers).forEach(serverId => {
+                addDefenseIcon(serverId, 'proxy');
+            });
+        }
+
+        function deployRateLimiting() {
+            // ... (code existant) ...
+            
+            // Ajouter l'icône sur tous les serveurs
+            Object.keys(gameState.servers).forEach(serverId => {
+                addDefenseIcon(serverId, 'ratelimit');
+            });
+        }
+
+        function upgradeInfrastructure() {
+            // ... (code existant) ...
+            
+            // Ajouter l'icône sur tous les serveurs
+            Object.keys(gameState.servers).forEach(serverId => {
+                addDefenseIcon(serverId, 'infra');
+            });
+        }
+
+        function deployRedundancy() {
+            // ... (code existant) ...
+            
+            // Ajouter l'icône sur tous les serveurs
+            Object.keys(gameState.servers).forEach(serverId => {
+                addDefenseIcon(serverId, 'redundancy');
+            });
+        }
+
+        function resetServerVisual(serverId) {
+            const serverEl = document.getElementById(serverId);
+            const healthFill = serverEl.querySelector('.server-health-fill');
+            
+            healthFill.style.width = '100%';
+            serverEl.style.opacity = '1';
+            serverEl.classList.remove('under-attack', 'critical', 'protected');
+            
+            // Retirer toutes les icônes de défense
+            const icons = serverEl.querySelectorAll('.defense-icon');
+            icons.forEach(icon => icon.remove());
+        }
+
+        function attackServer(serverId, intensity) {
+            // ... (code existant) ...
+            
+            // Créer des paquets visuels - par défaut ping
+            createAttackPackets(serverId, blocked, 'ping');
+        }
+
+        function attackServerAdvanced(serverId, intensity) {
+            // ... (code existant) ...
+            
+            // Créer des paquets pour attaque avancée
+            createAttackPackets(serverId, blocked, 'advanced');
+        }
+
+        function attackServerSocial(serverId, intensity) {
+            // ... (code existant) ...
+            
+            // Créer des paquets pour attaque sociale
+            createAttackPackets(serverId, false, 'social');
+        }
+
+        function attackServerUltimate(serverId, intensity) {
+            // ... (code existant) ...
+            
+            // Créer des paquets pour attaque ultime
+            createAttackPackets(serverId, blocked, 'ultimate');
+        }
+
+        function startPingFlood() {
+            // ... (code existant) ...
+            
+            attackInterval = setInterval(() => {
+                Object.keys(gameState.servers).forEach(serverId => {
+                    attackServer(serverId, 1);
+                    // Créer des paquets spécifiques
+                    createAttackPackets(serverId, false, 'ping');
+                });
+            }, 300);
+            
+            // ... (suite du code) ...
+        }
+
+        function startBotnetAttack() {
+            // ... (code existant) ...
+            
+            attackInterval = setInterval(() => {
+                Object.keys(gameState.servers).forEach(serverId => {
+                    attackServer(serverId, 3);
+                    // Créer des paquets spécifiques
+                    createAttackPackets(serverId, false, 'botnet');
+                });
+            }, 200);
+        }
+
+        function startTargetedAttack() {
+            // ... (code existant) ...
+            
+            attackInterval = setInterval(() => {
+                attackServer(gameState.selectedServer, 4);
+                // Créer des paquets spécifiques
+                createAttackPackets(gameState.selectedServer, false, 'targeted');
+            }, 150);
+        }
+
+        // ... (le reste du code reste inchangé) ...
+    </script>
+</body>
+</html>
