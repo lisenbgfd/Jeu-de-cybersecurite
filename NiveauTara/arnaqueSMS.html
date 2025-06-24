@@ -28,7 +28,7 @@
         }
 
         .back-btn {
-        background: rgba(184, 24, 24, 0.9);
+        background: rgba(0, 0, 0, 0.9);
         border: none;
         padding: 12px 20px;
         border-radius: 25px;
@@ -43,10 +43,11 @@
 
 
         .back-btn:hover {
-            background: white;
+            background: rgb(61, 61, 61);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
+        
 
         .rules {
             background: rgba(0, 0, 0, 0.95);
@@ -73,7 +74,7 @@
         display: flex;
         justify-content: center;
         /* align-items: center;  <-- optionnel à retirer aussi si ça gêne */
-        margin-top: -90px;
+        margin-top: -185px;
         margin-bottom: 0;
         }
 
@@ -271,16 +272,51 @@
             margin: 20px 0;
             color: #4ff436;
         }
+
+        .player-profile {
+        position: absolute;
+        top: 120px;
+        left: 30px;
+        width: 290px;
+        padding: 20px;
+        background: rgb(0, 0, 0);
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(208, 252, 193, 0.3);
+        font-size: 15px;
+        z-index: 500;
+        }
+
+        .player-profile h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .player-profile p {
+            margin: 6px 0;
+            color: #d6d6d6;
+        }
+
     </style>
 </head>
 <body>
     <div class="header">
-        <button class="back-btn" onclick="goBack()">← Retour</button>
-        <div class="rules">
-            <h2>Règles du Jeu</h2>
-            <p>Vous avez reçu 10 messages, certains sont des arnaques. Faites attention en répondant !</p>
-        </div>
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <div class="rules">
+        <h2>Règles du Jeu</h2>
+        <p>Vous avez reçu 10 messages, certains sont des arnaques. Faites attention en répondant ! Peut être vaut-il mieux ne pas répondre !</p>
     </div>
+</div>
+
+<!-- Profil du joueur positionné librement -->
+<div class="player-profile">
+    <h2>Vous êtes :</h2>
+    <p><strong>Nom :</strong> Camille B.</p>
+    <p><strong>Âge :</strong> 44 ans</p>
+    <p>Vous travaillez à IBM, vous habitez en banlieu parisienne avec votre conjoint et vos deux enfants : Gabrielle 14 ans et Alix 11 ans</p>
+</div>
+
+
 
     <div class="score-display">
         Score: <span id="score">0</span>/10
@@ -291,7 +327,7 @@
             <div class="phone-screen">
                 <div class="status-bar">
                     <span>9:41</span>
-                    <span>🔋 90%</span>
+                    <span>🔋 87%</span>
                 </div>
                 <div class="messages-header">
                     Messages (10)
@@ -308,14 +344,21 @@
     <!-- Modal pour répondre aux messages -->
     <div class="modal" id="messageModal">
         <div class="modal-content">
-            <h3 id="modalSender"></h3>
-            <p id="modalContent"></p>
-            <div class="modal-buttons">
-                <button class="modal-btn reply-btn" onclick="replyToMessage()">Répondre</button>
-                <button class="modal-btn ignore-btn" onclick="ignoreMessage()">Ignorer</button>
-            </div>
+            <h3 id="modalSender">Expéditeur</h3>
+            <p id="modalContent">Contenu du message</p>
+
+            <form action="#reponse-envoyee" method="get">
+                <label for="playerReply">Votre réponse :</label><br>
+                <textarea id="playerReply" name="playerReply" rows="4" cols="50" placeholder="Écris ta réponse ici..."></textarea><br>
+
+                <div class="modal-buttons">
+                    <input type="submit" class="modal-btn reply-btn" value="Envoyer">
+                    <input type="submit" class="modal-btn ignore-btn" value="Ignorer">
+                </div>
+            </form>
         </div>
     </div>
+
 
     <!-- Modal des résultats -->
     <div class="modal result-modal" id="resultModal">
@@ -338,43 +381,45 @@
         const messages = [
             {
                 sender: "Banque Populaire",
-                preview: "Urgent : Votre compte sera suspendu. Cliquez ici pour le réactiver immédiatement.",
+                preview: "Urgent : Votre compte sera suspendu dans 2h...",
                 content: "Urgent : Votre compte sera suspendu dans 2h. Cliquez sur ce lien pour le réactiver : www.banque-populaire-secure.com",
                 isScam: true,
-                type: "link"
+                type: "link",
+                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
+                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Maman",
-                preview: "Tu peux passer ce soir ? J'ai préparé ton plat préféré !",
+                preview: "Salut mon chéri ! Tu peux passer ce soir ? ...",
                 content: "Salut mon chéri ! Tu peux passer ce soir ? J'ai préparé ton plat préféré !",
                 isScam: false,
                 type: "family"
             },
             {
-                sender: "Netflix Support",
-                preview: "Votre abonnement expire demain. Renouvelez maintenant avec 50% de réduction !",
-                content: "Votre abonnement Netflix expire demain ! Profitez de 50% de réduction en renouvelant maintenant : netflix-renewal.net",
+                sender: "Netflix Suport",
+                preview: "Votre abonnement Netflix expire demain...",
+                content: "Votre abonnement Netflix expire demain ! Profitez de 50% de réduction en renouvelant maintenant : netflix-renewall.net",
                 isScam: true,
                 type: "link"
             },
             {
-                sender: "Marie Dubois",
-                preview: "Bonjour, je travaille pour une ONG et j'ai besoin de votre aide urgente...",
-                content: "Bonjour, je suis Marie Dubois, je travaille pour une ONG. Nous avons besoin d'aide urgente pour des enfants malades. Pouvez-vous nous envoyer 50€ par virement ?",
+                sender: "Unknown",
+                preview: "C'est le livreur j'ai un colis à votre nom...",
+                content: "c'est le livreur j'ai un colis à votre nom qui ne rentrait pas dans la boite aux lettres veuillez choisir un relais https://mondiale-livraison.com",
                 isScam: true,
                 type: "personal"
             },
             {
-                sender: "Pierre - Travail",
-                preview: "Réunion reportée à 15h demain. Merci de confirmer ta présence.",
+                sender: "Pierre (Travail) ",
+                preview: "Salut ! La réunion de demain est reportée à 15h au lieu de 14h...",
                 content: "Salut ! La réunion de demain est reportée à 15h au lieu de 14h. Merci de confirmer ta présence.",
                 isScam: false,
                 type: "work"
             },
             {
-                sender: "Amazon Livraison",
-                preview: "Votre colis est en attente. Frais de livraison impayés : 2.99€",
-                content: "Votre colis Amazon est en attente de livraison. Frais de livraison impayés : 2.99€. Payez maintenant pour recevoir votre commande.",
+                sender: "Unknown",
+                preview: "Nous cherchons 100 volontaires pour tester...",
+                content: "Nous cherchons 100 volontaires pour tester nos nouveaux appareils auditifs gratuitement. Infos https://adzm.me/8ex7ostc",
                 isScam: true,
                 type: "personal"
             },
@@ -400,10 +445,10 @@
                 type: "job"
             },
             {
-                sender: "Service Client",
-                preview: "Félicitations ! Vous avez gagné 500€. Réclamez votre prix maintenant !",
-                content: "Félicitations ! Vous êtes notre 1000ème visiteur ! Vous avez gagné 500€. Cliquez ici pour réclamer votre prix !",
-                isScam: false,
+                sender: "Unknown",
+                preview: "Coucou maman, j’ai cassé mon téléphone...",
+                content: "Coucou maman, j’ai cassé mon téléphone, là je te parle depuis celui d’un ami. Peux-tu m’avancer de l’argent pour en acheter un autre ? Voici le RIB de mon ami : FR76 5000 4032 8500 0087 8427 258",
+                isScam: true,
                 type: "prize"
             }
         ];
@@ -459,6 +504,40 @@
             closeModal();
             updateScore();
             markMessageAsAnswered(currentMessageIndex);
+        }
+
+        function analyzeCustomResponse(response, scenario) {
+            if (message.isScam) {
+                const lowerResponse = response.toLowerCase();
+            let score = 50; // Score de base
+            let dangerPoints = 0;
+            let safePoints = 0;
+
+            // Analyse des mots-clés dangereux
+            scenario.dangerKeywords.forEach(keyword => {
+            if (lowerResponse.includes(keyword.toLowerCase())) {
+            dangerPoints += 25;
+            }
+            });
+
+            // Analyse des mots-clés sécurisés
+            scenario.safeKeywords.forEach(keyword => {
+            if (lowerResponse.includes(keyword.toLowerCase())) {
+            safePoints += 25;
+            }
+            });
+
+            // Calcul du score final
+            score = Math.max(0, Math.min(100, score + safePoints - dangerPoints));
+            const isSafe = score >= 60;
+            if (score >= 50) {
+                score++;
+                showFeedback("Bonne réponse ! Ce message était un scam.", true);
+            }
+            if (score <50) {
+                showFeedback("Attention ! C'était une arnaque !", false);
+            }
+            }
         }
 
         function ignoreMessage() {
