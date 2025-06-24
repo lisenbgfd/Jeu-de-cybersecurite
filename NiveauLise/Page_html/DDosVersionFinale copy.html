@@ -1200,8 +1200,8 @@ function initializeTutorial() {
             title: "Zone d'Attaque",
             text: "Ici vous pouvez lancer différents types d'attaques : Ping Flood (modéré), Botnet Attack (massif), ou Attaque Ciblée (sur un serveur spécifique). Chaque attaque a ses propres caractéristiques.",
             highlight: "#attackPanel",
-            position: { top: "20%", left: "70%", transform: "translateX(-50%)" },
-            arrow: { direction: "left", top: "50%", left: "65%" }
+            position: { top: "20%", left: "30%", transform: "translateX(-50%)" },
+            arrow: { direction: "right", top: "50%", left: "35%" }
         },
         {
             title: "Infrastructure Réseau",
@@ -1214,8 +1214,8 @@ function initializeTutorial() {
             title: "Systèmes de Défense",
             text: "Déployez des défenses pour protéger votre infrastructure : Firewall (bloque 40%), Load Balancer (réduit 60%), Rate Limiting (réduit 30%), Infrastructure+ (réduit 70%), ou Redondance (failover).",
             highlight: "#defensePanel",
-            position: { top: "20%", left: "30%", transform: "translateX(-50%)" },
-            arrow: { direction: "right", top: "50%", left: "35%" }
+            position: { top: "20%", left: "70%", transform: "translateX(-50%)" },
+            arrow: { direction: "left", top: "50%", left: "65%" }
         },
         {
             title: "Surveillance du Système",
@@ -1329,7 +1329,7 @@ function endTutorial() {
     document.getElementById('tutorialOverlay').classList.remove('visible');
     document.getElementById('tutorialHighlight').classList.remove('visible');
     document.getElementById('tutorialArrow').classList.remove('visible');
-    addLog('🎓 Tutoriel terminé - Amusez-vous bien !', 'success');
+    addLog(' Tutoriel terminé - Amusez-vous bien !', 'success');
 }
         let gameState = {
             phase: 'learning', // 'learning' ou 'challenge'
@@ -2264,7 +2264,7 @@ function attackServerSocial(serverId, intensity) {
     updateGlobalHealth();
     updateUI();
 }
-// Fonction pour démarrer le mode attaque - à ajouter à la fin de votre script
+// Fonction pour démarrer le mode attaque 
 function startAttackMode() {
     // Changer l'état du jeu
     gameState.phase = 'attack';
