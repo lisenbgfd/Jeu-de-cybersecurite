@@ -82,50 +82,90 @@
         .game-screen {
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
             gap: 2rem;
             padding: 2rem;
+            align-items: center;
+        }
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .phone-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .instruction-text {
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
             font-size: 16px;
             color: rgba(255, 255, 255, 0.9);
             text-align: center;
-            max-width: 500px;
         }
 
         .hint-text {
             background: rgba(255, 193, 7, 0.2);
             border: 1px solid rgba(255, 193, 7, 0.5);
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 14px;
+            font-size: 16px;
             color: #ffc107;
             text-align: center;
-            max-width: 500px;
-            min-height: 50px;
+            min-height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        .error-feedback {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #f44336;
+            text-align: center;
+            min-height: 80px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .error-feedback.show {
+            display: flex;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
         .iphone-mockup {
-            width: 320px;
-            height: 650px;
+            width: 400px;
+            height: 800px;
             background: #000;
-            border-radius: 40px;
-            padding: 8px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
             position: relative;
-            border: 2px solid #333;
+            border: 3px solid #333;
         }
 
         .iphone-screen {
@@ -434,9 +474,24 @@
         }
 
         @media (max-width: 768px) {
+            .game-screen {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .left-panel, .right-panel {
+                order: 1;
+            }
+            
+            .phone-container {
+                order: 2;
+            }
+            
             .iphone-mockup {
-                width: 280px;
-                height: 570px;
+                width: 300px;
+                height: 600px;
             }
         }
     </style>
@@ -453,106 +508,119 @@
 
     <!-- Écran de jeu -->
     <div class="screen game-screen" id="gameScreen">
-        <div class="instruction-text">
-            Clique sur l'écran pour essayer de déverrouiller le téléphone<br>
-            Utilise les informations du compte Instagram pour deviner le code
+        <div class="left-panel">
+            <div class="instruction-text">
+                📱 Clique sur l'écran pour essayer de déverrouiller le téléphone
+            </div>
+            
+            <div class="hint-text" id="hintText">
+                💡 Essaie de deviner le code d'accès...
+            </div>
         </div>
         
-        <div class="hint-text" id="hintText">
-            💡 Essaie de deviner le code d'accès...
+        <div class="phone-container">
+            <div class="iphone-mockup">
+                <div class="iphone-screen">
+                    <div class="lock-screen" id="lockScreen" onclick="showPasscode()">
+                        <div class="status-bar">
+                            <div class="status-left">Bouygues</div>
+                            <div class="status-right">
+                                📶 📶 79%
+                            </div>
+                        </div>
+                        
+                        <div class="date-time">
+                            <div class="date">Jeudi 10 avril</div>
+                            <div class="time">13:05</div>
+                        </div>
+                        
+                        <div class="heart-hands">💕</div>
+                        
+                        <div class="unlock-area">
+                            <div class="unlock-text">Balayez vers le haut ou saisissez le code</div>
+                        </div>
+                        
+                        <div class="lock-screen-bottom">
+                            <div class="flashlight-btn">🔦</div>
+                            <div class="camera-btn" onclick="event.stopPropagation(); showPasscode()">📷</div>
+                        </div>
+                        
+                        <div class="home-indicators"></div>
+                    </div>
+
+                    <div class="passcode-overlay" id="passcodeOverlay">
+                        <div class="status-bar">
+                            <div class="status-left">Bouygues</div>
+                            <div class="status-right">
+                                📶 📶 79%
+                            </div>
+                        </div>
+                        
+                        <div class="lock-icon">🔒</div>
+                        
+                        <div class="passcode-instruction">
+                            Saisissez le code
+                        </div>
+                        
+                        <div class="passcode-dots" id="passcodeDots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        
+                        <div class="keypad">
+                            <div class="key" onclick="addDigit('1')">1</div>
+                            <div class="key" onclick="addDigit('2')">2<div class="key-letters">ABC</div></div>
+                            <div class="key" onclick="addDigit('3')">3<div class="key-letters">DEF</div></div>
+                            <div class="key" onclick="addDigit('4')">4<div class="key-letters">GHI</div></div>
+                            <div class="key" onclick="addDigit('5')">5<div class="key-letters">JKL</div></div>
+                            <div class="key" onclick="addDigit('6')">6<div class="key-letters">MNO</div></div>
+                            <div class="key" onclick="addDigit('7')">7<div class="key-letters">PQRS</div></div>
+                            <div class="key" onclick="addDigit('8')">8<div class="key-letters">TUV</div></div>
+                            <div class="key" onclick="addDigit('9')">9<div class="key-letters">WXYZ</div></div>
+                            <div class="key key-zero" onclick="addDigit('0')">0</div>
+                        </div>
+                        
+                        <div class="passcode-bottom">
+                            <button class="emergency-btn">Urgence</button>
+                            <button class="cancel-btn" onclick="hidePasscode()">Annuler</button>
+                        </div>
+                        
+                        <div class="attempts-text" id="attemptsText">Essais restants : 3</div>
+                        <div class="error-text" id="errorText"></div>
+                        
+                        <div class="home-indicators"></div>
+                    </div>
+
+                    <div class="home-screen" id="homeScreen">
+                        <div class="status-bar">
+                            <div class="status-left">13:06</div>
+                            <div class="status-right">
+                                📶 📶 79%
+                            </div>
+                        </div>
+                        
+                        <div class="success-screen">
+                            <div class="success-icon">🔓</div>
+                            <div class="success-text">Téléphone déverrouillé !</div>
+                        </div>
+                        
+                        <div class="home-indicators"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div class="iphone-mockup">
-            <div class="iphone-screen">
-                <div class="lock-screen" id="lockScreen" onclick="showPasscode()">
-                    <div class="status-bar">
-                        <div class="status-left">Bouygues</div>
-                        <div class="status-right">
-                            📶 📶 79%
-                        </div>
-                    </div>
-                    
-                    <div class="date-time">
-                        <div class="date">Jeudi 10 avril</div>
-                        <div class="time">13:05</div>
-                    </div>
-                    
-                    <div class="heart-hands">💕</div>
-                    
-                    <div class="unlock-area">
-                        <div class="unlock-text">Balayez vers le haut ou saisissez le code</div>
-                    </div>
-                    
-                    <div class="lock-screen-bottom">
-                        <div class="flashlight-btn">🔦</div>
-                        <div class="camera-btn" onclick="event.stopPropagation(); showPasscode()">📷</div>
-                    </div>
-                    
-                    <div class="home-indicators"></div>
-                </div>
-
-                <div class="passcode-overlay" id="passcodeOverlay">
-                    <div class="status-bar">
-                        <div class="status-left">Bouygues</div>
-                        <div class="status-right">
-                            📶 📶 79%
-                        </div>
-                    </div>
-                    
-                    <div class="lock-icon">🔒</div>
-                    
-                    <div class="passcode-instruction">
-                        Saisissez le code
-                    </div>
-                    
-                    <div class="passcode-dots" id="passcodeDots">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
-                    
-                    <div class="keypad">
-                        <div class="key" onclick="addDigit('1')">1</div>
-                        <div class="key" onclick="addDigit('2')">2<div class="key-letters">ABC</div></div>
-                        <div class="key" onclick="addDigit('3')">3<div class="key-letters">DEF</div></div>
-                        <div class="key" onclick="addDigit('4')">4<div class="key-letters">GHI</div></div>
-                        <div class="key" onclick="addDigit('5')">5<div class="key-letters">JKL</div></div>
-                        <div class="key" onclick="addDigit('6')">6<div class="key-letters">MNO</div></div>
-                        <div class="key" onclick="addDigit('7')">7<div class="key-letters">PQRS</div></div>
-                        <div class="key" onclick="addDigit('8')">8<div class="key-letters">TUV</div></div>
-                        <div class="key" onclick="addDigit('9')">9<div class="key-letters">WXYZ</div></div>
-                        <div class="key key-zero" onclick="addDigit('0')">0</div>
-                    </div>
-                    
-                    <div class="passcode-bottom">
-                        <button class="emergency-btn">Urgence</button>
-                        <button class="cancel-btn" onclick="hidePasscode()">Annuler</button>
-                    </div>
-                    
-                    <div class="attempts-text" id="attemptsText">Essais restants : 3</div>
-                    <div class="error-text" id="errorText"></div>
-                    
-                    <div class="home-indicators"></div>
-                </div>
-
-                <div class="home-screen" id="homeScreen">
-                    <div class="status-bar">
-                        <div class="status-left">13:06</div>
-                        <div class="status-right">
-                            📶 📶 79%
-                        </div>
-                    </div>
-                    
-                    <div class="success-screen">
-                        <div class="success-icon">🔓</div>
-                        <div class="success-text">Téléphone déverrouillé !</div>
-                    </div>
-                    
-                    <div class="home-indicators"></div>
-                </div>
+        <div class="right-panel">
+            <div class="instruction-text">
+                🔍 Utilise les informations du compte Instagram pour deviner le code
+            </div>
+            
+            <div class="error-feedback" id="errorFeedback">
+                ❌ Tentative échouée ! Ce n'est pas le bon code...
             </div>
         </div>
     </div>
@@ -578,6 +646,24 @@
             "💡 Indice : Pense aux dates d'anniversaire mentionnées sur Instagram",
             "💡 Indice : C'est souvent une date d'un proche de la famille, pas la sienne"
         ];
+
+        const errorMessages = [
+            "❌ Tentative échouée ! Ce n'est pas le bon code...",
+            "🔴 Encore raté ! Continue à chercher...",
+            "⚠️ Dernière chance ! Réfléchis bien avant d'essayer..."
+        ];
+
+        function showErrorFeedback() {
+            const errorFeedback = document.getElementById('errorFeedback');
+            const messageIndex = Math.min(attemptCount - 1, errorMessages.length - 1);
+            errorFeedback.textContent = errorMessages[messageIndex];
+            errorFeedback.classList.add('show');
+            
+            // Masquer après 3 secondes
+            setTimeout(() => {
+                errorFeedback.classList.remove('show');
+            }, 3000);
+        }
 
         function startGame() {
             document.getElementById('introScreen').classList.remove('active');
@@ -649,6 +735,9 @@
                 attemptCount++;
                 errorText.textContent = 'Code incorrect';
                 
+                // Afficher le message d'erreur dans le panneau de droite
+                showErrorFeedback();
+                
                 // Mettre à jour l'indice
                 updateHint();
                 
@@ -686,6 +775,7 @@
             document.getElementById('attemptsText').textContent = 'Essais restants : 3';
             document.getElementById('errorText').textContent = '';
             document.getElementById('hintText').textContent = hints[0];
+            document.getElementById('errorFeedback').classList.remove('show');
             updateDots();
             
             // Retour à l'écran d'intro
