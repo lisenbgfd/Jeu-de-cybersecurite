@@ -352,8 +352,8 @@
                 <textarea id="playerReply" name="playerReply" rows="4" cols="50" placeholder="Écris ta réponse ici..."></textarea><br>
 
                 <div class="modal-buttons">
-                    <input type="submit" class="modal-btn reply-btn" value="Envoyer">
-                    <input type="submit" class="modal-btn ignore-btn" value="Ignorer">
+                    <button type="button" class="modal-btn reply-btn" onclick="replyToMessage()">Envoyer</button>
+                    <button type="button" class="modal-btn ignore-btn" onclick="ignoreMessage()">Ignorer</button>
                 </div>
             </form>
         </div>
@@ -389,9 +389,9 @@
                 safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
-                sender: "Maman",
-                preview: "Salut mon chéri ! Tu peux passer ce soir ? ...",
-                content: "Salut mon chéri ! Tu peux passer ce soir ? J'ai préparé ton plat préféré !",
+                sender: "Mon amour",
+                preview: "Salut ma chérie ! Tu rentres à quelle heure ce soir ? ...",
+                content: "Salut ma chérie ! Tu rentres à quelle heure ce soir ? J'ai préparé ton plat préféré !",
                 isScam: false,
                 type: "family"
             },
@@ -400,14 +400,18 @@
                 preview: "Votre abonnement Netflix expire demain...",
                 content: "Votre abonnement Netflix expire demain ! Profitez de 50% de réduction en renouvelant maintenant : netflix-renewall.net",
                 isScam: true,
-                type: "link"
+                type: "link",
+                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
+                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Unknown",
                 preview: "C'est le livreur j'ai un colis à votre nom...",
                 content: "c'est le livreur j'ai un colis à votre nom qui ne rentrait pas dans la boite aux lettres veuillez choisir un relais https://mondiale-livraison.com",
                 isScam: true,
-                type: "personal"
+                type: "link",
+                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
+                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Pierre (Travail) ",
@@ -421,7 +425,9 @@
                 preview: "Nous cherchons 100 volontaires pour tester...",
                 content: "Nous cherchons 100 volontaires pour tester nos nouveaux appareils auditifs gratuitement. Infos https://adzm.me/8ex7ostc",
                 isScam: true,
-                type: "personal"
+                type: "link",
+                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
+                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Dr. Martin",
@@ -432,7 +438,7 @@
             },
             {
                 sender: "Sarah",
-                preview: "Ça te dit un ciné ce weekend ? Il y a le nouveau film Marvel !",
+                preview: "Salut ! Ça te dit un ciné ce weekend ? Il y a le nouveau film Marvel !",
                 content: "Salut ! Ça te dit un ciné ce weekend ? Il y a le nouveau film Marvel qui sort !",
                 isScam: false,
                 type: "friend"
@@ -449,7 +455,9 @@
                 preview: "Coucou maman, j’ai cassé mon téléphone...",
                 content: "Coucou maman, j’ai cassé mon téléphone, là je te parle depuis celui d’un ami. Peux-tu m’avancer de l’argent pour en acheter un autre ? Voici le RIB de mon ami : FR76 5000 4032 8500 0087 8427 258",
                 isScam: true,
-                type: "prize"
+                type: "family",
+                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
+                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             }
         ];
 
@@ -543,14 +551,13 @@
         function ignoreMessage() {
             const message = messages[currentMessageIndex];
             messagesAnswered++;
-            
             if (message.isScam) {
                 // Le joueur a ignoré une arnaque (bon choix)
                 score++;
-                showFeedback("✅ Excellent ! Vous avez bien fait d'ignorer cette arnaque.", true);
+                showFeedback("Excellent ! Vous avez bien fait d'ignorer cette arnaque.", true);
             } else {
                 // Le joueur a ignoré un message légitime (mauvais choix)
-                showFeedback("❌ Dommage ! Ce message était légitime, il fallait répondre.", false);
+                showFeedback("Dommage ! Ce message était légitime, il fallait répondre.", false);
             }
             
             closeModal();
