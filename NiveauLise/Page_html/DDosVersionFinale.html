@@ -19,6 +19,176 @@
             height: 100vh;  
             overflow: hidden;
         }
+        .tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.tutorial-overlay.visible {
+    display: flex;
+    opacity: 1;
+}
+
+.tutorial-content {
+    position: absolute;
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border: 2px solid #00ff00;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    min-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 255, 0, 0.3);
+    animation: tutorialSlide 0.5s ease-out;
+}
+
+@keyframes tutorialSlide {
+    from { transform: scale(0.8) translateY(-50px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.tutorial-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.tutorial-title {
+    color: #00ff00;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.tutorial-step {
+    color: #cccccc;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.tutorial-text {
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.tutorial-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tutorial-btn {
+    background: linear-gradient(45deg, #00aa00, #008800);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tutorial-btn:hover {
+    background: linear-gradient(45deg, #00cc00, #00aa00);
+    transform: translateY(-2px);
+}
+
+.tutorial-btn.secondary {
+    background: linear-gradient(45deg, #666666, #444444);
+}
+
+.tutorial-btn.secondary:hover {
+    background: linear-gradient(45deg, #888888, #666666);
+}
+
+.tutorial-progress {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+    background: #00ff00;
+    transform: scale(1.2);
+}
+
+.tutorial-highlight {
+    position: absolute;
+    border: 3px solid #00ff00;
+    border-radius: 15px;
+    background: rgba(0, 255, 0, 0.1);
+    pointer-events: none;
+    z-index: 1999;
+    opacity: 0;
+    transition: all 0.5s ease;
+    animation: tutorialPulse 2s infinite;
+}
+
+.tutorial-highlight.visible {
+    opacity: 1;
+}
+
+@keyframes tutorialPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+    50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.8); }
+}
+
+.tutorial-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1999;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.tutorial-arrow.visible {
+    opacity: 1;
+}
+
+.tutorial-arrow.up {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 20px solid #00ff00;
+}
+
+.tutorial-arrow.down {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid #00ff00;
+}
+
+.tutorial-arrow.left {
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 20px solid #00ff00;
+}
+
+.tutorial-arrow.right {
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 20px solid #00ff00;
+}
 
         .phase-indicator {
             position: absolute;
@@ -764,6 +934,31 @@
     </div>
 
     <div class="wave-announcement" id="waveAnnouncement"></div>
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-content" id="tutorialContent">
+            <div class="tutorial-header">
+                <h3 class="tutorial-title" id="tutorialTitle">Bienvenue dans le Simulateur DDoS</h3>
+                <div class="tutorial-step" id="tutorialStep">Étape 1 sur 6</div>
+            </div>
+            <div class="tutorial-text" id="tutorialText">
+                <!-- Le contenu sera injecté dynamiquement -->
+            </div>
+            <div class="tutorial-controls">
+                <button class="tutorial-btn secondary" onclick="skipTutorial()" id="skipBtn">Passer</button>
+                <div class="tutorial-progress" id="tutorialProgress">
+                    <!-- Les points de progression seront générés dynamiquement -->
+                </div>
+                <div>
+                    <button class="tutorial-btn secondary" onclick="previousTutorialStep()" id="prevBtn" style="display: none;">Précédent</button>
+                    <button class="tutorial-btn" onclick="nextTutorialStep()" id="nextBtn">Suivant</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Surbrillance et flèches pour le tutoriel -->
+    <div class="tutorial-highlight" id="tutorialHighlight"></div>
+    <div class="tutorial-arrow" id="tutorialArrow"></div>
 
     <div class="game-container">
         <!-- Panel d'Attaque -->
@@ -778,6 +973,9 @@
                 </button>
                 <button class="phase-btn" onclick="resetToLearning()" id="resetBtn" style="display: none;">
                     Retour Apprentissage
+                </button>
+                <button class="phase-btn" onclick="startTutorial()" id="tutorialBtn">
+                     Tutoriel
                 </button>
             </div>
 
@@ -983,7 +1181,156 @@
     </div>
 
     <script>
-        // Variables globales
+      
+let tutorialActive = false;
+let currentTutorialStep = 0;
+let tutorialSteps = [];
+
+
+
+function initializeTutorial() {
+    tutorialSteps = [
+        {
+            title: "Bienvenue dans le Simulateur DDoS",
+            text: "Ce simulateur vous permet d'apprendre les attaques DDoS et les défenses cybersécurité. Vous pouvez tester différentes stratégies en toute sécurité.",
+            highlight: null,
+            position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
+        },
+        {
+            title: "Zone d'Attaque",
+            text: "Ici vous pouvez lancer différents types d'attaques : Ping Flood (modéré), Botnet Attack (massif), ou Attaque Ciblée (sur un serveur spécifique). Chaque attaque a ses propres caractéristiques.",
+            highlight: "#attackPanel",
+            position: { top: "20%", left: "30%", transform: "translateX(-50%)" },
+            arrow: { direction: "right", top: "50%", left: "35%" }
+        },
+        {
+            title: "Infrastructure Réseau",
+            text: "Voici vos serveurs : Web Server, DB Server, API Server, CDN Node et Cache Server. Chacun a sa propre santé et peut être ciblé individuellement. Cliquez sur un serveur pour le sélectionner.",
+            highlight: "#gameArea",
+            position: { top: "20%", left: "50%", transform: "translateX(-50%)" },
+            arrow: { direction: "down", top: "15%", left: "50%" }
+        },
+        {
+            title: "Systèmes de Défense",
+            text: "Déployez des défenses pour protéger votre infrastructure : Firewall (bloque 40%), Load Balancer (réduit 60%), Rate Limiting (réduit 30%), Infrastructure+ (réduit 70%), ou Redondance (failover).",
+            highlight: "#defensePanel",
+            position: { top: "20%", left: "70%", transform: "translateX(-50%)" },
+            arrow: { direction: "left", top: "50%", left: "65%" }
+        },
+        {
+            title: "Surveillance du Système",
+            text: "Surveillez la santé globale, votre budget, le nombre de serveurs actifs et votre score. Ces métriques vous aident à évaluer l'efficacité de vos défenses.",
+            highlight: ".status-bar",
+            position: { top: "30%", left: "50%", transform: "translateX(-50%)" },
+            arrow: { direction: "up", top: "25%", left: "50%" }
+        },
+        {
+            title: "Modes de Jeu",
+            text: "Trois modes disponibles :<br>• <strong>Apprentissage</strong> : Testez librement pour apprendre <br>• <strong>Mode Défense</strong> : Survivez à 5 vagues d'attaques avec des défenses <br>• <strong>Mode Attaque</strong> : Vous devez percez les défenses <br><br>Bonne chance !",
+            highlight: null,
+            position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
+        }
+    ];
+    
+    // Créer les points de progression
+    const progressContainer = document.getElementById('tutorialProgress');
+    progressContainer.innerHTML = '';
+    tutorialSteps.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot';
+        if (index === 0) dot.classList.add('active');
+        progressContainer.appendChild(dot);
+    });
+}
+
+function startTutorial() {
+    tutorialActive = true;
+    currentTutorialStep = 0;
+    initializeTutorial();
+    showTutorialStep(0);
+    document.getElementById('tutorialOverlay').classList.add('visible');
+    addLog('🎓 Tutoriel démarré', 'info');
+}
+
+function showTutorialStep(stepIndex) {
+    const step = tutorialSteps[stepIndex];
+    const overlay = document.getElementById('tutorialOverlay');
+    const content = document.getElementById('tutorialContent');
+    const highlight = document.getElementById('tutorialHighlight');
+    const arrow = document.getElementById('tutorialArrow');
+    
+    // Mettre à jour le contenu
+    document.getElementById('tutorialTitle').textContent = step.title;
+    document.getElementById('tutorialStep').textContent = `Étape ${stepIndex + 1} sur ${tutorialSteps.length}`;
+    document.getElementById('tutorialText').innerHTML = step.text;
+    
+    // Positionner le contenu
+    Object.assign(content.style, step.position);
+    
+    // Gérer la surbrillance
+    if (step.highlight) {
+        const targetElement = document.querySelector(step.highlight);
+        if (targetElement) {
+            const rect = targetElement.getBoundingClientRect();
+            highlight.style.top = rect.top + 'px';
+            highlight.style.left = rect.left + 'px';
+            highlight.style.width = rect.width + 'px';
+            highlight.style.height = rect.height + 'px';
+            highlight.classList.add('visible');
+        }
+    } else {
+        highlight.classList.remove('visible');
+    }
+    
+    // Gérer la flèche
+    if (step.arrow) {
+        arrow.className = `tutorial-arrow ${step.arrow.direction} visible`;
+        arrow.style.top = step.arrow.top;
+        arrow.style.left = step.arrow.left;
+    } else {
+        arrow.classList.remove('visible');
+    }
+    
+    // Mettre à jour les points de progression
+    const dots = document.querySelectorAll('.progress-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === stepIndex);
+    });
+    
+    // Gérer les boutons
+    document.getElementById('prevBtn').style.display = stepIndex > 0 ? 'inline-block' : 'none';
+    document.getElementById('nextBtn').textContent = stepIndex === tutorialSteps.length - 1 ? 'Terminer' : 'Suivant';
+}
+
+function nextTutorialStep() {
+    if (currentTutorialStep < tutorialSteps.length - 1) {
+        currentTutorialStep++;
+        showTutorialStep(currentTutorialStep);
+    } else {
+        endTutorial();
+    }
+}
+
+function previousTutorialStep() {
+    if (currentTutorialStep > 0) {
+        currentTutorialStep--;
+        showTutorialStep(currentTutorialStep);
+    }
+}
+
+function skipTutorial() {
+    if (confirm('Êtes-vous sûr de vouloir passer le tutoriel ?')) {
+        endTutorial();
+    }
+}
+
+function endTutorial() {
+    tutorialActive = false;
+    document.getElementById('tutorialOverlay').classList.remove('visible');
+    document.getElementById('tutorialHighlight').classList.remove('visible');
+    document.getElementById('tutorialArrow').classList.remove('visible');
+    addLog(' Tutoriel terminé - Amusez-vous bien !', 'success');
+}
         let gameState = {
             phase: 'learning', // 'learning' ou 'challenge'
             health: 100,
@@ -1917,7 +2264,7 @@ function attackServerSocial(serverId, intensity) {
     updateGlobalHealth();
     updateUI();
 }
-// Fonction pour démarrer le mode attaque - à ajouter à la fin de votre script
+// Fonction pour démarrer le mode attaque 
 function startAttackMode() {
     // Changer l'état du jeu
     gameState.phase = 'attack';

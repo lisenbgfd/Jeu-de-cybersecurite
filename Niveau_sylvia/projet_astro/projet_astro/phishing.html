@@ -327,11 +327,18 @@
                 font-size: 1.2rem;
             ">
     
+
             <div id="score-box">Score : <span id="score-count">0</span></div>
 
             <div style="display: flex;">
                 <div id="email-list" style="width: 200px; margin-right: 20px;"></div>
                 <div id="email-display" style="flex: 1;"></div>
+            </div>
+            <div id="hackeuse-rules" style="background-color: #f9f9f9; border: 2px solid #444; padding: 20px; border-radius: 8px; max-width: 600px; margin: 20px auto; font-family: Courier New, sans-serif; color: #222;">
+                <h2 style="color: #2c3e50;"> À vous de jouer : Saurez-vous repérer les pièges ?</h2>
+                <p>
+                    Bienvenue dans le mode <strong>"Hackée"</strong>. Chloé, créatrice de contenu, reçoit chaque jour des emails variés. Parmi eux se cachent de véritables menaces. Votre mission : analyser chaque message et déterminer s’il s’agit d’un email légitime ou d’une tentative de phishing.
+                </p>
             </div>
             </div>
                 <h2>Boîte mail de Chloé's Eyes</h2>
@@ -376,6 +383,19 @@
                     <div class="profile-section">
                     <div id="final-message"></div>
                         <h2>Profil de Chloé's Eyes</h2>
+                        <div id="regles-hackeuse" style="border: 2px solid #ccc; padding: 20px; border-radius: 10px; margin-bottom: 30px; background-color: #f9f9f9;">
+                            <h2>À vous de jouer !</h2>
+                            <p>Écrivez un mail de phishing à Chloé. La crédibilité de votre message sera évaluée selon les critères suivants :</p>
+                            <ul>
+                                <li>Utilisation de l'urgence</li>
+                                <li>Imitation d'une marque connue</li>
+                                <li>Personnalisation basée sur le profil</li>
+                                <li>Appel à l'action clair</li>
+                                <li>Sentiment d'exclusivité</li>
+                                <li>Message bien structuré</li>
+                            </ul>
+                    </div>
+
                         <div class="profil">
                             <img src="images/profil-youtube.png" alt="Consulter porfil Youtube">
                         </div>
@@ -578,9 +598,23 @@ Service Sécurité Banque Sécurisée`,
             // Activer le mode sélectionné
             event.target.classList.add('active');
             document.getElementById(mode + '-mode').classList.add('active');
+
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.mode-content').forEach(content => content.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(mode + '-mode').classList.add('active');
+
+            if (mode === 'hackeuse') {
+                document.getElementById('hackeuse-rules').style.display = 'block';
+            } else {
+            document.getElementById('hackeuse-rules').style.display = 'none';
+    }
         }
 
-        
+        function startHackeuseMode() {
+            document.getElementById('hackeuse-rules').style.display = 'none';
+            document.getElementById('hackeuse-mode').style.display = 'block';
+    }
 
         function showEmail(emailId) {
             const email = emails[emailId];
@@ -612,9 +646,13 @@ Service Sécurité Banque Sécurisée`,
 }
 
 
+        function startHackeuseMode() {
+            document.getElementById('hackeuse-rules').style.display = 'none';
+            // ici tu lances l'éditeur de mail, ou affiches le champ pour écrire
+            document.getElementById('hackeuse-mode').classList.add('active');
+        }
 
         function markEmail(emailId, markedAsSafe) {
-        
             const email = emails[emailId];
             const feedback = document.getElementById(`email-feedback-${emailId}`);
 
@@ -631,48 +669,40 @@ Service Sécurité Banque Sécurisée`,
                     : " Cet email était un phishing !";
     }
 
-    // Met à jour le score
+            // Met à jour le score
             document.getElementById('score-count').textContent = score;
             feedback.innerHTML = `<div class="${className}" style="margin-top: 15px; padding: 10px; border-radius: 5px;">${message}</div>`;
 
-    // Supprime l'élément de la boîte de réception
+            // Supprime l'élément de la boîte de réception
             const listItem = document.getElementById(`email-item-${emailId}`);
             if (listItem) listItem.remove();
-            console.log('Suppression de :', emailId);
-            console.log('Emails restants :', Object.keys(emails));
+            delete emails[emailId];  // supprime l'email de l'objet
 
-    // Supprime l’email de l’objet `emails` pour éviter qu’il soit réaffiché
-            delete emails[emailId];
-
-    // Efface l'affichage du mail après 1,5 secondes
-            setTimeout(() => {
-                showEmail(null);
-            }, 1500);
-
+            // Attendre 1,5s puis afficher le message final si tous les emails ont été traités
             setTimeout(() => {
                 showEmail(null);
 
-            if (Object.keys(emails).length === 0) {
-                const messageBox = document.getElementById('final-message');
-                let finalMessage = '';
+                if (Object.keys(emails).length === 0) {
+                    const messageBox = document.getElementById('final-message');
+                    let finalMessage = '';
 
-            if (score >= 3) {
-                finalMessage = 'Bravo, vous avez pris connaissance des bonnes pratiques !';
-            } else if (score <= 2) {
-                finalMessage = 'Il vous faut encore vous renseigner sur la cybersécurité.';
-            } else {
-                finalMessage = 'Merci d’avoir participé !';
+                if (score >= 3) {
+                    finalMessage = '🎉 Bravo, vous avez pris connaissance des bonnes pratiques !';
+                } else if (score <= 2) {
+                    finalMessage = '⚠️ Il vous faut encore vous renseigner sur la cybersécurité.';
+                } else {
+                    finalMessage = 'Merci d’avoir participé !';
+                }
+
+                messageBox.innerHTML = `
+                    <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background-color: #f0f0f0; font-size: 1.2em;">
+                        ${finalMessage}
+                    </div>
+                `;
             }
-
-            messageBox.innerHTML = `
-                <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background-color: #f0f0f0; font-size: 1.2em;">
-                    ${finalMessage}
-                </div>
-            `;
-        }
-    }, 1500);
-
+        }, 1500);
 }
+
 
 
         

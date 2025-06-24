@@ -1,66 +1,172 @@
-Vendredi 14 février :
+**Vendredi 14 février** :
+
+_Recherche et documentation_
+
+Exploration des bonnes pratiques (gestion de mots de passe, phishing, DDoS) via l’ANSSI, OWASP, articles académiques.
+
+Mise en place d’un tableau comparatif pour recenser les techniques d’attaque et de défense.
+
+_Conception du concept_
+
+Définition des deux interfaces principales :
+
+Mode Utilisateur (simulation de téléphone, de messagerie, d’email)
+
+Mode Hacker / Analyste (vue “back-end”, composition de phishing, DDoS simulator)
+
+_Prise en main du dépôt Git_
+
+Création de la structure de répertoires (/sarah, /lise, /tara, /sylvia, /docs).
+
+Règles de commit et conventions GitFlow définies
+
+**Mardi 18 février**
+
+_Installation de Unity_
+
+Configuration de la version 2021.3 LTS et installation des modules iOS/Android.
+
+Prise en main de Unity
+
+Création d’un projet “PasswordGame” de test, import des assets de base (UI Canvas, sprites iPhone).
+
+Connexion de Unity à GitLab
+
+Mise en place du fichier .gitignore Unity standard.
+
+Création d’une branche unity-setup pour isoler la configuration initiale.
+
+**Mardi 4 mars**
+
+_Validation de l’environnement_
+
+Chacune vérifie sa connexion Git et effectue un commit de test.
+
+_Documentation collaborative_
+
+Tara & Lise ont complété docs/cyber_basics.md avec les premières synthèses sur phishing et brute-force.
+
+_Premiers tests Unity_
+
+Lise : projet “TestScene” avec caméra et contrôles WASD.
+
+Sarah : prototype “CharacterController” (personnage 2D se déplaçant sur un plan).
+
+Sylvia : fichier “UIPrototype.unity” avec bouton interactif.
+
+**Mardi 11 mars**
+
+_Lecture ANSSI en groupe_
+
+Répartition des lectures et prise de notes sur le drive partagé :
+
+Sylvia : « Développer la confiance dans l’IA » (risques, biais, consentement)
+
+Lise : bases de données relationnelles (modélisation utilisateur, logs)
+
+Sarah : protection contre les fuites de données (chiffrement, GDPR)
+
+_Co-conception des scénarios_
+
+Atelier de story-boarding : enchaînement d’écrans, interactions-clés, scoring.
+
+**Mardi 8 avril**
+
+_Finalisation des scénarios_
+
+Lise : DDoS (choix de cibles, montée en charge, déploiement de firewalls)
+
+Tara : Phishing (interface SMS, réponses multiples, scoring sémantique)
+
+Sarah : Chantage, hackage mot de passe, création de mot de passe (simulation Instagram, branding, page web redirigée)
+
+Sylvia : RAT (Remote Access Trojan) (interface mail, payload, étapes de décortication)
+
+**Lundi 5 mai**
+
+_Rédaction du rapport intermédiaire_
+
+Analyse des enjeux sociétaux et environnementaux liés aux attaques et défenses informatiques.
+
+_Ateliers Unity avancés_
+
+Tutoriels ciblés pour résoudre les erreurs de compilation C# (namespaces, prefab missing)
+
+Chaque membre commence le développement de son niveau attribué (scènes, scripts).
+
+Graphisme unifié
+
+Sylvia a établi un guide de style (palette de couleurs, typographie, bordures arrondies)
+
+Tous les assets UI harmonisés via un fichier ThemeSettings.unity.
+
+**Lundi 12 mai**
+
+_Premiers prototypes de niveaux_
+
+Tara : bouton « Envoyer SMS » et logique JavaScript associée.
+
+Lise : interface DDoS avec “nodes” cliquables codés en HTML/CSS/JS.
+
+Sarah : clone basique de MarioBros en C# (sprites, plateforme), début des jeux du hackage de téléphone et création de mot de passe
+
+Sylvia : expérimentations UI (menu, transitions), mais sans résultat exploitable.
+
+Retour critique
+
+Besoin de cohérence graphique et de prioriser le HTML/CSS pour prototype rapide.
+
+**Lundi 19 mai**
+
+_Audit croisé_
+
+Présentation de chaque mini-jeu à un autre groupe, retours sur ergonomie et cohérence.
+
+_Décisions_
+
+Abandon de Unity pour aller vers un proof-of-concept web (HTML/CSS/JS).
+
+**Lundi 26 mai**
+
+_Premier prototype web_
+
+Chacune a créé une page statique, reutilise leur code déjà fait pour unity pour les adapter au HTML
+On décide de chacune avancer de notre coté le plus possible avant la prochaine séance
 
 
--recherche d'information et de documentation concernant les bonnes ou mauvaises pratiques en cybersécurité
+**Lundi 2 juin**
 
--précision du projet avec de nouvelles idées (choix d'une interface hacker/utilisateur)
+_Nouveaux objectifs par niveau_
 
--établissement du planning
+Lise : intégrer documentation interactive (pop-ups explicatifs), multi-niveaux de jeu
 
--prise en main du git
+Tara : affiner interface SMS, ajuster nombre et pertinence des choix 
 
+Sylvia : améliorer fluidité et lisibilité du scénario mail, transitions plus naturelles
 
-Mardi 18 février :
+Sarah : créer un faux compte Instagram fonctionnel (public) et redirection depuis sa page web
 
+**Lundi 23 juin**
 
--installation de unity 
+_Avancées majeures_
 
--prise en main de unity
+Sylvia : liens entre niveaux OK, navigation nextLevel(), état persisté dans localStorage.
 
--connexion de unity au gitlab
+Lise : DDoS simulé en multi-serveurs, zones interactives, ajout de “tutorial mode” (étapes guidées).
 
-objectifs pour la suite :
-continuer à se documenter sur la prise en main de unity et mettre à jour le document ressources 
+Sarah : compte Instagram factice (@projetartishow) opérationnel, intégré via <iframe> et lien direct.
 
-Mardi 4 mars: 
-- Tout le monde a vérifié que sa connexion marchait bien et qu'il pouvait faire des commits. 
-- Tara et Lise ont crée et rempli un fichier avec des premières informations et documentations sur la cybersécurité. 
--  Lise a crée un premier fichier test Unity et a commencé à se familiariser sur ce fichier à l'utilisation de Unity
-- Sara a crée un premier jeu vidéo sur Unity avec un petit personnage se déplaçant. 
-- Sylvia a créé un premier fichier test Unity 
+Tara : refonte complète du scénario SMS, UI plus épurée, animations CSS pour feedback utilisateur.
 
-Mardi 11 mars :
-Nous nous sommes toutes rendues sur le site de l'ANSII et nous nous sommes réparties des documents à lire que nous avions trouvé dans la médiathèque.
-- Sylvia s'est intéressée au document "développer la confiance dnas l'IA à travers une approche par les risques cyber"
-- Lise s'est renseignée sur les essentiels de bases de données relationnelles
-- Sarah s'est renseignée sur les essentiels pour se protéger des fuites de données
-Nous avons consacré les trente dernières minutes de la séance à mettre en commun nos idées de scénario pour notre jeu 
+**Mardi 24 juin**
 
+_Finitions et peaufinage_
 
+Lise : phase tutoriel étoffée, légendes simplifiées et icônes dynamically rendered selon le niveau de défense.
 
-Mardi 8 avril :
-Nous avons finalisé nos idées de scénario et nous nous sommes réparties un scénario chacune.
+Sarah : création et partage de l’accès au compte Instagram de démonstration, paramétrage en public.
 
-Lise : hack d'une entreprise par la méthode du DDOS
-Tara : fishing d'une employée 
-Sarah : chantage d'une jeune adolescente
-Sylvia : hack d'un youtubeur par la méthode du RAT
+Sylvia : distinction visuelle renforcée entre mails légitimes et phishing (icônes, couleur de fond).
 
-Lundi 5 mai: 
-Nous avons rédigé le rapport sur les enjeux sociétaux et environnementaux de notre projet. 
-Lise, Tara et Sarah ont regardé des tutorials pour comprendre très présicesement comment coder sur Unity, notamment pour aider à résoudre des erreurs qu'elles avaient sur leurs projets d'entraînement: l'objectif est que chacun commence à coder le niveau qu'on lui a attribué. 
-Sylvia a bien avancé sur les interfaces graphiques (nous allons essayé de toutes utilisés les mêmes pour garantir davantage d'unité visuelle). 
+Tara : ajustement des choix de réponses, suppression des doublons, cohérence sémantique des options.
 
-Lundi 12 mai: 
-On a commencé à coder nos jeux: Tara a crée une interface avec un bouton, Lise une interface avec des petits cercles représentants les attaques. Sarah a codé MarioBros et Sylvia a tenté pleins de choses mais n'a rien donné de concluant. 
-
-Lundi 19 mai: Séance d'audit des autres groupes et retour sur notre projet : il est urgent de commencer à coder, et il faudrait s'interesser à la cohérence graphique de notre interface. 
-
-
-Lundi 26 mai : après maintes réflexion, on a décidé de coder sur html, chacune a crée une page web à présenter au prof 
-
-Lundi 2 juin: chacun se concentre sur les points d'amélioration de son niveau : Lise doit rajouter la partie documentation sous forme de messages explicatifs, et faire plusieurs niveaux de jeu (acccès à tous, puis à la partie hacké, puis à la partie hacker). Tara devrait configurer une interface de messagerie et revoir les différents choix proposés (pourquoi 4 par exemple). Sylvia doit rendre l'interface "plus naturelle" (retravailler un peu le scénario). Sarah doit créer un faux compte Instagram réaliste, sur lequel sa page web redirigerait le joueur. 
-
-Lundi 23 juin : Sylvia a réussi à connecter les différents niveaux de jeu, Lise a terminé son jeu en rajoutant un mode multiserveurs. Sarah a crée le compte Instagram et l'a rattaché à sa page html  et Tara a retravaillé entièrement son scénario et son interface graphique de téléphone. 
-
-Mardi 24 juin: Lise intègre une phase de tutoriel et des explications simplifiées pour rendre son jeu plus clair. De plus, elle a travaillé à mieux distinguer les différentes attaques et à rajouter un logo sur les serveurs quand ils ont une certaine défense. Sarah doit créer un compte Instagram pour que tout le monde puisse accéder à celui fictif qu'elle a crée. Sylvia doit mieux montrer graphiquement la différence entre les mails et Tara 
