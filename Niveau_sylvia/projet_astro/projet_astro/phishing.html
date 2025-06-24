@@ -447,7 +447,12 @@ Conseils pour un phishing efficace:
                 
                 <div class="doc-section">
                     <h3>Qu'est-ce que le Phishing ?</h3>
-                    <p>Le phishing est une technique de cyberattaque qui consiste à tromper les victimes pour qu'elles révèlent des informations sensibles (mots de passe, données bancaires) ou téléchargent des logiciels malveillants.</p>
+                    <p>
+                        Le phishing est une technique de cyberattaque qui consiste à tromper les victimes pour qu'elles révèlent des informations sensibles (mots de passe, données bancaires) ou téléchargent des logiciels malveillants. Ces attaques se présentent souvent sous forme de faux emails ou sites web imitant des sources fiables pour inciter l’utilisateur à agir rapidement.
+                    </p>
+                    <p>
+                        Parmi les logiciels malveillants couramment diffusés via le phishing, on trouve les <strong>RAT</strong> (Remote Access Trojans). Un RAT est un cheval de Troie qui, une fois installé sur l’ordinateur de la victime, permet au pirate d’avoir un contrôle total à distance : il peut espionner l’utilisateur, voler des données, activer la webcam, ou installer d’autres logiciels malveillants. C’est pourquoi il est essentiel de ne jamais ouvrir de pièces jointes ou cliquer sur des liens suspects dans des emails inattendus.
+                    </p>
                 </div>
 
                 <div class="doc-section">
@@ -656,51 +661,53 @@ Service Sécurité Banque Sécurisée`,
             const email = emails[emailId];
             const feedback = document.getElementById(`email-feedback-${emailId}`);
 
-            let message, className;
-            if ((email.safe && markedAsSafe) || (!email.safe && !markedAsSafe)) {
-                message = "Bonne analyse ! Vous avez correctement identifié cet email.";
-                score++;
-                className = "ai-result success";
+        let message, className;
+        if ((email.safe && markedAsSafe) || (!email.safe && !markedAsSafe)) {
+            message = "Bonne analyse ! Vous avez correctement identifié cet email.";
+            score++;
+            className = "ai-result success";
+        } else {
+            message = "Attention ! Vous vous êtes trompé sur cet email.";
+            className = "ai-result failure";
+            message += email.safe
+                ? " Cet email était légitime."
+                : " Cet email était un phishing !";
+        }
+
+        // Met à jour le score
+        document.getElementById('score-count').textContent = score;
+        feedback.innerHTML = `<div class="${className}" style="margin-top: 15px; padding: 10px; border-radius: 5px;">${message}</div>`;
+
+        // Supprime l'élément de la boîte de réception
+        const listItem = document.getElementById(`email-item-${emailId}`);
+        if (listItem) listItem.remove();
+        delete emails[emailId];  // supprime l'email de l'objet
+
+        // Attendre 1,5s puis afficher le message final si tous les emails ont été traités
+        setTimeout(() => {
+            showEmail(null);
+
+        if (Object.keys(emails).length === 0) {
+            const messageBox = document.getElementById('final-message');
+            let finalMessage = '';
+
+            // Logique selon vos exigences exactes
+            if (score >= 3) {
+                finalMessage = '🎉 Bravo, vous avez les bonnes pratiques pour vous prémunir contre le phishing.';
             } else {
-                message = "Attention ! Vous vous êtes trompé sur cet email.";
-                className = "ai-result failure";
-                message += email.safe
-                    ? " Cet email était légitime."
-                    : " Cet email était un phishing !";
-    }
-
-            // Met à jour le score
-            document.getElementById('score-count').textContent = score;
-            feedback.innerHTML = `<div class="${className}" style="margin-top: 15px; padding: 10px; border-radius: 5px;">${message}</div>`;
-
-            // Supprime l'élément de la boîte de réception
-            const listItem = document.getElementById(`email-item-${emailId}`);
-            if (listItem) listItem.remove();
-            delete emails[emailId];  // supprime l'email de l'objet
-
-            // Attendre 1,5s puis afficher le message final si tous les emails ont été traités
-            setTimeout(() => {
-                showEmail(null);
-
-                if (Object.keys(emails).length === 0) {
-                    const messageBox = document.getElementById('final-message');
-                    let finalMessage = '';
-
-                if (score >= 3) {
-                    finalMessage = '🎉 Bravo, vous avez pris connaissance des bonnes pratiques !';
-                } else if (score <= 2) {
-                    finalMessage = '⚠️ Il vous faut encore vous renseigner sur la cybersécurité.';
-                } else {
-                    finalMessage = 'Merci d’avoir participé !';
-                }
-
-                messageBox.innerHTML = `
-                    <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background-color: #f0f0f0; font-size: 1.2em;">
-                        ${finalMessage}
-                    </div>
-                `;
+                finalMessage = '⚠️ Vous n\'avez pas encore acquis tous les mécanismes nécessaires pour vous protéger contre le phishing. Veuillez consulter la documentation.';
             }
-        }, 1500);
+
+            messageBox.innerHTML = `
+                <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background-color: #e8f5e8; border: 2px solid #4CAF50; font-size: 1.2em; text-align: center;">
+                    <h3>Jeu terminé !</h3>
+                    <p><strong>Score final : ${score}/5</strong></p>
+                    <p>${finalMessage}</p>
+                    ${score < 3 ? '<p><em>Consultez nos ressources pour améliorer vos compétences en cybersécurité.</em></p>' : ''}
+                </div>
+            `;
+        }
+    }, 1500);
 }
 
 
