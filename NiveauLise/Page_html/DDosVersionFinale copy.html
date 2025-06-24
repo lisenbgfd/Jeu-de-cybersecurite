@@ -1,20 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DDoS Defense Simulator - Tutoriel</title>
+    <title>DDoS Defense Simulator - Multi-Modes</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         } 
 
         body {
             background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
             color: white;
+            font-family: 'Courier New', monospace;  
+            font-size: 10px;  
             height: 100vh;  
             overflow: hidden;
         }
@@ -29,30 +31,21 @@
             border-radius: 20px;
             padding: 10px 20px;
             z-index: 1001;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             text-align: center;
             min-width: 300px; 
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
         }
 
         .phase-indicator.challenge { 
             border-color: #ff6600; 
             background: rgba(255, 102, 0, 0.1); 
-            box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
         }
 
         .phase-indicator.attack-mode { 
             border-color: #cc0000; 
             background: rgba(204, 0, 0, 0.1); 
-            color: #ffcccc;
-            box-shadow: 0 0 15px rgba(204, 0, 0, 0.4);
-        }
-
-        .tutorial-indicator {
-            border-color: #0088ff;
-            background: rgba(0, 136, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0, 136, 255, 0.4);
+            color: #ffcccc; 
         }
 
         .zoom-controls { 
@@ -92,7 +85,7 @@
             color: #00ff00; 
             padding: 5px 10px; 
             border-radius: 15px; 
-            font-size: 12px;
+            font-size: 10px;
             text-align: center; 
         }
 
@@ -106,7 +99,7 @@
             border-radius: 20px;
             padding: 30px; 
             z-index: 1002; 
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
             text-align: center;
             opacity: 0;
@@ -141,7 +134,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2); 
             border-radius: 15px; 
             padding: 15px; 
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
         .attack-panel { 
@@ -178,7 +170,6 @@
             overflow: hidden; 
             background: radial-gradient(circle at center, #1a1a2e, #0a0a0a); 
             cursor: grab; 
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
         }
 
         .game-area:active { 
@@ -213,20 +204,20 @@
         }
 
         .info-comment { 
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: absolute; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
             background: rgba(0, 0, 0, 0.95); 
             border: 2px solid #ff6600; 
             border-radius: 15px; 
             padding: 0;  
-            width: 600px; 
-            max-width: 90%;
+            max-width: 600px; 
+            min-width: 500px; 
             max-height: 80vh; 
             z-index: 1000; 
             opacity: 0; 
-            transform: translate(-50%, -50%) translateY(-20px); 
+            transform: translateX(-50%) translateY(-20px); 
             transition: all 0.5s ease; 
             box-shadow: 0 15px 40px rgba(255, 102, 0, 0.4); 
             display: flex; 
@@ -235,17 +226,12 @@
 
         .info-comment.visible { 
             opacity: 1; 
-            transform: translate(-50%, -50%) translateY(0); 
+            transform: translateX(-50%) translateY(0); 
         }
 
         .info-comment.defense {
             border-color: #00cc00;
             box-shadow: 0 15px 40px rgba(0, 204, 0, 0.4); 
-        }
-
-        .tutorial-comment {
-            border-color: #0088ff;
-            box-shadow: 0 15px 40px rgba(0, 136, 255, 0.4);
         }
 
         .info-comment-header {
@@ -266,7 +252,7 @@
             color: #ff6600; 
             margin: 0; 
             text-align: center; 
-            font-size: 20px; 
+            font-size: 14px; 
             font-weight: bold; 
             padding-right: 30px; 
         }
@@ -275,14 +261,10 @@
             color: #00cc00; 
         }
 
-        .tutorial-comment h4 {
-            color: #0088ff;
-        }
-
         .info-comment p { 
-            font-size: 16px; 
-            line-height: 1.5; 
-            margin-bottom: 15px; 
+            font-size: 11px; 
+            line-height: 1.4; 
+            margin-bottom: 10px; 
             color: #cccccc; 
             text-align: left; 
         }
@@ -294,11 +276,11 @@
             background: none; 
             border: none; 
             color: #ff6600; 
-            font-size: 24px; 
+            font-size: 16px; 
             cursor: pointer; 
             font-weight: bold; 
-            width: 30px; 
-            height: 30px; 
+            width: 20px; 
+            height: 20px; 
             display: flex;
             align-items: center; 
             justify-content: center;
@@ -308,18 +290,10 @@
             color: #00cc00;
         }
 
-        .tutorial-comment .close-btn {
-            color: #0088ff;
-        }
-
         .info-comment .close-btn:hover {
             color: #ffffff;
             background: rgba(255, 102, 0, 0.2);
             border-radius: 50%;
-        }
-
-        .tutorial-comment .close-btn:hover {
-            background: rgba(0, 136, 255, 0.2);
         }
 
         .phase-controls {
@@ -332,20 +306,17 @@
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 12px 15px;
+            padding: 10px 15px;
             margin: 5px;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
-            max-width: 220px;
         }
 
         .phase-btn:hover {
             background: linear-gradient(45deg, #0088ff, #0066cc);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .phase-btn.attack-mode {
@@ -356,42 +327,18 @@
             background: linear-gradient(45deg, #ff0000, #cc0000);
         }
 
-        .tutorial-btn {
-            background: linear-gradient(45deg, #0066cc, #004499);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 15px;
-            margin: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: absolute;
-            top: 10px;
-            right: 160px;
-            z-index: 1001;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .tutorial-btn:hover {
-            background: linear-gradient(45deg, #0088ff, #0066cc);
-            transform: translateY(-2px);
-        }
-
         .btn {
             width: 100%; 
-            padding: 12px; 
-            margin: 8px 0; 
+            padding: 8px; 
+            margin: 6px 0; 
             border: none; 
             border-radius: 8px; 
-            font-size: 14px; 
+            font-size: 11px; 
             font-weight: bold; 
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative; 
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }  
  
         .btn-attack {
@@ -425,8 +372,8 @@
 
         .server {
             position: absolute;
-            width: 80px; 
-            height: 60px; 
+            width: 60px; 
+            height: 45px; 
             background: linear-gradient(45deg, #00ff00, #00aa00); 
             border-radius: 8px; 
             box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); 
@@ -435,7 +382,7 @@
             align-items: center; 
             justify-content: center; 
             font-weight: bold; 
-            font-size: 14px; 
+            font-size: 8px; 
             color: black; 
             cursor: pointer; 
             border: 2px solid transparent; 
@@ -444,7 +391,6 @@
         .server.selected { 
             border-color: #ffffff;
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
-            z-index: 10;
         }
 
         .server.under-attack {
@@ -469,6 +415,61 @@
             box-shadow: 0 0 30px rgba(153, 0, 0, 0.8); 
         }
 
+        /* Icônes de défense sur les serveurs */
+        .server-defenses {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            pointer-events: none;
+        }
+
+        .defense-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            animation: defenseGlow 2s infinite;
+        }
+
+        .defense-icon.firewall {
+            background: linear-gradient(45deg, #ff6600, #cc4400);
+            box-shadow: 0 0 8px rgba(255, 102, 0, 0.6);
+        }
+
+        .defense-icon.proxy {
+            background: linear-gradient(45deg, #0088ff, #0066cc);
+            box-shadow: 0 0 8px rgba(0, 136, 255, 0.6);
+        }
+
+        .defense-icon.rate-limit {
+            background: linear-gradient(45deg, #8800ff, #6600cc);
+            box-shadow: 0 0 8px rgba(136, 0, 255, 0.6);
+        }
+
+        .defense-icon.infrastructure {
+            background: linear-gradient(45deg, #00ffaa, #00cc88);
+            box-shadow: 0 0 8px rgba(0, 255, 170, 0.6);
+        }
+
+        .defense-icon.redundancy {
+            background: linear-gradient(45deg, #ffaa00, #cc8800);
+            box-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+        }
+
+        @keyframes defenseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
         @keyframes shake {
             0%, 100% { transform: rotate(0deg); } 
             25% { transform: rotate(1deg); } 
@@ -487,24 +488,24 @@
 
         .server-label {
             position: absolute;
-            top: -25px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 12px;
+            font-size: 9px;
             color: #ffffff;
             background: rgba(0, 0, 0, 0.7);
-            padding: 4px 10px;
+            padding: 2px 6px;
             border-radius: 4px;
             white-space: nowrap;
         }
 
         .server-health { 
             position: absolute; 
-            bottom: -20px; 
+            bottom: -15px; 
             left: 50%; 
             transform: translateX(-50%); 
-            width: 60px; 
-            height: 4px;
+            width: 40px; 
+            height: 3px;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 2px;
         }
@@ -518,8 +519,8 @@
 
         .spawn-point {
             position: absolute;
-            width: 16px;
-            height: 16px;
+            width: 12px;
+            height: 12px;
             background: radial-gradient(circle, #ff0000, #990000);
             border-radius: 50%;
             opacity: 0.3;
@@ -537,30 +538,91 @@
             50% { transform: scale(1.3); }
         }
 
+        /* Différents types d'attaques visuelles */
         .packet {
             position: absolute; 
-            width: 8px; 
-            height: 8px; 
-            background: radial-gradient(circle, #ff0000, #cc0000); 
+            width: 6px; 
+            height: 6px; 
             border-radius: 50%;  
-            box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);  
             transition: all 0.1s linear;  
             pointer-events: none;  
         }
 
-        .packet.blocked { 
-            background: radial-gradient(circle, #666666, #333333);  
-            box-shadow: 0 0 4px rgba(102, 102, 102, 0.6);  
+        /* Ping Flood - petits points rouges rapides */
+        .packet.ping-flood {
+            background: radial-gradient(circle, #ff4444, #cc0000); 
+            box-shadow: 0 0 6px rgba(255, 68, 68, 0.8);
+            width: 4px;
+            height: 4px;
         }
 
-        .packet.advanced { 
-            background: radial-gradient(circle, #ff00ff, #cc00cc);  
-            box-shadow: 0 0 8px rgba(255, 0, 255, 0.8);  
+        /* Botnet Attack - points violets plus gros */
+        .packet.botnet {
+            background: radial-gradient(circle, #ff00ff, #cc00cc); 
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.9);
+            width: 8px;
+            height: 8px;
+            animation: botnetPulse 0.5s infinite;
+        }
+
+        @keyframes botnetPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Attaque ciblée - forme triangulaire orange */
+        .packet.targeted {
+            background: linear-gradient(45deg, #ff6600, #cc4400);
+            box-shadow: 0 0 12px rgba(255, 102, 0, 1);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 8px solid #ff6600;
+            border-radius: 0;
+            animation: targetedSpin 1s linear infinite;
+        }
+
+        @keyframes targetedSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Attaque avancée - étoile jaune */
+        .packet.advanced {
+            background: radial-gradient(circle, #ffff00, #cccc00);
+            box-shadow: 0 0 15px rgba(255, 255, 0, 1);
+            width: 10px;
+            height: 10px;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: advancedGlow 0.3s infinite;
+        }
+
+        @keyframes advancedGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Paquets bloqués - gris avec X */
+        .packet.blocked { 
+            background: radial-gradient(circle, #666666, #333333);  
+            box-shadow: 0 0 4px rgba(102, 102, 102, 0.6);
+            opacity: 0.5;
+        }
+
+        .packet.blocked::after {
+            content: '×';
+            color: white;
+            font-size: 6px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .health-bar { 
-            width: 200px;  
-            height: 20px;  
+            width: 150px;  
+            height: 15px;  
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 8px;  
             overflow: hidden;  
@@ -576,25 +638,25 @@
 
         .stat {
             text-align: center;  
-            font-size: 14px;  
+            font-size: 11px;  
         }
 
         .stat-label { 
-            font-size: 12px; 
+            font-size: 9px; 
             opacity: 0.8;   
-            margin-bottom: 5px;   
+            margin-bottom: 3px;   
         }
 
         .stat-value { 
-            font-size: 16px;  
+            font-size: 12px;  
             font-weight: bold;  
         } 
 
         .log-entry {  
-            margin: 5px 0;  
-            padding: 6px;  
+            margin: 2px 0;  
+            padding: 3px;  
             border-radius: 3px;  
-            font-size: 14px;  
+            font-size: 9px;  
             animation: slideIn 0.3s ease;  
         }
 
@@ -635,17 +697,17 @@
         } 
 
         .firewall { 
-            width: 120px; 
-            height: 3px; 
+            width: 100px; 
+            height: 2px; 
             background: linear-gradient(90deg, transparent, #0088ff, transparent);
-            box-shadow: 0 0 10px rgba(0, 136, 255, 0.8); 
+            box-shadow: 0 0 8px rgba(0, 136, 255, 0.8); 
             border-radius: 1px; 
         }
 
         .shield {
-            width: 100px;
-            height: 100px;
-            border: 3px solid rgba(0, 136, 255, 0.6);
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(0, 136, 255, 0.6);
             border-radius: 50%; 
             animation: rotate 3s linear infinite; 
         }
@@ -660,21 +722,21 @@
             margin-bottom: 15px;
             padding-bottom: 8px; 
             border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
-            font-size: 18px;
+            font-size: 12px;
         } 
 
         .cost {
-            font-size: 12px; 
+            font-size: 9px; 
             opacity: 0.8;
             display: block;
-            margin-top: 4px; 
+            margin-top: 1px; 
         }
 
         .countdown { 
-            font-size: 20px;
+            font-size: 14px;
             color: #ff6600;
             font-weight: bold; 
-            margin: 15px 0;
+            margin: 10px 0;
             text-align: center; 
         }
 
@@ -698,8 +760,8 @@
             background: rgba(0, 0, 0, 0.8);
             border: 2px solid #00ff00;
             border-radius: 10px;
-            padding: 15px;
-            min-width: 250px;
+            padding: 10px;
+            min-width: 200px;
             z-index: 1000;
             opacity: 0;
             transform: translateY(20px);
@@ -712,18 +774,18 @@
         }
 
         .server-info-header { 
-            font-size: 16px; 
+            font-size: 12px; 
             font-weight: bold;
             color: #00ff00; 
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
         }
 
         .server-info-item {
             display: flex; 
             justify-content: space-between; 
-            margin: 8px 0; 
-            font-size: 14px; 
+            margin: 4px 0; 
+            font-size: 10px; 
         }
 
         .server-info-label { 
@@ -740,17 +802,15 @@
             color: white; 
             border: none; 
             border-radius: 5px; 
-            padding: 8px 12px; 
-            margin: 10px 0 5px; 
-            font-size: 14px; 
+            padding: 5px 10px; 
+            margin: 5px 0; 
+            font-size: 10px; 
             cursor: pointer; 
             width: 100%; 
-            transition: all 0.3s ease;
         }
 
         .attack-target-btn:hover { 
             background: linear-gradient(45deg, #ff6666, #ff4444); 
-            transform: translateY(-2px);
         } 
 
         .attack-target-btn:disabled {
@@ -762,17 +822,17 @@
             background: rgba(255, 0, 0, 0.2); 
             border: 1px solid rgba(255, 0, 0, 0.4); 
             border-radius: 8px;
-            padding: 12px;  
-            margin: 12px 0; 
-            font-size: 14px;  
+            padding: 8px;
+            margin: 8px 0; 
+            font-size: 10px;  
         }
 
         .resource-bar {  
             width: 100%;
-            height: 10px; 
+            height: 8px; 
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 4px;
-            margin: 6px 0;
+            margin: 4px 0;
             overflow: hidden; 
         }
 
@@ -787,15 +847,15 @@
             background: rgba(0, 255, 0, 0.2);
             border: 1px solid rgba(0, 255, 0, 0.4);
             border-radius: 8px;
-            padding: 12px; 
-            margin: 12px 0; 
-            font-size: 14px;
+            padding: 8px; 
+            margin: 8px 0; 
+            font-size: 10px;
         }
 
         .auto-defense { 
             position: absolute; 
-            width: 25px;
-            height: 25px; 
+            width: 20px;
+            height: 20px; 
             background: radial-gradient(circle, #00ff00, #008800); 
             border-radius: 50%; 
             animation: autoDefensePulse 2s infinite;
@@ -806,110 +866,19 @@
             0%, 100% { opacity: 0.5; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.2); }
         }
-
-        .tutorial-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 999;
-            display: none;
-        }
-
-        .tutorial-highlight {
-            position: absolute;
-            border: 3px solid #0088ff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 136, 255, 0.8);
-            z-index: 1000;
-            transition: all 0.5s ease;
-        }
-
-        .tutorial-navigation {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .tutorial-step-counter {
-            color: #0088ff;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .tutorial-next-btn {
-            background: linear-gradient(45deg, #0088ff, #0066cc);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .tutorial-next-btn:hover {
-            background: linear-gradient(45deg, #00aaff, #0088ff);
-            transform: translateY(-2px);
-        }
-
-        .tutorial-skip-btn {
-            background: transparent;
-            color: #ff4444;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .tutorial-skip-btn:hover {
-            background: rgba(255, 68, 68, 0.1);
-        }
-        
-        .backup-indicator {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, #00ffff, #0088cc);
-            border-radius: 50%;
-            animation: backupPulse 2s infinite;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-            font-weight: bold;
-        }
-
-        @keyframes backupPulse {
-            0%, 100% { opacity: 0.7; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
     </style>
 </head>
 <body>
-    <div class="phase-indicator tutorial-indicator" id="phaseIndicator">
-        TUTORIEL - Découvrez le simulateur de défense DDoS
+    <div class="phase-indicator" id="phaseIndicator">
+        PHASE D'APPRENTISSAGE - Testez librement les attaques et défenses
     </div>
-
-    <button class="tutorial-btn" id="tutorialBtn">Lancer le Tutoriel</button>
 
     <div class="zoom-controls">
-        <button class="zoom-btn" id="zoomInBtn">+</button>
+        <button class="zoom-btn" onclick="zoomIn()">+</button>
         <div class="zoom-level" id="zoomLevel">1.0x</div>
-        <button class="zoom-btn" id="zoomOutBtn">-</button>
-        <button class="zoom-btn" id="resetZoomBtn" title="Reset">⌂</button>
+        <button class="zoom-btn" onclick="zoomOut()">-</button>
+        <button class="zoom-btn" onclick="resetZoom()" title="Reset">⌂</button>
     </div>
-
-    <div class="tutorial-overlay" id="tutorialOverlay"></div>
 
     <div class="wave-announcement" id="waveAnnouncement"></div>
 
@@ -918,13 +887,13 @@
         <div class="panel attack-panel" id="attackPanel">
             <h3 id="attackPanelTitle"> ATTAQUES</h3>
             <div class="phase-controls" id="phaseControls">
-                <button class="phase-btn" id="challengeBtn">
+                <button class="phase-btn" onclick="startChallengePhase()" id="challengeBtn">
                     Mode Défense 
                 </button>
-                <button class="phase-btn attack-mode" id="attackModeBtn">
+                <button class="phase-btn attack-mode" onclick="startAttackMode()" id="attackModeBtn">
                     Mode Attaque
                 </button>
-                <button class="phase-btn" id="resetBtn" style="display: none;">
+                <button class="phase-btn" onclick="resetToLearning()" id="resetBtn" style="display: none;">
                     Retour Apprentissage
                 </button>
             </div>
@@ -941,27 +910,27 @@
                 </div>
             </div>
 
-            <button class="btn btn-attack" id="pingFloodBtn">
+            <button class="btn btn-attack" onclick="startPingFlood()">
                 <span id="pingFloodText">Ping Flood</span>
                 <span class="cost" id="pingFloodCost">Attaque modérée</span>
             </button>
-            <button class="btn btn-attack" id="botnetAttackBtn">
+            <button class="btn btn-attack" onclick="startBotnetAttack()">
                 <span id="botnetAttackText">Botnet Attack</span>
                 <span class="cost" id="botnetAttackCost">Attaque massive</span>
             </button>
-            <button class="btn btn-attack" id="targetedAttackBtn">
+            <button class="btn btn-attack" onclick="startTargetedAttack()">
                 <span id="targetedAttackText">Attaque Ciblée</span>
                 <span class="cost" id="targetedAttackCost">Serveur sélectionné</span>
             </button>
-            <button class="btn btn-attack" id="advancedAttackBtn" style="display: none;">
+            <button class="btn btn-attack" onclick="startAdvancedAttack()" id="advancedAttackBtn" style="display: none;">
                 Attaque Avancée
                 <span class="cost">Contourne 70% défenses</span>
             </button>
-            <button class="btn btn-attack" id="socialEngineeringBtn" style="display: none;">
+            <button class="btn btn-attack" onclick="startSocialEngineering()" id="socialEngineeringBtn" style="display: none;">
                 Social Engineering
                 <span class="cost">Ignore certaines défenses</span>
             </button>
-            <button class="btn btn-attack" id="stopBtn" disabled>
+            <button class="btn btn-attack" onclick="stopAttack()" id="stopBtn" disabled>
                 Arrêter Attaque
             </button>
             <div class="countdown" id="countdown" style="display: none;"></div>
@@ -971,35 +940,35 @@
         <div class="game-area" id="gameArea">
             <div class="game-world" id="gameWorld">
                 <!-- Serveurs -->
-                <div class="server" id="server1" style="top: 30%; left: 40%;">
+                <div class="server" id="server1" style="top: 30%; left: 40%;" onclick="selectServer('server1')">
                     <div class="server-label">Web Server</div>
                     <div class="server-health">
                         <div class="server-health-fill" style="width: 100%;"></div>
                     </div>
                     WEB
                 </div>
-                <div class="server" id="server2" style="top: 30%; left: 60%;">
+                <div class="server" id="server2" style="top: 30%; left: 60%;" onclick="selectServer('server2')">
                     <div class="server-label">DB Server</div>
                     <div class="server-health">
                         <div class="server-health-fill" style="width: 100%;"></div>
                     </div>
                     DB
                 </div>
-                <div class="server" id="server3" style="top: 60%; left: 50%;">
+                <div class="server" id="server3" style="top: 60%; left: 50%;" onclick="selectServer('server3')">
                     <div class="server-label">API Server</div>
                     <div class="server-health">
                         <div class="server-health-fill" style="width: 100%;"></div>
                     </div>
                     API
                 </div>
-                <div class="server" id="server4" style="top: 45%; left: 25%;">
+                <div class="server" id="server4" style="top: 45%; left: 25%;" onclick="selectServer('server4')">
                     <div class="server-label">CDN Node</div>
                     <div class="server-health">
                         <div class="server-health-fill" style="width: 100%;"></div>
                     </div>
                     CDN
                 </div>
-                <div class="server" id="server5" style="top: 45%; left: 75%;">
+                <div class="server" id="server5" style="top: 45%; left: 75%;" onclick="selectServer('server5')">
                     <div class="server-label">Cache Server</div>
                     <div class="server-health">
                         <div class="server-health-fill" style="width: 100%;"></div>
@@ -1009,23 +978,22 @@
                 
                 <!-- Lignes de réseau -->
                 <div class="network-line" style="top: 32%; left: 46%; width: 8%; transform: rotate(0deg);"></div>
+                <div class="network-line" style="top: 46%; left
+         
+                <!-- Lignes de réseau -->
+                <div class="network-line" style="top: 32%; left: 46%; width: 8%; transform: rotate(0deg);"></div>
                 <div class="network-line" style="top: 46%; left: 31%; width: 14%; transform: rotate(45deg);"></div>
                 <div class="network-line" style="top: 46%; left: 55%; width: 14%; transform: rotate(-45deg);"></div>
                 <div class="network-line" style="top: 54%; left: 46%; width: 8%; transform: rotate(90deg);"></div>
                 
                 <!-- Commentaire d'information -->
-                <div class="info-comment tutorial-comment" id="infoComment">
+                <div class="info-comment" id="infoComment">
                     <div class="info-comment-header">
-                        <button class="close-btn" id="closeCommentBtn">×</button>
-                        <h4 id="commentTitle">Tutoriel</h4>
+                        <button class="close-btn" onclick="hideInfoComment()">×</button>
+                        <h4 id="commentTitle">Titre</h4>
                     </div>
                     <div class="info-comment-content" id="commentContent">
                         <!-- Le contenu sera inséré dynamiquement -->
-                    </div>
-                    <div class="tutorial-navigation">
-                        <button class="tutorial-skip-btn" id="skipTutorialBtn">Passer le tutoriel</button>
-                        <span class="tutorial-step-counter" id="tutorialStepCounter">1/8</span>
-                        <button class="tutorial-next-btn" id="nextTutorialStep">Suivant</button>
                     </div>
                 </div>
                 
@@ -1050,32 +1018,32 @@
         </div>
 
         <!-- Panel de Défense -->
-        <div class="panel defense-panel" id="defensePanel">
+        <div class="panel defense-panel">
             <h3> DÉFENSES</h3>
-            <button class="btn btn-defense" id="firewallBtn">
+            <button class="btn btn-defense" onclick="deployFirewall()" id="firewallBtn">
                 Firewall Global
                 <span class="cost">800€ - Bloque 40%</span>
             </button>
-            <button class="btn btn-defense" id="proxyBtn">
+            <button class="btn btn-defense" onclick="deployReverseProxy()" id="proxyBtn">
                 Load Balancer
                 <span class="cost">2000€ - Réduit 60%</span>
             </button>
-            <button class="btn btn-defense" id="rateLimitBtn">
+            <button class="btn btn-defense" onclick="deployRateLimiting()" id="rateLimitBtn">
                 Rate Limiting
                 <span class="cost">1200€ - Réduit 30%</span>
             </button>
-            <button class="btn btn-defense" id="infraBtn">
+            <button class="btn btn-defense" onclick="upgradeInfrastructure()" id="infraBtn">
                 Infrastructure+
                 <span class="cost">4000€ - Réduit 70%</span>
             </button>
-            <button class="btn btn-defense" id="redundancyBtn">
+            <button class="btn btn-defense" onclick="deployRedundancy()" id="redundancyBtn">
                 Redondance
                 <span class="cost">3500€ - Failover</span>
             </button>
         </div>
 
         <!-- Barre de Statut -->
-        <div class="status-bar" id="statusBar">
+        <div class="status-bar">
             <div class="stat">
                 <div class="stat-label">Santé Globale</div>
                 <div class="health-bar">
@@ -1125,7 +1093,7 @@
                 <span class="server-info-label">Défenses:</span>
                 <span class="server-info-value" id="serverDefenses">Aucune</span>
             </div>
-            <button class="attack-target-btn" id="attackTargetBtn">
+            <button class="attack-target-btn" onclick="attackSelectedServer()" id="attackTargetBtn">
                 Attaquer ce serveur
             </button>
         </div>
@@ -1133,8 +1101,8 @@
 
     <script>
         // Variables globales
-        const gameState = {
-            phase: 'learning', // 'learning', 'challenge' ou 'attack'
+        let gameState = {
+            phase: 'learning', // 'learning' ou 'challenge'
             health: 100,
             budget: 8000,
             score: 0,
@@ -1155,9 +1123,7 @@
                 server3: { health: 100, type: 'API Server', status: 'normal', defenses: [] },
                 server4: { health: 100, type: 'CDN Node', status: 'normal', defenses: [] },
                 server5: { health: 100, type: 'Cache Server', status: 'normal', defenses: [] }
-            },
-            botnetCount: 100,
-            bandwidthCount: 1000
+            }
         };
 
         let zoomLevel = 1.0;
@@ -1168,127 +1134,26 @@
         let challengeWaves = [];
         let currentWave = 0;
         let waveInProgress = false;
-        
-        // Variables pour le tutoriel
-        const tutorial = {
-            currentStep: 0,
-            totalSteps: 8,
-            active: false,
-            highlightElement: null
-        };
-        
-        // Étapes du tutoriel
-        const tutorialSteps = [
-            {
-                title: "Bienvenue dans le simulateur DDoS",
-                content: "Ce jeu vous permet d'apprendre à défendre une infrastructure réseau contre des attaques DDoS. Vous pouvez aussi passer en mode attaquant pour comprendre les techniques offensives.<br><br>Ce tutoriel vous guidera à travers les différentes fonctionnalités du jeu.",
-                element: null
-            },
-            {
-                title: "Zone de jeu et serveurs",
-                content: "La zone centrale représente votre infrastructure réseau. Chaque carré coloré est un serveur avec une fonction spécifique :<br><br>- Serveur Web (WEB)<br>- Base de données (DB)<br>- API<br>- CDN (réseau de distribution de contenu)<br>- Cache<br><br>Cliquez sur un serveur pour le sélectionner et voir ses détails.",
-                element: "gameArea",
-                highlight: {x: 0, y: 0, width: "100%", height: "100%"}
-            },
-            {
-                title: "Panel d'Attaque",
-                content: "Ce panneau vous permet de lancer différentes attaques DDoS :<br><br>- Ping Flood : Attaque de base qui envoie des paquets ICMP<br>- Botnet Attack : Attaque massive provenant de multiples sources<br>- Attaque Ciblée : Concentrée sur un serveur spécifique<br><br>En mode Apprentissage, vous pouvez tester ces attaques librement.",
-                element: "attackPanel",
-                highlight: {x: 0, y: 0, width: "100%", height: "100%"}
-            },
-            {
-                title: "Panel de Défense",
-                content: "Ce panneau vous permet de déployer des contre-mesures :<br><br>- Firewall : Bloque 40% des paquets malveillants<br>- Load Balancer : Réduit l'impact des attaques de 60%<br>- Rate Limiting : Limite le nombre de requêtes par IP<br>- Infrastructure+ : Améliore la capacité de traitement<br>- Redondance : Système de failover automatique<br><br>Chaque défense a un coût qui sera déduit de votre budget.",
-                element: "defensePanel",
-                highlight: {x: 0, y: 0, width: "100%", height: "100%"}
-            },
-            {
-                title: "Barre de Statut",
-                content: "Cette barre affiche l'état de votre infrastructure :<br><br>- Santé Globale : État général de vos serveurs<br>- Budget : Montant disponible pour déployer des défenses<br>- Serveurs Actifs : Nombre de serveurs opérationnels<br>- Score : Votre performance dans le jeu<br><br>Surveillez ces indicateurs pendant les vagues d'attaque!",
-                element: "statusBar",
-                highlight: {x: 0, y: 0, width: "100%", height: "100%"}
-            },
-            {
-                title: "Journal des événements",
-                content: "Ce panneau affiche les événements en temps réel :<br><br>- Attaques lancées<br>- Défenses déployées<br>- État des serveurs<br>- Messages d'erreur<br><br>Les messages sont codés par couleur :<br>- <span style='color:#0088ff'>Bleu</span> : Informations<br>- <span style='color:#ffa500'>Orange</span> : Avertissements<br>- <span style='color:#00cc00'>Vert</span> : Succès<br>- <span style='color:#ff0000'>Rouge</span> : Erreurs",
-                element: "logsPanel",
-                highlight: {x: 0, y: 0, width: "100%", height: "100%"}
-            },
-            {
-                title: "Modes de jeu",
-                content: "Le jeu propose 3 modes :<br><br>1. <strong>Apprentissage</strong> : Testez librement attaques et défenses<br>2. <strong>Mode Défi</strong> : Survivez à 5 vagues d'attaques croissantes<br>3. <strong>Mode Attaque</strong> : Devenez l'attaquant avec des ressources limitées<br><br>Utilisez les boutons du panneau d'attaque pour changer de mode.",
-                element: "phaseControls",
-                highlight: {x: 0, y: 0, width: "100%", height: "100%"}
-            },
-            {
-                title: "Démarrez votre aventure!",
-                content: "Vous êtes maintenant prêt à défendre votre infrastructure!<br><br>Conseils :<br>- Commencez par le mode Apprentissage pour comprendre les mécanismes<br>- En mode Défi, priorisez les défenses selon votre budget<br>- Surveillez la santé de vos serveurs critiques<br>- Les attaques coordonnées sont les plus dangereuses<br><br>Bonne chance!",
-                element: null
-            }
-        ];
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
             initializeGame();
             setupEventListeners();
             updateUI();
-            
-            // Démarrer le tutoriel automatiquement après un court délai
-            setTimeout(() => {
-                showTutorial(0);
-            }, 1500);
         });
 
         function initializeGame() {
             spawnPoints = document.querySelectorAll('.spawn-point');
             generateChallengeWaves();
-            addLog('Simulateur DDoS Multi-Serveurs prêt', 'info');
-            addLog('Mode apprentissage activé - Testez les fonctionnalités', 'info');
+            addLog(' Simulateur DDoS Multi-Serveurs prêt', 'info');
+            addLog(' Mode apprentissage activé - Testez les fonctionnalités', 'info');
         }
 
         function setupEventListeners() {
-            // Boutons de zoom
-            document.getElementById('zoomInBtn').addEventListener('click', zoomIn);
-            document.getElementById('zoomOutBtn').addEventListener('click', zoomOut);
-            document.getElementById('resetZoomBtn').addEventListener('click', resetZoom);
-            
-            // Boutons du tutoriel
-            document.getElementById('tutorialBtn').addEventListener('click', () => showTutorial(0));
-            document.getElementById('nextTutorialStep').addEventListener('click', nextTutorialStep);
-            document.getElementById('skipTutorialBtn').addEventListener('click', endTutorial);
-            document.getElementById('closeCommentBtn').addEventListener('click', hideInfoComment);
-            
-            // Boutons de contrôle de phase
-            document.getElementById('challengeBtn').addEventListener('click', startChallengePhase);
-            document.getElementById('attackModeBtn').addEventListener('click', startAttackMode);
-            document.getElementById('resetBtn').addEventListener('click', resetToLearning);
-            
-            // Boutons d'attaque
-            document.getElementById('pingFloodBtn').addEventListener('click', startPingFlood);
-            document.getElementById('botnetAttackBtn').addEventListener('click', startBotnetAttack);
-            document.getElementById('targetedAttackBtn').addEventListener('click', startTargetedAttack);
-            document.getElementById('stopBtn').addEventListener('click', stopAttack);
-            document.getElementById('attackTargetBtn').addEventListener('click', attackSelectedServer);
-            document.getElementById('advancedAttackBtn').addEventListener('click', startAdvancedAttack);
-            document.getElementById('socialEngineeringBtn').addEventListener('click', startSocialEngineering);
-            
-            // Boutons de défense
-            document.getElementById('firewallBtn').addEventListener('click', deployFirewall);
-            document.getElementById('proxyBtn').addEventListener('click', deployReverseProxy);
-            document.getElementById('rateLimitBtn').addEventListener('click', deployRateLimiting);
-            document.getElementById('infraBtn').addEventListener('click', upgradeInfrastructure);
-            document.getElementById('redundancyBtn').addEventListener('click', deployRedundancy);
-            
-            // Sélection des serveurs
-            document.querySelectorAll('.server').forEach(server => {
-                server.addEventListener('click', () => selectServer(server.id));
-            });
-            
-            // Drag pour la zone de jeu
             const gameArea = document.getElementById('gameArea');
             let isDragging = false;
             let startX, startY, currentX = 0, currentY = 0;
-            
+
             gameArea.addEventListener('mousedown', (e) => {
                 if (e.target === gameArea || e.target.id === 'gameWorld') {
                     isDragging = true;
@@ -1297,7 +1162,7 @@
                     gameArea.style.cursor = 'grabbing';
                 }
             });
-            
+
             document.addEventListener('mousemove', (e) => {
                 if (isDragging) {
                     currentX = e.clientX - startX;
@@ -1306,7 +1171,7 @@
                     gameWorld.style.transform = `translate(${currentX}px, ${currentY}px) scale(${zoomLevel})`;
                 }
             });
-            
+
             document.addEventListener('mouseup', () => {
                 isDragging = false;
                 gameArea.style.cursor = 'grab';
@@ -1355,91 +1220,7 @@
             document.getElementById('zoomLevel').textContent = zoomLevel.toFixed(1) + 'x';
         }
 
-        // Fonctions de gestion du tutoriel
-        function showTutorial(stepIndex) {
-            tutorial.active = true;
-            tutorial.currentStep = stepIndex;
-            const step = tutorialSteps[stepIndex];
-            
-            // Mettre à jour le contenu
-            document.getElementById('commentTitle').textContent = step.title;
-            document.getElementById('commentContent').innerHTML = step.content;
-            document.getElementById('tutorialStepCounter').textContent = `${stepIndex + 1}/${tutorialSteps.length}`;
-            
-            // Afficher la boîte de commentaire
-            const comment = document.getElementById('infoComment');
-            comment.className = 'info-comment tutorial-comment visible';
-            
-            // Gérer l'élément mis en évidence
-            highlightTutorialElement(step);
-            
-            // Afficher l'overlay
-            document.getElementById('tutorialOverlay').style.display = 'block';
-            
-            // Désactiver les autres interactions
-            document.getElementById('tutorialBtn').disabled = true;
-        }
-
-        function highlightTutorialElement(step) {
-            // Supprimer la mise en évidence précédente
-            if (tutorial.highlightElement) {
-                tutorial.highlightElement.remove();
-                tutorial.highlightElement = null;
-            }
-            
-            if (step.element && document.getElementById(step.element)) {
-                const element = document.getElementById(step.element);
-                const rect = element.getBoundingClientRect();
-                
-                // Créer un élément de mise en évidence
-                const highlight = document.createElement('div');
-                highlight.className = 'tutorial-highlight';
-                highlight.style.left = `${rect.left}px`;
-                highlight.style.top = `${rect.top}px`;
-                highlight.style.width = `${rect.width}px`;
-                highlight.style.height = `${rect.height}px`;
-                
-                document.body.appendChild(highlight);
-                tutorial.highlightElement = highlight;
-            }
-        }
-
-        function nextTutorialStep() {
-            if (tutorial.currentStep < tutorialSteps.length - 1) {
-                showTutorial(tutorial.currentStep + 1);
-            } else {
-                endTutorial();
-            }
-        }
-
-        function endTutorial() {
-            tutorial.active = false;
-            
-            // Cacher la boîte de commentaire
-            hideInfoComment();
-            
-            // Supprimer la mise en évidence
-            if (tutorial.highlightElement) {
-                tutorial.highlightElement.remove();
-                tutorial.highlightElement = null;
-            }
-            
-            // Cacher l'overlay
-            document.getElementById('tutorialOverlay').style.display = 'none';
-            
-            // Réactiver le bouton tutoriel
-            document.getElementById('tutorialBtn').disabled = false;
-            
-            // Ajouter un log
-            addLog('Tutoriel terminé - Prêt à jouer!', 'success');
-        }
-
-        function hideInfoComment() {
-            const comment = document.getElementById('infoComment');
-            comment.classList.remove('visible');
-        }
-
-        // Fonctions de gestion des phases
+        // Gestion des phases
         function startChallengePhase() {
             gameState.phase = 'challenge';
             gameState.waveNumber = 0;
@@ -1452,7 +1233,7 @@
             document.getElementById('challengeBtn').style.display = 'none';
             document.getElementById('resetBtn').style.display = 'inline-block';
             
-            addLog('Mode défi activé - Préparez vos défenses!', 'warning');
+            addLog(' Mode défi activé - Préparez vos défenses!', 'warning');
             addLog('5 vagues d\'attaques programmées', 'info');
             
             setTimeout(() => {
@@ -1496,7 +1277,7 @@
             
             enableAllButtons();
             updateUI();
-            addLog('Retour au mode apprentissage', 'info');
+            addLog(' Retour au mode apprentissage', 'info');
         }
 
         function startNextWave() {
@@ -1510,7 +1291,7 @@
             gameState.waveNumber = currentWave + 1;
             
             showWaveAnnouncement(`VAGUE ${gameState.waveNumber}/5: ${wave.name}`);
-            addLog(`Vague ${gameState.waveNumber}: ${wave.name} (${wave.duration}s)`, 'warning');
+            addLog(` Vague ${gameState.waveNumber}: ${wave.name} (${wave.duration}s)`, 'warning');
             
             setTimeout(() => {
                 startWaveAttack(wave);
@@ -1554,12 +1335,12 @@
             document.getElementById('countdown').style.display = 'none';
             
             if (victory) {
-                addLog('VICTOIRE! Toutes les vagues repoussées!', 'success');
-                addLog(`Score final: ${gameState.score}`, 'success');
+                addLog(' VICTOIRE! Toutes les vagues repoussées!', 'success');
+                addLog(` Score final: ${gameState.score}`, 'success');
                 gameState.score += 5000;
             } else {
-                addLog('DÉFAITE! Infrastructure compromise', 'error');
-                addLog(`Score final: ${gameState.score}`, 'error');
+                addLog(' DÉFAITE! Infrastructure compromise', 'error');
+                addLog(` Score final: ${gameState.score}`, 'error');
             }
             
             setTimeout(() => {
@@ -1575,11 +1356,11 @@
             document.getElementById('stopBtn').disabled = false;
             
             showInfoComment('Ping Flood', 
-                'Le Ping Flood envoie des paquets ICMP en masse vers les serveurs cibles. ' +
-                'Cette attaque consomme la bande passante et peut surcharger les serveurs moins protégés. ' +
+                'Le Ping Flood envoie des messsages (paquets ICMP) en masse vers les serveurs cibles. ' +
+                'Cette attaque  peut surcharger les serveurs moins protégés. ' +
                 'Durée: 10 secondes. Impact: Modéré sur tous les serveurs.');
             
-            addLog('Ping Flood lancé', 'error');
+            addLog(' Ping Flood lancé', 'error');
             
             attackInterval = setInterval(() => {
                 Object.keys(gameState.servers).forEach(serverId => {
@@ -1599,11 +1380,11 @@
             document.getElementById('stopBtn').disabled = false;
             
             showInfoComment('Botnet Attack', 
-                'Attaque distribuée utilisant un réseau de machines compromises. ' +
-                'Génère un trafic massif depuis plusieurs sources, rendant le filtrage difficile. ' +
+                'Attaque distribuée: on infecte des machines par propagation d un virus  ' +
+                'Génère un trafic massif depuis plusieurs sources. ' +
                 'Impact très élevé sur l\'infrastructure. Durée: 15 secondes.');
             
-            addLog('Attaque Botnet déclenchée', 'error');
+            addLog(' Attaque Botnet déclenchée', 'error');
             
             attackInterval = setInterval(() => {
                 Object.keys(gameState.servers).forEach(serverId => {
@@ -1618,7 +1399,7 @@
 
         function startTargetedAttack() {
             if (gameState.attackActive || !gameState.selectedServer) {
-                addLog('Sélectionnez un serveur cible', 'error');
+                addLog(' Sélectionnez un serveur cible', 'error');
                 return;
             }
             
@@ -1631,7 +1412,7 @@
                 'Utilise des techniques spécialisées pour exploiter les faiblesses spécifiques du serveur cible. ' +
                 'Impact très élevé mais localisé. Durée: 12 secondes.');
             
-            addLog(`Attaque ciblée sur ${serverType}`, 'error');
+            addLog(` Attaque ciblée sur ${serverType}`, 'error');
             
             attackInterval = setInterval(() => {
                 attackServer(gameState.selectedServer, 4);
@@ -1650,7 +1431,7 @@
             gameState.attackActive = false;
             clearInterval(attackInterval);
             document.getElementById('stopBtn').disabled = true;
-            addLog('Attaque arrêtée', 'info');
+            addLog(' Attaque arrêtée', 'info');
             hideInfoComment();
         }
 
@@ -1688,7 +1469,7 @@
                 
                 if (server.health <= 0) {
                     gameState.activeServers--;
-                    addLog(`${server.type} hors service`, 'error');
+                    addLog(` ${server.type} hors service`, 'error');
                 }
             }
             
@@ -1708,7 +1489,7 @@
         function deployFirewall() {
             const cost = 800;
             if (gameState.budget < cost) {
-                addLog('Budget insuffisant pour le Firewall', 'error');
+                addLog(' Budget insuffisant pour le Firewall', 'error');
                 return;
             }
             
@@ -1725,14 +1506,14 @@
             document.getElementById('firewallBtn').disabled = true;
             document.querySelectorAll('.firewall').forEach(fw => fw.classList.add('active'));
             
-            addLog('Firewall global déployé', 'success');
+            addLog(' Firewall global déployé', 'success');
             updateUI();
         }
 
         function deployReverseProxy() {
             const cost = 2000;
             if (gameState.budget < cost) {
-                addLog('Budget insuffisant pour le Load Balancer', 'error');
+                addLog(' Budget insuffisant pour le Load Balancer', 'error');
                 return;
             }
             
@@ -1747,14 +1528,14 @@
                 'defense');
             
             document.getElementById('proxyBtn').disabled = true;
-            addLog('Load Balancer activé', 'success');
+            addLog(' Load Balancer activé', 'success');
             updateUI();
         }
 
         function deployRateLimiting() {
             const cost = 1200;
             if (gameState.budget < cost) {
-                addLog('Budget insuffisant pour le Rate Limiting', 'error');
+                addLog(' Budget insuffisant pour le Rate Limiting', 'error');
                 return;
             }
             
@@ -1769,7 +1550,7 @@
                 'defense');
             
             document.getElementById('rateLimitBtn').disabled = true;
-            addLog('Rate Limiting configuré', 'success');
+            addLog(' Rate Limiting configuré', 'success');
             updateUI();
         }
 
@@ -1796,50 +1577,80 @@
                 serverEl.classList.add('protected');
             });
             
-            addLog('Infrastructure améliorée', 'success');
+            addLog(' Infrastructure améliorée', 'success');
             updateUI();
         }
 
         function deployRedundancy() {
-            const cost = 3500;
-            if (gameState.budget < cost) {
-                addLog('Budget insuffisant pour la Redondance', 'error');
-                return;
+    const cost = 3500;
+    if (gameState.budget < cost) {
+        addLog('Budget insuffisant pour la Redondance', 'error');
+        return;
+    }
+    
+    gameState.budget -= cost;
+    gameState.defenses.redundancy = true;
+    gameState.score += 350;
+    
+    showInfoComment('Redondance', 
+        'Déploie des serveurs de sauvegarde et des systèmes de failover automatique. ' +
+        'Si un serveur tombe, le trafic est automatiquement redirigé vers les backups. ' +
+        'Assure une continuité de service même en cas d\'attaque réussie sur certains serveurs.', 
+        'defense');
+    
+    document.getElementById('redundancyBtn').disabled = true;
+    
+    // Ajouter un effet visuel de redondance sur tous les serveurs
+    Object.keys(gameState.servers).forEach(serverId => {
+        const serverEl = document.getElementById(serverId);
+        if (serverEl) {
+            // Ajouter une classe CSS pour l'effet de redondance
+            serverEl.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
+            serverEl.style.border = '2px solid rgba(0, 255, 255, 0.5)';
+            
+            // Créer un indicateur de backup visuel
+            if (!serverEl.querySelector('.backup-indicator')) {
+                const backupIndicator = document.createElement('div');
+                backupIndicator.className = 'backup-indicator';
+                backupIndicator.style.cssText = `
+                    position: absolute;
+                    top: -8px;
+                    right: -8px;
+                    width: 16px;
+                    height: 16px;
+                    background: radial-gradient(circle, #00ffff, #0088cc);
+                    border-radius: 50%;
+                    animation: backupPulse 2s infinite;
+                    font-size: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: black;
+                    font-weight: bold;
+                `;
+                backupIndicator.textContent = 'B';
+                serverEl.appendChild(backupIndicator);
             }
-            
-            gameState.budget -= cost;
-            gameState.defenses.redundancy = true;
-            gameState.score += 350;
-            
-            showInfoComment('Redondance', 
-                'Déploie des serveurs de backup et des systèmes de failover automatique. ' +
-                'Si un serveur tombe, le trafic est automatiquement redirigé vers les backups. ' +
-                'Assure une continuité de service même en cas d\'attaque réussie sur certains serveurs.', 
-                'defense');
-            
-            document.getElementById('redundancyBtn').disabled = true;
-            
-            // Ajouter un effet visuel de redondance sur tous les serveurs
-            Object.keys(gameState.servers).forEach(serverId => {
-                const serverEl = document.getElementById(serverId);
-                if (serverEl) {
-                    // Ajouter une classe CSS pour l'effet de redondance
-                    serverEl.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
-                    serverEl.style.border = '2px solid rgba(0, 255, 255, 0.5)';
-                    
-                    // Créer un indicateur de backup visuel
-                    if (!serverEl.querySelector('.backup-indicator')) {
-                        const backupIndicator = document.createElement('div');
-                        backupIndicator.className = 'backup-indicator';
-                        serverEl.appendChild(backupIndicator);
-                    }
-                }
-            });
-            
-            addLog('Système de redondance activé', 'success');
-            addLog('Serveurs de backup déployés', 'info');
-            updateUI();
         }
+    });
+    
+    // Ajouter l'animation CSS si elle n'existe pas déjà
+    if (!document.querySelector('#backup-animation-style')) {
+        const style = document.createElement('style');
+        style.id = 'backup-animation-style';
+        style.textContent = `
+            @keyframes backupPulse {
+                0%, 100% { opacity: 0.7; transform: scale(1); }
+                50% { opacity: 1; transform: scale(1.2); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    addLog(' Système de redondance activé', 'success');
+    addLog(' Serveurs de backup déployés', 'info');
+    updateUI();
+}
 
         // Fonctions visuelles
         function createAttackPackets(targetServerId, blocked) {
@@ -1978,6 +1789,10 @@
             }
         }
 
+        function hideInfoComment() {
+            document.getElementById('infoComment').classList.remove('visible');
+        }
+
         function updateUI() {
             document.getElementById('healthFill').style.width = gameState.health + '%';
             document.getElementById('healthText').textContent = gameState.health + '%';
@@ -2006,89 +1821,503 @@
                 logs.removeChild(logs.firstChild);
             }
         }
-        
-        // Mode attaque
-        function startAttackMode() {
-            gameState.phase = 'attack';
-            gameState.botnetCount = 100;
-            gameState.bandwidthCount = 1000;
-            
-            // Modifier l'interface pour le mode attaque
-            document.getElementById('phaseIndicator').textContent = 'MODE ATTAQUE - Utilisez vos ressources pour attaquer l\'infrastructure';
-            document.getElementById('phaseIndicator').classList.add('attack-mode');
-            
-            // Afficher les ressources d'attaque
-            document.getElementById('attackResources').style.display = 'block';
-            
-            // Désactiver le panel de défense
-            document.querySelector('.defense-panel').classList.add('disabled');
-            
-            // Modifier les boutons de contrôle
-            document.getElementById('challengeBtn').style.display = 'none';
-            document.getElementById('attackModeBtn').style.display = 'none';
-            document.getElementById('resetBtn').style.display = 'inline-block';
-            
-            // Activer les attaques avancées
-            document.getElementById('advancedAttackBtn').style.display = 'inline-block';
-            document.getElementById('socialEngineeringBtn').style.display = 'inline-block';
-            
-            // Modifier les textes des boutons d'attaque pour montrer le coût en ressources
-            document.getElementById('pingFloodCost').textContent = '10 bots - 50 Mbps';
-            document.getElementById('botnetAttackCost').textContent = '50 bots - 200 Mbps';
-            document.getElementById('targetedAttackCost').textContent = '20 bots - 100 Mbps';
-            
-            updateAttackResources();
-            addLog('Mode attaque activé - Ressources disponibles', 'warning');
-            addLog('Botnet: 100 bots, Bande passante: 1000 Mbps', 'info');
-        }
-        
-        function updateAttackResources() {
-            document.getElementById('botnetCount').textContent = gameState.botnetCount || 0;
-            document.getElementById('bandwidthCount').textContent = gameState.bandwidthCount || 0;
-            
-            // Mettre à jour les barres de progression
-            const botnetPercentage = (gameState.botnetCount / 100) * 100;
-            const bandwidthPercentage = (gameState.bandwidthCount / 1000) * 100;
-            
-            document.getElementById('botnetBar').style.width = botnetPercentage + '%';
-            document.getElementById('bandwidthBar').style.width = bandwidthPercentage + '%';
-            
-            // Changer la couleur des barres selon le niveau
-            const botnetBar = document.getElementById('botnetBar');
-            const bandwidthBar = document.getElementById('bandwidthBar');
-            
-            if (botnetPercentage < 20) {
-                botnetBar.style.backgroundColor = '#ff4444';
-            } else if (botnetPercentage < 50) {
-                botnetBar.style.backgroundColor = '#ffaa00';
-            } else {
-                botnetBar.style.backgroundColor = '#44ff44';
-            }
-            
-            if (bandwidthPercentage < 20) {
-                bandwidthBar.style.backgroundColor = '#ff4444';
-            } else if (bandwidthPercentage < 50) {
-                bandwidthBar.style.backgroundColor = '#ffaa00';
-            } else {
-                bandwidthBar.style.backgroundColor = '#44ff44';
-            }
-        }
 
-        function startAdvancedAttack() {
-            addLog('Attaque avancée déclenchée', 'error');
-            showInfoComment('Attaque Avancée', 
-                'Cette attaque utilise des techniques sophistiquées pour contourner les systèmes de défense. ' +
-                'Elle est très difficile à bloquer et cause des dégâts importants. ' +
-                'Durée: 15 secondes. Impact: Élevé sur tous les serveurs.');
-        }
+        // Fonction à ajouter dans votre script JavaScript
+function startAttackMode() {
+    gameState.phase = 'attack';
+    gameState.botnetCount = 100;
+    gameState.bandwidthCount = 1000;
+    
+    // Modifier l'interface pour le mode attaque
+    document.getElementById('phaseIndicator').textContent = 'MODE ATTAQUE - Utilisez vos ressources pour attaquer l\'infrastructure';
+    document.getElementById('phaseIndicator').classList.add('attack-mode');
+    
+    // Afficher les ressources d'attaque
+    document.getElementById('attackResources').style.display = 'block';
+    
+    // Désactiver le panel de défense
+    document.querySelector('.defense-panel').classList.add('disabled');
+    
+    // Modifier les boutons de contrôle
+    document.getElementById('challengeBtn').style.display = 'none';
+    document.getElementById('attackModeBtn').style.display = 'none';
+    document.getElementById('resetBtn').style.display = 'inline-block';
+    
+    // Activer les attaques avancées
+    document.getElementById('advancedAttackBtn').style.display = 'inline-block';
+    document.getElementById('socialEngineeringBtn').style.display = 'inline-block';
+    
+    // Modifier les textes des boutons d'attaque pour montrer le coût en ressources
+    document.getElementById('pingFloodCost').textContent = '10 bots - 50 Mbps';
+    document.getElementById('botnetAttackCost').textContent = '50 bots - 200 Mbps';
+    document.getElementById('targetedAttackCost').textContent = '20 bots - 100 Mbps';
+    
+    updateAttackResources();
+    addLog(' Mode attaque activé - Ressources disponibles', 'warning');
+    addLog(' Botnet: 100 bots, Bande passante: 1000 Mbps', 'info');
+}
 
-        function startSocialEngineering() {
-            addLog('Ingénierie sociale déclenchée', 'error');
-            showInfoComment('Ingénierie Sociale', 
-                'Cette attaque cible les utilisateurs plutôt que les systèmes. ' +
-                'Elle contourne complètement les défenses techniques et peut compromettre la sécurité. ' +
-                'Durée: 20 secondes. Impact: Critique sur les serveurs vulnérables.');
+// Fonction pour mettre à jour l'affichage des ressources
+function updateAttackResources() {
+    document.getElementById('botnetCount').textContent = gameState.botnetCount || 0;
+    document.getElementById('bandwidthCount').textContent = gameState.bandwidthCount || 0;
+    
+    // Mettre à jour les barres de progression
+    const botnetPercentage = (gameState.botnetCount / 100) * 100;
+    const bandwidthPercentage = (gameState.bandwidthCount / 1000) * 100;
+    
+    document.getElementById('botnetBar').style.width = botnetPercentage + '%';
+    document.getElementById('bandwidthBar').style.width = bandwidthPercentage + '%';
+    
+    // Changer la couleur des barres selon le niveau
+    const botnetBar = document.getElementById('botnetBar');
+    const bandwidthBar = document.getElementById('bandwidthBar');
+    
+    if (botnetPercentage < 20) {
+        botnetBar.style.backgroundColor = '#ff4444';
+    } else if (botnetPercentage < 50) {
+        botnetBar.style.backgroundColor = '#ffaa00';
+    } else {
+        botnetBar.style.backgroundColor = '#44ff44';
+    }
+    
+    if (bandwidthPercentage < 20) {
+        bandwidthBar.style.backgroundColor = '#ff4444';
+    } else if (bandwidthPercentage < 50) {
+        bandwidthBar.style.backgroundColor = '#ffaa00';
+    } else {
+        bandwidthBar.style.backgroundColor = '#44ff44';
+    }
+}
+
+// Fonction pour consommer des ressources lors d'une attaque
+function consumeAttackResources(botsUsed, bandwidthUsed) {
+    if (gameState.phase !== 'attack') return true;
+    
+    if (gameState.botnetCount < botsUsed || gameState.bandwidthCount < bandwidthUsed) {
+        addLog(' Ressources insuffisantes pour cette attaque', 'error');
+        return false;
+    }
+    
+    gameState.botnetCount -= botsUsed;
+    gameState.bandwidthCount -= bandwidthUsed;
+    
+    updateAttackResources();
+    return true;
+}
+
+// Nouvelles fonctions d'attaque avancées
+function startAdvancedAttack() {
+    if (gameState.attackActive) return;
+    
+    if (!consumeAttackResources(30, 150)) return;
+    
+    gameState.attackActive = true;
+    document.getElementById('stopBtn').disabled = false;
+    
+    showInfoComment('Attaque Avancée', 
+        'Utilise des techniques d\'évasion sophistiquées et des exploits zero-day. ' +
+        'Contourne 70% des défenses traditionnelles grâce à des méthodes de camouflage avancées. ' +
+        'Coût: 30 bots, 150 Mbps. Durée: 8 secondes.', 
+        'attack');
+    
+    addLog(' Attaque avancée initiée', 'error');
+    
+    attackInterval = setInterval(() => {
+        Object.keys(gameState.servers).forEach(serverId => {
+            // Attaque qui ignore en partie les défenses
+            attackServerAdvanced(serverId, 5);
+        });
+    }, 250);
+    
+    setTimeout(() => {
+        stopAttack();
+    }, 8000);
+}
+
+function startSocialEngineering() {
+    if (gameState.attackActive) return;
+    
+    if (!consumeAttackResources(15, 75)) return;
+    
+    gameState.attackActive = true;
+    document.getElementById('stopBtn').disabled = false;
+    
+    showInfoComment('Social Engineering', 
+        'Attaque qui exploite le facteur humain pour contourner les défenses techniques. ' +
+        'Ignore les firewalls et rate limiting en utilisant des comptes légitimes compromis. ' +
+        'Coût: 15 bots, 75 Mbps. Durée: 6 secondes.', 
+        'attack');
+    
+    addLog(' Attaque par ingénierie sociale lancée', 'error');
+    
+    attackInterval = setInterval(() => {
+        Object.keys(gameState.servers).forEach(serverId => {
+            // Attaque qui ignore firewall et rate limiting
+            attackServerSocial(serverId, 3);
+        });
+    }, 400);
+    
+    setTimeout(() => {
+        stopAttack();
+    }, 6000);
+}
+
+// Fonction d'attaque avancée qui contourne partiellement les défenses
+function attackServerAdvanced(serverId, intensity) {
+    const server = gameState.servers[serverId];
+    if (!server || server.health <= 0) return;
+    
+    let damage = intensity * 2;
+    let blocked = false;
+    
+    // L'attaque avancée contourne 70% des défenses
+    if (gameState.defenses.firewall && Math.random() > 0.7) {
+        if (Math.random() < 0.4) {
+            blocked = true;
+            damage = 0;
         }
+    }
+    
+    if (gameState.defenses.reverseProxy && !blocked && Math.random() > 0.7) {
+        damage *= 0.4;
+    }
+    
+    if (gameState.defenses.rateLimiting && !blocked && Math.random() > 0.7) {
+        damage *= 0.7;
+    }
+    
+    if (gameState.defenses.infrastructure && !blocked) {
+        damage *= 0.5; // Infrastructure reste partiellement efficace
+    }
+    
+    if (!blocked) {
+        server.health = Math.max(0, server.health - damage);
+        updateServerVisual(serverId);
+        
+        if (server.health <= 0) {
+            gameState.activeServers--;
+            addLog(` ${server.type} neutralisé par attaque avancée`, 'error');
+        }
+    }
+    
+    createAttackPackets(serverId, blocked);
+    updateGlobalHealth();
+    updateUI();
+}
+
+// Fonction d'attaque sociale qui ignore certaines défenses
+function attackServerSocial(serverId, intensity) {
+    const server = gameState.servers[serverId];
+    if (!server || server.health <= 0) return;
+    
+    let damage = intensity * 2;
+    
+    // L'ingénierie sociale ignore firewall et rate limiting
+    if (gameState.defenses.reverseProxy) {
+        damage *= 0.6;
+    }
+    
+    if (gameState.defenses.infrastructure) {
+        damage *= 0.4;
+    }
+    
+    server.health = Math.max(0, server.health - damage);
+    updateServerVisual(serverId);
+    
+    if (server.health <= 0) {
+        gameState.activeServers--;
+        addLog(` ${server.type} compromis par ingénierie sociale`, 'error');
+    }
+    
+    createAttackPackets(serverId, false);
+    updateGlobalHealth();
+    updateUI();
+}
+// Fonction pour démarrer le mode attaque - à ajouter à la fin de votre script
+function startAttackMode() {
+    // Changer l'état du jeu
+    gameState.phase = 'attack';
+    gameState.attackResources = {
+        botnet: 100,
+        bandwidth: 1000,
+        exploits: 5
+    };
+    
+    // Modifier l'interface
+    document.getElementById('phaseIndicator').textContent = 'MODE ATTAQUE - Percez les défenses de l\'infrastructure';
+    document.getElementById('phaseIndicator').classList.add('attack-mode');
+    document.getElementById('phaseIndicator').style.backgroundColor = '#cc0000';
+    document.getElementById('phaseIndicator').style.color = 'white';
+    
+    // Désactiver le panel de défense
+    const defensePanel = document.querySelector('.defense-panel');
+    if (defensePanel) {
+        defensePanel.style.opacity = '0.3';
+        defensePanel.style.pointerEvents = 'none';
+    }
+    
+    // Modifier les boutons de contrôle
+    const challengeBtn = document.getElementById('challengeBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    if (challengeBtn) challengeBtn.style.display = 'none';
+    if (resetBtn) resetBtn.style.display = 'inline-block';
+    
+    // Ajouter des ressources d'attaque dans l'interface
+    const statsPanel = document.querySelector('.stats-panel');
+    if (statsPanel && !document.getElementById('attackResourcesDisplay')) {
+        const resourcesDiv = document.createElement('div');
+        resourcesDiv.id = 'attackResourcesDisplay';
+        resourcesDiv.innerHTML = `
+            <div style="background: #2a0a0a; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #ff4444;">
+                <h4 style="color: #ff4444; margin: 0 0 10px 0;"> RESSOURCES D'ATTAQUE</h4>
+                <div style="display: flex; justify-content: space-between; color: white; font-size: 12px;">
+                    <span>Botnet: <span id="botnetDisplay">${gameState.attackResources.botnet}</span></span>
+                    <span>Bande passante: <span id="bandwidthDisplay">${gameState.attackResources.bandwidth}</span> Mbps</span>
+                    <span>Exploits: <span id="exploitsDisplay">${gameState.attackResources.exploits}</span></span>
+                </div>
+            </div>
+        `;
+        statsPanel.appendChild(resourcesDiv);
+    }
+    
+    // Modifier les attaques existantes pour consommer des ressources
+    gameState.originalAttackFunctions = {
+        startPingFlood: window.startPingFlood,
+        startBotnetAttack: window.startBotnetAttack,
+        startTargetedAttack: window.startTargetedAttack
+    };
+    
+    // Redéfinir les fonctions d'attaque avec consommation de ressources
+    window.startPingFlood = function() {
+        if (gameState.attackActive) return;
+        
+        if (gameState.attackResources.botnet < 10 || gameState.attackResources.bandwidth < 50) {
+            addLog(' Ressources insuffisantes (besoin: 10 bots, 50 Mbps)', 'error');
+            return;
+        }
+        
+        // Consommer les ressources
+        gameState.attackResources.botnet -= 10;
+        gameState.attackResources.bandwidth -= 50;
+        updateAttackResourcesDisplay();
+        
+        // Lancer l'attaque originale
+        gameState.originalAttackFunctions.startPingFlood();
+        addLog(' Ping Flood lancé (-10 bots, -50 Mbps)', 'error');
+    };
+    
+    window.startBotnetAttack = function() {
+        if (gameState.attackActive) return;
+        
+        if (gameState.attackResources.botnet < 30 || gameState.attackResources.bandwidth < 200) {
+            addLog(' Ressources insuffisantes (besoin: 30 bots, 200 Mbps)', 'error');
+            return;
+        }
+        
+        // Consommer les ressources
+        gameState.attackResources.botnet -= 30;
+        gameState.attackResources.bandwidth -= 200;
+        updateAttackResourcesDisplay();
+        
+        // Lancer l'attaque originale
+        gameState.originalAttackFunctions.startBotnetAttack();
+        addLog(' Attaque Botnet lancée (-30 bots, -200 Mbps)', 'error');
+    };
+    
+    window.startTargetedAttack = function() {
+        if (gameState.attackActive) return;
+        
+        if (gameState.attackResources.botnet < 20 || gameState.attackResources.bandwidth < 100 || gameState.attackResources.exploits < 1) {
+            addLog(' Ressources insuffisantes (besoin: 20 bots, 100 Mbps, 1 exploit)', 'error');
+            return;
+        }
+        
+        if (!gameState.selectedServer) {
+            addLog(' Sélectionnez un serveur cible', 'error');
+            return;
+        }
+        
+        // Consommer les ressources
+        gameState.attackResources.botnet -= 20;
+        gameState.attackResources.bandwidth -= 100;
+        gameState.attackResources.exploits -= 1;
+        updateAttackResourcesDisplay();
+        
+        // Lancer l'attaque originale
+        gameState.originalAttackFunctions.startTargetedAttack();
+        addLog('Attaque ciblée lancée (-20 bots, -100 Mbps, -1 exploit)', 'error');
+    };
+    
+    // Ajouter une attaque ultime
+    if (!document.getElementById('ultimateAttackBtn')) {
+        const attackPanel = document.getElementById('attackPanel');
+        if (attackPanel) {
+            const ultimateBtn = document.createElement('button');
+            ultimateBtn.id = 'ultimateAttackBtn';
+            ultimateBtn.className = 'btn attack-btn';
+            ultimateBtn.innerHTML = ' ATTAQUE ULTIME';
+            ultimateBtn.style.backgroundColor = '#660000';
+            ultimateBtn.style.borderColor = '#990000';
+            ultimateBtn.onclick = startUltimateAttack;
+            attackPanel.appendChild(ultimateBtn);
+        }
+    }
+    
+    addLog(' MODE ATTAQUE ACTIVÉ', 'warning');
+    addLog(' Objectif: Percer toutes les défenses avec vos ressources limitées', 'info');
+    addLog('Ressources: 100 bots, 1000 Mbps, 5 exploits', 'info');
+}
+
+// Fonction pour mettre à jour l'affichage des ressources
+function updateAttackResourcesDisplay() {
+    const botnetDisplay = document.getElementById('botnetDisplay');
+    const bandwidthDisplay = document.getElementById('bandwidthDisplay');
+    const exploitsDisplay = document.getElementById('exploitsDisplay');
+    
+    if (botnetDisplay) botnetDisplay.textContent = gameState.attackResources.botnet;
+    if (bandwidthDisplay) bandwidthDisplay.textContent = gameState.attackResources.bandwidth;
+    if (exploitsDisplay) exploitsDisplay.textContent = gameState.attackResources.exploits;
+    
+    // Vérifier si les ressources sont épuisées
+    if (gameState.attackResources.botnet <= 0 && gameState.attackResources.bandwidth <= 0) {
+        addLog(' RESSOURCES ÉPUISÉES - Retour au mode apprentissage', 'error');
+        setTimeout(() => {
+            resetToLearning();
+        }, 3000);
+    }
+}
+
+// Attaque ultime qui coûte toutes les ressources restantes
+function startUltimateAttack() {
+    if (gameState.attackActive) return;
+    
+    if (gameState.attackResources.botnet < 50 || gameState.attackResources.bandwidth < 500 || gameState.attackResources.exploits < 3) {
+        addLog('Ressources insuffisantes pour l\'attaque ultime (besoin: 50 bots, 500 Mbps, 3 exploits)', 'error');
+        return;
+    }
+    
+    gameState.attackActive = true;
+    document.getElementById('stopBtn').disabled = false;
+    
+    // Consommer massivement les ressources
+    gameState.attackResources.botnet -= 50;
+    gameState.attackResources.bandwidth -= 500;
+    gameState.attackResources.exploits -= 3;
+    updateAttackResourcesDisplay();
+    
+    showInfoComment(' ATTAQUE ULTIME', 
+        'Déploiement de toutes les techniques d\'attaque simultanément. ' +
+        'Utilise des exploits zero-day, du trafic massif distribué et des techniques d\'évasion avancées. ' +
+        'Cette attaque ignore 80% des défenses et cause des dégâts dévastateurs. ' +
+        'Coût: 50 bots, 500 Mbps, 3 exploits. Durée: 20 secondes.');
+    
+    addLog(' ATTAQUE ULTIME DÉCLENCHÉE - TOUS LES SYSTÈMES SOUS STRESS MAXIMAL', 'error');
+    
+    attackInterval = setInterval(() => {
+        Object.keys(gameState.servers).forEach(serverId => {
+            // Attaque qui ignore la plupart des défenses 
+            attackServerUltimate(serverId, 8); 
+        });
+    }, 100);
+    
+    setTimeout(() => { 
+        stopAttack(); 
+        addLog(' Attaque ultime terminée - Infrastructure critique', 'error'); 
+    }, 20000); 
+} 
+
+// Fonction d'attaque ultime
+function attackServerUltimate(serverId, intensity) {
+    const server = gameState.servers[serverId];
+    if (!server || server.health <= 0) return;
+    
+    let damage = intensity * 3;
+    let blocked = false;
+    
+    // L'attaque ultime ignore 80% des défenses 
+    if (gameState.defenses.firewall && Math.random() > 0.8) {
+        if (Math.random() < 0.4) { 
+            blocked = true; 
+            damage = 0; 
+        }
+    }
+    
+    if (gameState.defenses.reverseProxy && !blocked && Math.random() > 0.8) { 
+        damage *= 0.4;
+    }
+    
+    if (gameState.defenses.rateLimiting && !blocked && Math.random() > 0.8) {
+        damage *= 0.7;
+    }
+    
+    if (gameState.defenses.infrastructure && !blocked && Math.random() > 0.5) {
+        damage *= 0.3;
+    }
+    
+    if (!blocked) {
+        server.health = Math.max(0, server.health - damage);
+        updateServerVisual(serverId);
+        
+        if (server.health <= 0) {
+            gameState.activeServers--;
+            addLog(` ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
+        }
+    }
+    
+    createAttackPackets(serverId, blocked);  
+    updateGlobalHealth();  
+    updateUI();  
+    
+    // Vérifier la victoire de l'attaquant
+    if (gameState.health <= 10) { 
+        addLog(' VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');  
+        setTimeout(() => {  
+            resetToLearning();  
+        }, 3000);  
+    }
+}
+
+// Modifier la fonction resetToLearning pour restaurer les fonctions originales
+const originalResetToLearning = resetToLearning; 
+resetToLearning = function() { 
+    // Restaurer les fonctions d'attaque originales si elles existent
+    if (gameState.originalAttackFunctions) {  
+        window.startPingFlood = gameState.originalAttackFunctions.startPingFlood;  
+        window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack;  
+        window.startTargetedAttack = gameState.originalAttackFunctions.startTargetedAttack;  
+        delete gameState.originalAttackFunctions;  
+    }
+    
+    // Supprimer l'affichage des ressources d'attaque 
+    const attackResourcesDisplay = document.getElementById('attackResourcesDisplay');  
+    if (attackResourcesDisplay) {  
+        attackResourcesDisplay.remove();  
+    }
+    
+    // Supprimer le bouton d'attaque ultime
+    const ultimateBtn = document.getElementById('ultimateAttackBtn'); 
+    if (ultimateBtn) { 
+        ultimateBtn.remove(); 
+    }
+    
+    // Restaurer l'interface
+    document.getElementById('phaseIndicator').classList.remove('attack-mode'); 
+    document.getElementById('phaseIndicator').style.backgroundColor = ''; 
+    document.getElementById('phaseIndicator').style.color = ''; 
+    
+    const defensePanel = document.querySelector('.defense-panel');
+    if (defensePanel) {
+        defensePanel.style.opacity = '';
+        defensePanel.style.pointerEvents = '';
+    }
+    
+    // Appeler la fonction de reset originale
+    originalResetToLearning(); 
+};
+        // Initialisation finale
+        updateUI();
     </script>
 </body>
 </html>
