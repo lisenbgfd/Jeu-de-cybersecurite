@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDoS Defense Simulator - Multi-Modes</title>
     <style>
+
+.attack-badge {
+    position: absolute;
+    top: -30px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #ff0000, #cc0000);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    animation: attackBlink 1s infinite;
+    z-index: 10;
+}
+
+@keyframes attackBlink {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
         * {
             margin: 0;
             padding: 0;
@@ -1177,6 +1198,47 @@
                 gameArea.style.cursor = 'grab';
             });
         }
+
+        function updateServerDefenseBadges(serverId, defenses) {
+    const server = document.getElementById(serverId);
+    let defensesDiv = server.querySelector('.server-defenses');
+    
+    if (!defensesDiv) {
+        defensesDiv = document.createElement('div');
+        defensesDiv.className = 'server-defenses';
+        server.appendChild(defensesDiv);
+    }
+    
+    defensesDiv.innerHTML = '';
+    
+    defenses.forEach(defense => {
+        const badge = document.createElement('div');
+        badge.className = `defense-icon ${defense.type}`;
+        badge.textContent = defense.symbol;
+        badge.title = defense.name;
+        defensesDiv.appendChild(badge);
+    });
+}
+function addAttackBadge(serverId, attackType) {
+    const server = document.getElementById(serverId);
+    let attackBadge = server.querySelector('.attack-badge');
+    
+    if (!attackBadge) {
+        attackBadge = document.createElement('div');
+        attackBadge.className = 'attack-badge';
+        server.appendChild(attackBadge);
+    }
+    
+    const badges = {
+        'ping-flood': '⚡',
+        'botnet': '🤖',
+        'targeted': '🎯',
+        'advanced': '💀'
+    };
+    
+    attackBadge.textContent = badges[attackType] || '⚠';
+    attackBadge.style.display = 'block';
+}
 
         function generateChallengeWaves() {
             challengeWaves = [
