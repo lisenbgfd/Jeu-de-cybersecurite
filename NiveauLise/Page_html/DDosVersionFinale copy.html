@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDoS Defense Simulator - Multi-Modes</title>
     <style>
+
+.attack-badge {
+    position: absolute;
+    top: -30px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #ff0000, #cc0000);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    animation: attackBlink 1s infinite;
+    z-index: 10;
+}
+
+@keyframes attackBlink {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
         * {
             margin: 0;
             padding: 0;
@@ -89,23 +111,23 @@
         }
 
         .wave-announcement {
-    position: absolute;
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    background: rgba(255, 0, 0, 0.95); 
-    border: 3px solid #ff0000; 
-    border-radius: 20px;
-    padding: 30px; 
-    z-index: 1002; 
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    opacity: 0;
-    display: none; 
-    animation: waveAlert 3s ease-in-out;
-    pointer-events: none;
-}
+            position: absolute;
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: rgba(255, 0, 0, 0.95); 
+            border: 3px solid #ff0000; 
+            border-radius: 20px;
+            padding: 30px; 
+            z-index: 1002; 
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            display: none; 
+            animation: waveAlert 3s ease-in-out;
+            pointer-events: none;
+        }
 
         @keyframes waveAlert { 
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } 
@@ -414,6 +436,61 @@
             box-shadow: 0 0 30px rgba(153, 0, 0, 0.8); 
         }
 
+        /* Icônes de défense sur les serveurs */
+        .server-defenses {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            pointer-events: none;
+        }
+
+        .defense-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            animation: defenseGlow 2s infinite;
+        }
+
+        .defense-icon.firewall {
+            background: linear-gradient(45deg, #ff6600, #cc4400);
+            box-shadow: 0 0 8px rgba(255, 102, 0, 0.6);
+        }
+
+        .defense-icon.proxy {
+            background: linear-gradient(45deg, #0088ff, #0066cc);
+            box-shadow: 0 0 8px rgba(0, 136, 255, 0.6);
+        }
+
+        .defense-icon.rate-limit {
+            background: linear-gradient(45deg, #8800ff, #6600cc);
+            box-shadow: 0 0 8px rgba(136, 0, 255, 0.6);
+        }
+
+        .defense-icon.infrastructure {
+            background: linear-gradient(45deg, #00ffaa, #00cc88);
+            box-shadow: 0 0 8px rgba(0, 255, 170, 0.6);
+        }
+
+        .defense-icon.redundancy {
+            background: linear-gradient(45deg, #ffaa00, #cc8800);
+            box-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+        }
+
+        @keyframes defenseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
         @keyframes shake {
             0%, 100% { transform: rotate(0deg); } 
             25% { transform: rotate(1deg); } 
@@ -482,25 +559,86 @@
             50% { transform: scale(1.3); }
         }
 
+        /* Différents types d'attaques visuelles */
         .packet {
             position: absolute; 
             width: 6px; 
             height: 6px; 
-            background: radial-gradient(circle, #ff0000, #cc0000); 
             border-radius: 50%;  
-            box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);  
             transition: all 0.1s linear;  
             pointer-events: none;  
         }
 
-        .packet.blocked { 
-            background: radial-gradient(circle, #666666, #333333);  
-            box-shadow: 0 0 4px rgba(102, 102, 102, 0.6);  
+        /* Ping Flood - petits points rouges rapides */
+        .packet.ping-flood {
+            background: radial-gradient(circle, #ff4444, #cc0000); 
+            box-shadow: 0 0 6px rgba(255, 68, 68, 0.8);
+            width: 4px;
+            height: 4px;
         }
 
-        .packet.advanced { 
-            background: radial-gradient(circle, #ff00ff, #cc00cc);  
-            box-shadow: 0 0 8px rgba(255, 0, 255, 0.8);  
+        /* Botnet Attack - points violets plus gros */
+        .packet.botnet {
+            background: radial-gradient(circle, #ff00ff, #cc00cc); 
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.9);
+            width: 8px;
+            height: 8px;
+            animation: botnetPulse 0.5s infinite;
+        }
+
+        @keyframes botnetPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Attaque ciblée - forme triangulaire orange */
+        .packet.targeted {
+            background: linear-gradient(45deg, #ff6600, #cc4400);
+            box-shadow: 0 0 12px rgba(255, 102, 0, 1);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 8px solid #ff6600;
+            border-radius: 0;
+            animation: targetedSpin 1s linear infinite;
+        }
+
+        @keyframes targetedSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Attaque avancée - étoile jaune */
+        .packet.advanced {
+            background: radial-gradient(circle, #ffff00, #cccc00);
+            box-shadow: 0 0 15px rgba(255, 255, 0, 1);
+            width: 10px;
+            height: 10px;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: advancedGlow 0.3s infinite;
+        }
+
+        @keyframes advancedGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Paquets bloqués - gris avec X */
+        .packet.blocked { 
+            background: radial-gradient(circle, #666666, #333333);  
+            box-shadow: 0 0 4px rgba(102, 102, 102, 0.6);
+            opacity: 0.5;
+        }
+
+        .packet.blocked::after {
+            content: '×';
+            color: white;
+            font-size: 6px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .health-bar { 
@@ -705,7 +843,7 @@
             background: rgba(255, 0, 0, 0.2); 
             border: 1px solid rgba(255, 0, 0, 0.4); 
             border-radius: 8px;
-            padding: 8px;  ;
+            padding: 8px;
             margin: 8px 0; 
             font-size: 10px;  
         }
@@ -1060,6 +1198,47 @@
                 gameArea.style.cursor = 'grab';
             });
         }
+
+        function updateServerDefenseBadges(serverId, defenses) {
+    const server = document.getElementById(serverId);
+    let defensesDiv = server.querySelector('.server-defenses');
+    
+    if (!defensesDiv) {
+        defensesDiv = document.createElement('div');
+        defensesDiv.className = 'server-defenses';
+        server.appendChild(defensesDiv);
+    }
+    
+    defensesDiv.innerHTML = '';
+    
+    defenses.forEach(defense => {
+        const badge = document.createElement('div');
+        badge.className = `defense-icon ${defense.type}`;
+        badge.textContent = defense.symbol;
+        badge.title = defense.name;
+        defensesDiv.appendChild(badge);
+    });
+}
+function addAttackBadge(serverId, attackType) {
+    const server = document.getElementById(serverId);
+    let attackBadge = server.querySelector('.attack-badge');
+    
+    if (!attackBadge) {
+        attackBadge = document.createElement('div');
+        attackBadge.className = 'attack-badge';
+        server.appendChild(attackBadge);
+    }
+    
+    const badges = {
+        'ping-flood': '⚡',
+        'botnet': '🤖',
+        'targeted': '🎯',
+        'advanced': '💀'
+    };
+    
+    attackBadge.textContent = badges[attackType] || '⚠';
+    attackBadge.style.display = 'block';
+}
 
         function generateChallengeWaves() {
             challengeWaves = [

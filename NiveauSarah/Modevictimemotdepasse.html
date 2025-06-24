@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Sécurité - Création de Mot de Passe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #121212;
+            color: white;
+            overflow: hidden;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .screen.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .intro-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .highlight {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: #ffffff;
+            color: #121212;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .password-creation-screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .password-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .website-header {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #4CAF50;
+        }
+
+        .instruction {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .password-input-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .password-input:focus {
+            border-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .password-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .toggle-visibility {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .security-indicator {
+            margin-bottom: 2rem;
+        }
+
+        .security-level {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .security-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .security-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .security-weak .security-fill {
+            width: 25%;
+            background: #f44336;
+        }
+
+        .security-medium .security-fill {
+            width: 60%;
+            background: #ff9800;
+        }
+
+        .security-strong .security-fill {
+            width: 85%;
+            background: #4CAF50;
+        }
+
+        .security-very-strong .security-fill {
+            width: 100%;
+            background: #2196F3;
+        }
+
+        .security-details {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .hint-box {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            color: #ffc107;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .hint-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .create-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .create-btn.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .create-btn:hover.enabled {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .success-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 2rem;
+            color: #4CAF50;
+        }
+
+        .success-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #4CAF50;
+        }
+
+        .stats-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        .memory-test-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .memory-icon {
+            font-size: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .memory-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .memory-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .memory-input:focus {
+            border-color: #ff9800;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .memory-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .check-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #f57c00;
+            transform: translateY(-2px);
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #4CAF50;
+        }
+
+        .result-failure {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            color: #f44336;
+        }
+
+        .final-screen {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .final-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .tips-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+
+        .tip-item {
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .password-container, .stats-container, .tips-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .intro-text, .memory-text, .final-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Écran d'introduction -->
+    <div class="screen intro-screen active" id="introScreen">
+        <div class="intro-text">
+            Tu es <span class="highlight">Élodie Sinclair</span>. Tu viens de créer un compte sur un nouveau site web et tu dois maintenant choisir un mot de passe sécurisé pour protéger tes données personnelles.<br><br>
+            Ton objectif : créer le mot de passe le plus sûr possible !
+        </div>
+        <button class="btn" onclick="startGame()">Commencer</button>
+    </div>
+
+    <!-- Écran de création de mot de passe -->
+    <div class="screen password-creation-screen" id="passwordScreen">
+        <div class="password-container">
+            <div class="website-header">🔐 Instagram </div>
+            <div class="instruction">Créez un mot de passe pour votre nouveau compte</div>
+            
+            <div class="password-input-container">
+                <input type="password" class="password-input" id="passwordInput" placeholder="Tapez votre mot de passe..." oninput="checkPassword()">
+                <button class="toggle-visibility" onclick="toggleVisibility()">👁️</button>
+            </div>
+            
+            <div class="security-indicator" id="securityIndicator">
+                <div class="security-level" id="securityLevel">Niveau de sécurité : Faible</div>
+                <div class="security-bar security-weak" id="securityBar">
+                    <div class="security-fill"></div>
+                </div>
+                <div class="security-details" id="securityDetails">
+                    • Trop court (minimum 8 caractères)<br>
+                    • Ajoutez des lettres majuscules<br>
+                    • Ajoutez des chiffres<br>
+                    • Ajoutez des symboles (!@#$%^&*)
+                </div>
+            </div>
+            
+            <div class="hint-box" id="hintBox">
+                💡 Astuce : Mélangez majuscules, minuscules, chiffres et symboles !
+            </div>
+            
+            <button class="create-btn" id="createBtn" onclick="createAccount()">Créer le compte</button>
+        </div>
+    </div>
+
+    <!-- Écran de succès -->
+    <div class="screen success-screen" id="successScreen">
+        <div class="success-icon">🎉</div>
+        <div class="success-text">Excellent ! Mot de passe très sécurisé !</div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-label">Temps pour le pirater (brute force) :</span>
+                <span class="stat-value" id="hackTime">plusieurs milliards d'années</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Combinaisons possibles :</span>
+                <span class="stat-value" id="combinations">10^15+</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Résistance aux attaques :</span>
+                <span class="stat-value">Très élevée</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Sécurité globale :</span>
+                <span class="stat-value">Excellente</span>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="proceedToTest()">Continuer</button>
+    </div>
+
+    <!-- Écran de test de mémoire -->
+    <div class="screen memory-test-screen" id="memoryScreen">
+        <div class="memory-icon">🧠</div>
+        <div class="memory-text">
+            Parfait ! Ton compte a été créé avec succès.<br><br>
+            <strong>Une semaine plus tard...</strong><br><br>
+            Tu reviens sur le site. Peux-tu te souvenir de ton mot de passe ?
+        </div>
+        
+        <input type="password" class="memory-input" id="memoryInput" placeholder="Retapez votre mot de passe...">
+        <br>
+        <button class="check-btn" onclick="checkMemory()">Vérifier</button>
+        
+        <div class="result-message" id="resultMessage" style="display: none;"></div>
+        
+        <button class="btn" onclick="showFinal()" style="display: none; margin-top: 2rem;" id="finalBtn">Voir les conclusions</button>
+    </div>
+
+    <!-- Écran final -->
+    <div class="screen final-screen" id="finalScreen">
+        <div class="final-text">
+            <strong>Le dilemme de la sécurité :</strong><br><br>
+            Un mot de passe très sécurisé te protège contre le piratage, mais il est aussi plus difficile à retenir. 
+            C'est le défi constant de la cybersécurité !<br><br>
+            <span id="finalMessage"></span>
+        </div>
+        
+        <div class="tips-container">
+            <h3 style="text-align: center; margin-bottom: 1rem; color: #4CAF50;">💡 Conseils pour bien gérer tes mots de passe :</h3>
+            <div class="tip-item">🔑 Utilise un gestionnaire de mots de passe (comme Bitwarden, 1Password)</div>
+            <div class="tip-item">🎯 Crée des phrases de passe mémorables : "J'adore2Chocolats!2024"</div>
+            <div class="tip-item">🔄 Active l'authentification à deux facteurs quand c'est possible</div>
+            <div class="tip-item">❌ Ne réutilise jamais le même mot de passe sur plusieurs sites</div>
+            <div class="tip-item">📱 Utilise la reconnaissance biométrique quand disponible</div>
+        </div>
+        
+        <button class="btn" onclick="restartGame()">Recommencer</button>
+    </div>
+
+    <script>
+        let userPassword = '';
+        let hintShown = false;
+        let hintTimeout;
+
+        function startGame() {
+            document.getElementById('introScreen').classList.remove('active');
+            document.getElementById('passwordScreen').classList.add('active');
+            
+            // Afficher l'indice après 10 secondes
+            hintTimeout = setTimeout(() => {
+                if (!hintShown) {
+                    document.getElementById('hintBox').classList.add('show');
+                    hintShown = true;
+                }
+            }, 10000);
+        }
+
+        function toggleVisibility() {
+            const input = document.getElementById('passwordInput');
+            const button = document.querySelector('.toggle-visibility');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const securityLevel = document.getElementById('securityLevel');
+            const securityBar = document.getElementById('securityBar');
+            const securityDetails = document.getElementById('securityDetails');
+            const createBtn = document.getElementById('createBtn');
+            
+            let score = 0;
+            let issues = [];
+            let strengths = [];
+            
+            // Vérifications
+            if (password.length < 8) {
+                issues.push('• Trop court (minimum 8 caractères)');
+            } else if (password.length >= 12) {
+                score += 2;
+                strengths.push('• Longueur suffisante');
+            } else {
+                score += 1;
+                strengths.push('• Longueur correcte');
+            }
+            
+            if (!/[a-z]/.test(password)) {
+                issues.push('• Ajoutez des lettres minuscules');
+            } else {
+                score += 1;
+                strengths.push('• Contient des minuscules');
+            }
+            
+            if (!/[A-Z]/.test(password)) {
+                issues.push('• Ajoutez des lettres majuscules');
+            } else {
+                score += 1;
+                strengths.push('• Contient des majuscules');
+            }
+            
+            if (!/[0-9]/.test(password)) {
+                issues.push('• Ajoutez des chiffres');
+            } else {
+                score += 1;
+                strengths.push('• Contient des chiffres');
+            }
+            
+            if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+                issues.push('• Ajoutez des symboles (!@#$%^&*)');
+            } else {
+                score += 2;
+                strengths.push('• Contient des symboles');
+            }
+            
+            // Vérifier les motifs faibles
+            if (/(.)\1{2,}/.test(password)) {
+                issues.push('• Évitez les caractères répétés');
+            }
+            if (/123|abc|qwerty|password|azerty/i.test(password)) {
+                issues.push('• Évitez les séquences communes');
+                score -= 2;
+            }
+            
+            // Déterminer le niveau
+            let level, className;
+            if (score <= 2) {
+                level = 'Faible';
+                className = 'security-weak';
+            } else if (score <= 4) {
+                level = 'Moyen';
+                className = 'security-medium';
+            } else if (score <= 6) {
+                level = 'Fort';
+                className = 'security-strong';
+            } else {
+                level = 'Très fort';
+                className = 'security-very-strong';
+            }
+            
+            // Mettre à jour l'interface
+            securityLevel.textContent = `Niveau de sécurité : ${level}`;
+            securityBar.className = `security-bar ${className}`;
+            
+            let details = '';
+            if (issues.length > 0) {
+                details += issues.join('<br>');
+            }
+            if (strengths.length > 0) {
+                if (details) details += '<br><br>';
+                details += '<span style="color: #4CAF50;">' + strengths.join('<br>') + '</span>';
+            }
+            securityDetails.innerHTML = details;
+            
+            // Activer le bouton si le mot de passe est fort
+            if (score >= 5) {
+                createBtn.classList.add('enabled');
+                userPassword = password;
+            } else {
+                createBtn.classList.remove('enabled');
+            }
+            
+            // Afficher l'indice si nécessaire
+            if (password.length > 3 && score < 3 && !hintShown) {
+                clearTimeout(hintTimeout);
+                document.getElementById('hintBox').classList.add('show');
+                hintShown = true;
+            }
+        }
+
+        function createAccount() {
+            if (document.getElementById('createBtn').classList.contains('enabled')) {
+                // Calculer les statistiques
+                const password = userPassword;
+                let charset = 0;
+                if (/[a-z]/.test(password)) charset += 26;
+                if (/[A-Z]/.test(password)) charset += 26;
+                if (/[0-9]/.test(password)) charset += 10;
+                if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) charset += 32;
+                
+                const combinations = Math.pow(charset, password.length);
+                const attemptsPerSecond = 1000000000; // 1 milliard
+                const secondsToHack = combinations / (2 * attemptsPerSecond);
+                
+                let hackTime;
+                if (secondsToHack > 31536000000) { // Plus d'un millénaire
+                    hackTime = "plusieurs milliards d'années";
+                } else if (secondsToHack > 31536000) { // Plus d'un an
+                    hackTime = Math.round(secondsToHack / 31536000) + " années";
+                } else if (secondsToHack > 86400) { // Plus d'un jour
+                    hackTime = Math.round(secondsToHack / 86400) + " jours";
+                } else {
+                    hackTime = "moins d'un jour";
+                }
+                
+                document.getElementById('hackTime').textContent = hackTime;
+                document.getElementById('combinations').textContent = combinations.toExponential(2);
+                
+                document.getElementById('passwordScreen').classList.remove('active');
+                document.getElementById('successScreen').classList.add('active');
+            }
+        }
+
+        function proceedToTest() {
+            document.getElementById('successScreen').classList.remove('active');
+            document.getElementById('memoryScreen').classList.add('active');
+        }
+
+        function checkMemory() {
+            const userInput = document.getElementById('memoryInput').value;
+            const resultMessage = document.getElementById('resultMessage');
+            const finalBtn = document.getElementById('finalBtn');
+            
+            if (userInput === userPassword) {
+                resultMessage.className = 'result-message result-success';
+                resultMessage.textContent = '✅ Bravo ! Tu as retenu ton mot de passe !';
+                document.getElementById('finalMessage').innerHTML = 
+                    'Félicitations ! Tu as réussi à créer un mot de passe sécurisé ET à t\'en souvenir. ' +
+                    'C\'est rare et cela montre que tu as trouvé le bon équilibre entre sécurité et mémorisation.';
+            } else {
+                resultMessage.className = 'result-message result-failure';
+                resultMessage.textContent = '❌ Ce n\'est pas le bon mot de passe...';
+                document.getElementById('finalMessage').innerHTML = 
+                    'C\'est normal ! Même si tu as créé un mot de passe très sécurisé, il est difficile à retenir. ' +
+                    'C\'est exactement le problème que rencontrent des millions d\'utilisateurs chaque jour.';
+            }
+            
+            resultMessage.style.display = 'flex';
+            finalBtn.style.display = 'block';
+        }
+
+        function showFinal() {
+            document.getElementById('memoryScreen').classList.remove('active');
+            document.getElementById('finalScreen').classList.add('active');
+        }
+
+        function restartGame() {
+            // Réinitialiser toutes les variables
+            userPassword = '';
+            hintShown = false;
+            clearTimeout(hintTimeout);
+            
+            // Réinitialiser l'interface
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('memoryInput').value = '';
+            document.getElementById('passwordInput').type = 'password';
+            document.querySelector('.toggle-visibility').textContent = '👁️';
+            document.getElementById('hintBox').classList.remove('show');
+            document.getElementById('createBtn').classList.remove('enabled');
+            document.getElementById('resultMessage').style.display = 'none';
+            document.getElementById('finalBtn').style.display = 'none';
+            
+            // Réinitialiser l'indicateur de sécurité
+            document.getElementById('securityLevel').textContent = 'Niveau de sécurité : Faible';
+            document.getElementById('securityBar').className = 'security-bar security-weak';
+            document.getElementById('securityDetails').innerHTML = 
+                '• Trop court (minimum 8 caractères)<br>' +
+                '• Ajoutez des lettres majuscules<br>' +
+                '• Ajoutez des chiffres<br>' +
+                '• Ajoutez des symboles (!@#$%^&*)';
+            
+            // Retour à l'écran d'intro
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById('introScreen').classList.add('active');
+        }
+    </script>
+</body>
+</html>
