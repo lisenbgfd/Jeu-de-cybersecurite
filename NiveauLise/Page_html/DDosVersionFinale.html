@@ -483,17 +483,17 @@
         }
 
         .packet {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: radial-gradient(circle, #ff0000, #cc0000);
-            border-radius: 50%; 
-            box-shadow: 0 0 6px rgba(255, 0, 0, 0.6); 
-            transition: all 0.1s linear; 
-            pointer-events: none; 
+            position: absolute; 
+            width: 6px; 
+            height: 6px; 
+            background: radial-gradient(circle, #ff0000, #cc0000); 
+            border-radius: 50%;  
+            box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);  
+            transition: all 0.1s linear;  
+            pointer-events: none;  
         }
 
-        .packet.blocked {
+        .packet.blocked { 
             background: radial-gradient(circle, #666666, #333333); 
             box-shadow: 0 0 4px rgba(102, 102, 102, 0.6); 
         }
@@ -2100,16 +2100,16 @@ function startUltimateAttack() {
     
     attackInterval = setInterval(() => {
         Object.keys(gameState.servers).forEach(serverId => {
-            // Attaque qui ignore la plupart des défenses
-            attackServerUltimate(serverId, 8);
+            // Attaque qui ignore la plupart des défenses 
+            attackServerUltimate(serverId, 8); 
         });
     }, 100);
     
-    setTimeout(() => {
-        stopAttack();
-        addLog(' Attaque ultime terminée - Infrastructure critique', 'error');
-    }, 20000);
-}
+    setTimeout(() => { 
+        stopAttack(); 
+        addLog(' Attaque ultime terminée - Infrastructure critique', 'error'); 
+    }, 20000); 
+} 
 
 // Fonction d'attaque ultime
 function attackServerUltimate(serverId, intensity) {
@@ -2119,15 +2119,15 @@ function attackServerUltimate(serverId, intensity) {
     let damage = intensity * 3;
     let blocked = false;
     
-    // L'attaque ultime ignore 80% des défenses
+    // L'attaque ultime ignore 80% des défenses 
     if (gameState.defenses.firewall && Math.random() > 0.8) {
-        if (Math.random() < 0.4) {
-            blocked = true;
-            damage = 0;
+        if (Math.random() < 0.4) { 
+            blocked = true; 
+            damage = 0; 
         }
     }
     
-    if (gameState.defenses.reverseProxy && !blocked && Math.random() > 0.8) {
+    if (gameState.defenses.reverseProxy && !blocked && Math.random() > 0.8) { 
         damage *= 0.4;
     }
     
@@ -2149,34 +2149,34 @@ function attackServerUltimate(serverId, intensity) {
         }
     }
     
-    createAttackPackets(serverId, blocked); 
-    updateGlobalHealth(); 
-    updateUI(); 
+    createAttackPackets(serverId, blocked);  
+    updateGlobalHealth();  
+    updateUI();  
     
     // Vérifier la victoire de l'attaquant
-    if (gameState.health <= 10) {
-        addLog(' VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error'); 
-        setTimeout(() => { 
-            resetToLearning(); 
-        }, 3000); 
+    if (gameState.health <= 10) { 
+        addLog(' VICTOIRE DE L\'ATTAQUANT - Infrastructure compromise', 'error');  
+        setTimeout(() => {  
+            resetToLearning();  
+        }, 3000);  
     }
 }
 
 // Modifier la fonction resetToLearning pour restaurer les fonctions originales
-const originalResetToLearning = resetToLearning;
-resetToLearning = function() {
+const originalResetToLearning = resetToLearning; 
+resetToLearning = function() { 
     // Restaurer les fonctions d'attaque originales si elles existent
-    if (gameState.originalAttackFunctions) { 
-        window.startPingFlood = gameState.originalAttackFunctions.startPingFlood; 
-        window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack; 
-        window.startTargetedAttack = gameState.originalAttackFunctions.startTargetedAttack; 
-        delete gameState.originalAttackFunctions; 
+    if (gameState.originalAttackFunctions) {  
+        window.startPingFlood = gameState.originalAttackFunctions.startPingFlood;  
+        window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack;  
+        window.startTargetedAttack = gameState.originalAttackFunctions.startTargetedAttack;  
+        delete gameState.originalAttackFunctions;  
     }
     
-    // Supprimer l'affichage des ressources d'attaque
-    const attackResourcesDisplay = document.getElementById('attackResourcesDisplay'); 
-    if (attackResourcesDisplay) { 
-        attackResourcesDisplay.remove(); 
+    // Supprimer l'affichage des ressources d'attaque 
+    const attackResourcesDisplay = document.getElementById('attackResourcesDisplay');  
+    if (attackResourcesDisplay) {  
+        attackResourcesDisplay.remove();  
     }
     
     // Supprimer le bouton d'attaque ultime
