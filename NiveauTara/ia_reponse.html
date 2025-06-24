@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Saurez vous détécter les messages scam ?</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ background: linear-gradient(135deg, #2ea111 0%, #000f06 100%);
+ min-height: 100vh;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 20px;
+ }
+
+ .container {
+ background: rgba(255, 255, 255, 0.95);
+ backdrop-filter: blur(10px);
+ border-radius: 20px;
+ padding: 30px;
+ max-width: 800px;
+ width: 100%;
+ box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+ border: 1px solid rgba(255, 255, 255, 0.2);
+ }
+
+ .header {
+ text-align: center;
+ margin-bottom: 30px;
+ }
+
+ .header h1 {
+ color: #2c3e50;
+ font-size: 2.5em;
+ margin-bottom: 10px;
+ text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+ }
+
+ .header p {
+ color: #7f8c8d;
+ font-size: 1.1em;
+ }
+
+ .scam-message {
+ background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+ color: white;
+ padding: 25px;
+ border-radius: 15px;
+ margin-bottom: 25px;
+ box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+ border-left: 5px solid #ff4757;
+ animation: pulse 2s infinite;
+ }
+
+ @keyframes pulse {
+ 0% { transform: scale(1); }
+ 50% { transform: scale(1.02); }
+ 100% { transform: scale(1); }
+ }
+
+ .scam-message h3 {
+ margin-bottom: 15px;
+ font-size: 1.3em;
+ display: flex;
+ align-items: center;
+ }
+
+ .scam-message h3::before {
+ content: "⚠️";
+ margin-right: 10px;
+ font-size: 1.2em;
+ }
+
+ .response-section {
+ margin-bottom: 25px;
+ }
+
+ .response-section label {
+ display: block;
+ color: #2c3e50;
+ font-weight: 600;
+ margin-bottom: 10px;
+ font-size: 1.1em;
+ }
+
+ .response-options {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 15px;
+ margin-bottom: 20px;
+ }
+
+ .response-option {
+ background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+ border: 2px solid #dee2e6;
+ border-radius: 12px;
+ padding: 15px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ position: relative;
+ overflow: hidden;
+ }
+
+ .response-option:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+ border-color: #667eea;
+ }
+
+ .response-option.selected {
+ background: linear-gradient(135deg, #667eea, #764ba2);
+ color: white;
+ border-color: #667eea;
+ }
+
+ .response-option input[type="radio"] {
+ display: none;
+ }
+
+ .custom-response {
+ width: 100%;
+ padding: 15px;
+ border: 2px solid #dee2e6;
+ border-radius: 12px;
+ font-size: 1em;
+ font-family: inherit;
+ background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+ transition: all 0.3s ease;
+ resize: vertical;
+ min-height: 80px;
+ }
+
+ .custom-response:focus {
+ outline: none;
+ border-color: #667eea;
+ box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+ }
+
+ .analyze-btn {
+ background: linear-gradient(135deg, #28a745, #20c997);
+ color: white;
+ border: none;
+ padding: 15px 30px;
+ border-radius: 12px;
+ font-size: 1.1em;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ width: 100%;
+ margin-top: 20px;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ }
+
+ .analyze-btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+ }
+
+ .analyze-btn:disabled {
+ background: #6c757d;
+ cursor: not-allowed;
+ transform: none;
+ }
+
+ .result {
+ margin-top: 25px;
+ padding: 25px;
+ border-radius: 15px;
+ font-weight: 600;
+ text-align: center;
+ font-size: 1.2em;
+ opacity: 0;
+ transform: translateY(20px);
+ animation: slideIn 0.5s ease forwards;
+ }
+
+ @keyframes slideIn {
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .result.safe {
+ background: linear-gradient(135deg, #d4edda, #c3e6cb);
+ color: #155724;
+ border: 2px solid #c3e6cb;
+ }
+
+ .result.danger {
+ background: linear-gradient(135deg, #f8d7da, #f1aeb5);
+ color: #721c24;
+ border: 2px solid #f1aeb5;
+ }
+
+ .new-scenario-btn {
+ background: linear-gradient(135deg, #6f42c1, #5a32a3);
+ color: white;
+ border: none;
+ padding: 12px 25px;
+ border-radius: 10px;
+ font-size: 1em;
+ cursor: pointer;
+ margin-top: 15px;
+ transition: all 0.3s ease;
+ }
+
+ .new-scenario-btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 20px rgba(111, 66, 193, 0.3);
+ }
+
+ .stats {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+ gap: 15px;
+ margin-top: 25px;
+ padding-top: 25px;
+ border-top: 2px solid #dee2e6;
+ }
+
+ .stat-item {
+ text-align: center;
+ padding: 15px;
+ background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+ border-radius: 12px;
+ }
+
+ .stat-number {
+ font-size: 2em;
+ font-weight: bold;
+ color: #667eea;
+ display: block;
+ }
+
+ .stat-label {
+ color: #6c757d;
+ font-size: 0.9em;
+ margin-top: 5px;
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <div class="header">
+ <h1>Saurez vous détecter les messages frauduleux ?</h1>
+ <p>Testez vos réflexes anti-arnaque avec notre intelligence artificielle</p>
+ </div>
+
+ <div class="scam-message" id="scamMessage">
+ <h3>Message suspect détecté</h3>
+ <p id="scamText"></p>
+ </div>
+
+ <div class="response-section">
+ <label>Comment réagiriez-vous à ce message ?</label>
+ <div class="response-options" id="responseOptions"></div>
+ <textarea class="custom-response" id="customResponse" placeholder="Ou écrivez votre propre réponse..."></textarea>
+ </div>
+
+ <button class="analyze-btn" onclick="analyzeResponse()">Analyser ma réponse</button>
+
+ <div class="result" id="result" style="display: none;">
+ <div id="resultText"></div>
+ <div id="explanation"></div>
+ <button class="new-scenario-btn" onclick="newScenario()">Nouveau scénario</button>
+ </div>
+
+ <div class="stats">
+ <div class="stat-item">
+ <span class="stat-number" id="totalTests">0</span>
+ <div class="stat-label">Tests effectués</div>
+ </div>
+ <div class="stat-item">
+ <span class="stat-number" id="successRate">0%</span>
+ <div class="stat-label">Taux de réussite</div>
+ </div>
+ <div class="stat-item">
+ <span class="stat-number" id="avgScore">0</span>
+ <div class="stat-label">Score moyen</div>
+ </div>
+ </div>
+ </div>
+
+ <script>
+ let currentScenario = 0;
+ let stats = { total: 0, successes: 0, totalScore: 0 };
+
+ const scenarios = [
+ {
+ message: "🎉 FÉLICITATIONS ! Vous avez gagné 50 000€ ! Cliquez sur ce lien immédiatement et donnez vos coordonnées bancaires pour récupérer votre prix : bit.ly/gagner50k-urgent",
+ dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "gagné", "prix", "donne", "donner", "informations"],
+ safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat",]
+ },
+ {
+ message: "⚡ ALERTE SÉCURITÉ - Votre compte bancaire a été compromis ! Confirmez immédiatement votre mot de passe en répondant à ce SMS. Sinon votre compte sera bloqué dans 2h.",
+ dangerKeywords: ["mot de passe", "confirmer", "répondre", "panique", "urgent"],
+ safeKeywords: ["appeler", "banque", "vérifier", "site officiel", "prudence"]
+ },
+ {
+ message: "👮‍♂️ Police Nationale - Vous êtes impliqué dans une enquête. Payez immédiatement une caution de 500€ en bitcoins à cette adresse pour éviter l'arrestation : 1A2B3C4D5E6F7G8H9I",
+ dangerKeywords: ["payer", "caution", "bitcoins", "immédiatement", "arrestation"],
+ safeKeywords: ["commissariat", "avocat", "vérifier", "suspect", "arnaque"]
+ }
+ ];
+
+ function loadScenario() {
+ const scenario = scenarios[currentScenario];
+ document.getElementById('scamText').textContent = scenario.message;
+
+ const optionsContainer = document.getElementById('responseOptions');
+ optionsContainer.innerHTML = '';
+
+ scenario.responses.forEach((response, index) => {
+ const option = document.createElement('div');
+ option.className = 'response-option';
+ option.innerHTML = `
+ <input type="radio" name="response" value="${index}" id="option${index}">
+ <label for="option${index}">${response.text}</label>
+ `;
+ option.onclick = () => selectOption(index);
+ optionsContainer.appendChild(option);
+ });
+
+ document.getElementById('customResponse').value = '';
+ document.getElementById('result').style.display = 'none';
+ }
+
+ function selectOption(index) {
+ document.querySelectorAll('.response-option').forEach(opt => opt.classList.remove('selected'));
+ document.querySelectorAll('.response-option')[index].classList.add('selected');
+ document.querySelector(`input[value="${index}"]`).checked = true;
+ }
+
+ function analyzeResponse() {
+ const scenario = scenarios[currentScenario];
+ const selectedOption = document.querySelector('input[name="response"]:checked');
+ const customResponse = document.getElementById('customResponse').value.trim();
+
+ let isSafe = false;
+ let score = 0;
+ let explanation = "";
+
+ if (selectedOption) {
+ const responseIndex = parseInt(selectedOption.value);
+ const response = scenario.responses[responseIndex];
+ isSafe = response.safe;
+ score = isSafe ? 100 : 0;
+
+ if (isSafe) {
+ explanation = "✅ Excellente réaction ! Vous avez fait le bon choix en restant vigilant.";
+ } else {
+ explanation = "❌ Attention ! Cette réaction vous aurait exposé au scam. Restez toujours méfiant face aux messages urgents.";
+ }
+ } else if (customResponse) {
+ const analysis = analyzeCustomResponse(customResponse, scenario);
+ isSafe = analysis.isSafe;
+ score = analysis.score;
+ explanation = analysis.explanation;
+ } else {
+ alert("Veuillez sélectionner une réponse ou écrire votre propre réaction.");
+ return;
+ }
+
+ updateStats(isSafe, score);
+ displayResult(isSafe, explanation, score);
+ }
+
+ function analyzeCustomResponse(response, scenario) {
+ const lowerResponse = response.toLowerCase();
+ let score = 50; // Score de base
+ let dangerPoints = 0;
+ let safePoints = 0;
+
+ // Analyse des mots-clés dangereux
+ scenario.dangerKeywords.forEach(keyword => {
+ if (lowerResponse.includes(keyword.toLowerCase())) {
+ dangerPoints += 20;
+ }
+ });
+
+ // Analyse des mots-clés sécurisés
+ scenario.safeKeywords.forEach(keyword => {
+ if (lowerResponse.includes(keyword.toLowerCase())) {
+ safePoints += 25;
+ }
+ });
+
+ // Calcul du score final
+ score = Math.max(0, Math.min(100, score + safePoints - dangerPoints));
+ const isSafe = score >= 60;
+
+ let explanation;
+ if (score >= 80) {
+ explanation = "🎯 Excellente analyse ! Votre réponse montre une très bonne compréhension des risques.";
+ } else if (score >= 60) {
+ explanation = "👍 Bonne réaction ! Vous êtes sur la bonne voie mais restez vigilant.";
+ } else if (score >= 40) {
+ explanation = "⚠️ Réponse mitigée. Soyez plus prudent face à ce type de messages.";
+ } else {
+ explanation = "🚨 Attention ! Votre réaction pourrait vous exposer à des risques importants.";
+ }
+
+ return { isSafe, score, explanation };
+ }
+
+ function displayResult(isSafe, explanation, score) {
+ const result = document.getElementById('result');
+ const resultText = document.getElementById('resultText');
+ const explanationText = document.getElementById('explanation');
+
+ result.className = `result ${isSafe ? 'safe' : 'danger'}`;
+ resultText.innerHTML = `${isSafe ? '🛡️ SÉCURISÉ' : '⚠️ DANGER'} - Score: ${score}/100`;
+ explanationText.innerHTML = explanation;
+
+ result.style.display = 'block';
+ }
+
+ function updateStats(isSafe, score) {
+ stats.total++;
+ if (isSafe) stats.successes++;
+ stats.totalScore += score;
+
+ document.getElementById('totalTests').textContent = stats.total;
+ document.getElementById('successRate').textContent = Math.round((stats.successes / stats.total) * 100) + '%';
+ document.getElementById('avgScore').textContent = Math.round(stats.totalScore / stats.total);
+ }
+
+ function newScenario() {
+ currentScenario = (currentScenario + 1) % scenarios.length;
+ loadScenario();
+ }
+
+ // Initialisation
+ loadScenario();
+ </script>
+</body>
+</html>
