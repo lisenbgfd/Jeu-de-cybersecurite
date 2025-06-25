@@ -917,8 +917,8 @@
 
         .defense-indicator {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: 50%;
+    right: 50%;
     width: 16px;
     height: 16px;
     background: linear-gradient(45deg, #00ff00, #00aa00);
@@ -953,6 +953,72 @@
             0%, 100% { opacity: 0.5; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.2); }
         }
+/* Nouveaux styles de paquets par type d'attaque */
+.packet.ping-flood {
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #ff6600, #cc4400);
+    box-shadow: 0 0 4px rgba(255, 102, 0, 0.8);
+}
+
+.packet.botnet {
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #ff0066, #cc0044);
+    box-shadow: 0 0 10px rgba(255, 0, 102, 0.9);
+    animation: botnetFlicker 0.3s infinite alternate;
+}
+
+.packet.targeted {
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #9900ff, #6600cc);
+    box-shadow: 0 0 12px rgba(153, 0, 255, 1);
+    animation: targetedPulse 0.5s infinite;
+    border: 1px solid #ffffff;
+}
+
+@keyframes botnetFlicker {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+@keyframes targetedPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+}
+
+/* Effets sur les serveurs attaqués */
+.server.ping-attack {
+    animation: lightShake 0.3s infinite;
+}
+
+.server.botnet-attack {
+    animation: heavyShake 0.2s infinite;
+    filter: hue-rotate(45deg);
+}
+
+.server.targeted-attack {
+    animation: criticalShake 0.1s infinite;
+    filter: brightness(1.5) saturate(1.5);
+}
+
+@keyframes lightShake {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(0.5deg); }
+}
+
+@keyframes heavyShake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(2deg); }
+    75% { transform: rotate(-2deg); }
+}
+
+@keyframes criticalShake {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    33% { transform: rotate(1deg) scale(1.02); }
+    66% { transform: rotate(-1deg) scale(0.98); }
+}
     </style>
 </head>
 <body>
@@ -1628,7 +1694,7 @@ function endTutorial() {
             
             attackInterval = setInterval(() => {
                 Object.keys(gameState.servers).forEach(serverId => {
-                    attackServer(serverId, 1);
+                    attackServer(serverId, 1, 'ping-flood');
                 });
             }, 300);
             
@@ -1652,7 +1718,7 @@ function endTutorial() {
             
             attackInterval = setInterval(() => {
                 Object.keys(gameState.servers).forEach(serverId => {
-                    attackServer(serverId, 3);
+                    attackServer(serverId, 3, 'botnet');
                 });
             }, 200);
             
@@ -1679,7 +1745,7 @@ function endTutorial() {
             addLog(` Attaque ciblée sur ${serverType}`, 'error');
             
             attackInterval = setInterval(() => {
-                attackServer(gameState.selectedServer, 4);
+                attackServer(gameState.selectedServer, 4, 'targeted');
             }, 150);
             
             setTimeout(() => {
@@ -1738,7 +1804,27 @@ function endTutorial() {
             }
             
             // Créer des paquets visuels
-            createAttackPackets(serverId, blocked);
+            createAttackPackets(serverId, blocked, attackType);
+
+            const serverEl = document.getElementById(serverId);
+    if (serverEl && !blocked) {
+        // Retirer les anciennes classes d'attaque
+        serverEl.classList.remove('ping-attack', 'botnet-attack', 'targeted-attack');
+        
+        // Ajouter la nouvelle classe selon le type
+        if (attackType === 'ping-flood') {
+            serverEl.classList.add('ping-attack');
+        } else if (attackType === 'botnet') {
+            serverEl.classList.add('botnet-attack');
+        } else if (attackType === 'targeted') {
+            serverEl.classList.add('targeted-attack');
+        }
+        
+        // Retirer la classe après 1 seconde
+        setTimeout(() => {
+            serverEl.classList.remove('ping-attack', 'botnet-attack', 'targeted-attack');
+        }, 1000);
+    }
             
             // Vérifier l'état global
             updateGlobalHealth();
@@ -1927,6 +2013,14 @@ function endTutorial() {
 
         // Fonctions visuelles
         function createAttackPackets(targetServerId, blocked) {
+            function createAttackPackets(serverId, blocked, attackType = 'generic') {
+    const server = document.getElementById(serverId);
+    const packet = document.createElement('div');
+    packet.className = `packet ${attackType}`;
+    
+    if (blocked) {
+        packet.classList.add('blocked');
+    }
             const spawnPoint = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
             const targetServer = document.getElementById(targetServerId);
             
@@ -2515,9 +2609,7 @@ function updateDefenseIndicators() {
         let indicatorCount = 0;
         
         // Vérifier chaque type de défense
-        if (gameState.defenses.firewall) {
-            addDefenseIndicator(serverEl, 'F', 'firewall', indicatorCount++);
-        }
+        
         
         if (gameState.defenses.reverseProxy) {
             addDefenseIndicator(serverEl, 'P', 'reverseProxy', indicatorCount++);
