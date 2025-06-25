@@ -33,4 +33,8 @@ on a un tutoriel (je fais le tutoriel). Il y a trois "types" d'attaques: la ping
 précedement, la botnet attack qui repose sur le même principe sauf que pour la rendre encore plus massive, 
 on envoie pas l'attaque que depuis un unique ordinateur mais depuis un réseau d'ordinateurs qu'on a infecté 
 à l'aide d'un virus créeant une armée de zombies. Enfin, l'attaque ciblée est explicite. Du côté des 
-défenses, on a 
+défenses, on a le Firewall, qui est une défense générique qui surveille les paquets de données et si ils 
+respectent certaines conditions de sécurité. Le load Balancer permet de mieux répartir les charges, le 
+Rate Limiting limite le débit du traffic et enfin la Redondance redirige le traffic vers des serveurs de 
+backups. Ensuite, un fois qi'on a bien tout compris, on peut passer en mode Attaque : le but est de percer les
+défenses. Puis le mode Défense: on va subir 5 vagues d'attaque, et le but est de survivre. 
