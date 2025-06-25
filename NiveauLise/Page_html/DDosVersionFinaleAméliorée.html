@@ -3233,10 +3233,9 @@ function attackServerUltimate(serverId, intensity) {
     }
 }
 
-// Modifier la fonction resetToLearning pour restaurer les fonctions originales
+
 const originalResetToLearning = resetToLearning; 
 resetToLearning = function() { 
-    // Restaurer les fonctions d'attaque originales si elles existent
     if (gameState.originalAttackFunctions) {  
         window.startPingFlood = gameState.originalAttackFunctions.startPingFlood;  
         window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack;  
