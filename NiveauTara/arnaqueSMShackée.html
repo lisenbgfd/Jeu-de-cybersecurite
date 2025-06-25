@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arnaque SMS</title>
+    <title>Arnaque SMS mode victime</title>
     <style>
         * {
             margin: 1;
@@ -53,14 +53,16 @@
             background: rgba(0, 0, 0, 0.95);
             padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgb(255, 255, 255);
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.568);
             max-width: 400px;
             backdrop-filter: blur(10px);
+            margin-top: 50px;
         }
 
         .rules h2 {
             color: #ffffff;
             margin-bottom: 15px;
+            margin-top: -5px;
             font-size: 24px;
         }
 
@@ -74,7 +76,7 @@
         display: flex;
         justify-content: center;
         /* align-items: center;  <-- optionnel à retirer aussi si ça gêne */
-        margin-top: -185px;
+        margin-top: -200px;
         margin-bottom: 0;
         }
 
@@ -257,7 +259,7 @@
             right: 20px;
             background: rgba(255, 255, 255, 0.9);
             padding: 15px 25px;
-            border-radius: 25px;
+            border-radius: 35px;
             font-weight: 600;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
@@ -267,7 +269,7 @@
         }
 
         .result-score {
-            font-size: 48px;
+            font-size: 100px;
             font-weight: bold;
             margin: 20px 0;
             color: #4ff436;
@@ -275,9 +277,9 @@
 
         .player-profile {
         position: absolute;
-        top: 120px;
+        top: 100px;
         left: 30px;
-        width: 290px;
+        width: 350px;
         padding: 20px;
         background: rgb(0, 0, 0);
         border-radius: 15px;
@@ -287,8 +289,9 @@
         }
 
         .player-profile h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-size: 25px;
+            margin-top: -5px;
+            margin-bottom: 20px;
             color: #ffffff;
         }
 
@@ -304,7 +307,7 @@
     <button class="back-btn" onclick="goBack()">← Retour</button>
     <div class="rules">
         <h2>Règles du Jeu</h2>
-        <p>Vous avez reçu 10 messages, certains sont des arnaques. Faites attention en répondant ! Peut être vaut-il mieux ne pas répondre !</p>
+        <p>Vous avez reçu 10 messages, certains sont des arnaques. Faites attention en répondant !</p>
     </div>
 </div>
 
@@ -339,7 +342,7 @@
         </div>
     </div>
 
-    <button class="finish-btn" onclick="finishGame()">Finir</button>
+    <button class="finish-btn" onclick="finishGame()">Passer au mode hacker </button>
 
     <!-- Modal pour répondre aux messages -->
     <div class="modal" id="messageModal">
@@ -347,17 +350,20 @@
             <h3 id="modalSender">Expéditeur</h3>
             <p id="modalContent">Contenu du message</p>
 
-            <form action="#reponse-envoyee" method="get">
-                <label for="playerReply">Votre réponse :</label><br>
+            <!-- On supprime action/method car on gère tout en JS -->
+            <form onsubmit="return false;">
+                <label for="playerReply">Que faites vous/ Que répondez vous ? :</label><br>
                 <textarea id="playerReply" name="playerReply" rows="4" cols="50" placeholder="Écris ta réponse ici..."></textarea><br>
 
                 <div class="modal-buttons">
-                    <button type="button" class="modal-btn reply-btn" onclick="replyToMessage()">Envoyer</button>
+                    <!-- Appelle une fonction qui lit le champ et appelle analyzeCustomResponse avec les bons arguments -->
+                    <button type="button" class="modal-btn reply-btn" onclick="handleReply()">Envoyer</button>
                     <button type="button" class="modal-btn ignore-btn" onclick="ignoreMessage()">Ignorer</button>
                 </div>
             </form>
         </div>
     </div>
+
 
 
     <!-- Modal des résultats -->
@@ -368,7 +374,7 @@
             <p id="resultMessage"></p>
             <div class="modal-buttons">
                 <button class="modal-btn reply-btn" onclick="restartGame()">Rejouer</button>
-                <button class="modal-btn ignore-btn" onclick="goBack()">Quitter</button>
+                <button class="modal-btn ignore-btn" onclick="goBack()">Passer au mode hacker</button>
             </div>
         </div>
     </div>
@@ -385,8 +391,6 @@
                 content: "Urgent : Votre compte sera suspendu dans 2h. Cliquez sur ce lien pour le réactiver : www.banque-populaire-secure.com",
                 isScam: true,
                 type: "link",
-                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
-                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Mon amour",
@@ -401,17 +405,13 @@
                 content: "Votre abonnement Netflix expire demain ! Profitez de 50% de réduction en renouvelant maintenant : netflix-renewall.net",
                 isScam: true,
                 type: "link",
-                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
-                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Unknown",
-                preview: "C'est le livreur j'ai un colis à votre nom...",
-                content: "c'est le livreur j'ai un colis à votre nom qui ne rentrait pas dans la boite aux lettres veuillez choisir un relais https://mondiale-livraison.com",
+                preview: "Bonjour Camille ! c'est le livreur j'ai un colis à votre nom...",
+                content: "Bonjour Camille ! c'est le livreur j'ai un colis à votre nom qui ne rentrait pas dans la boite aux lettres veuillez choisir un relais https://mondiale-livraison.com",
                 isScam: true,
                 type: "link",
-                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
-                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Pierre (Travail) ",
@@ -426,8 +426,6 @@
                 content: "Nous cherchons 100 volontaires pour tester nos nouveaux appareils auditifs gratuitement. Infos https://adzm.me/8ex7ostc",
                 isScam: true,
                 type: "link",
-                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
-                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             },
             {
                 sender: "Dr. Martin",
@@ -456,8 +454,6 @@
                 content: "Coucou maman, j’ai cassé mon téléphone, là je te parle depuis celui d’un ami. Peux-tu m’avancer de l’argent pour en acheter un autre ? Voici le RIB de mon ami : FR76 5000 4032 8500 0087 8427 258",
                 isScam: true,
                 type: "family",
-                dangerKeywords: ["cliquer", "lien", "coordonnées bancaires", "urgent", "donne", "donner", "informations"],
-                safeKeywords: ["vérifier", "ignorer", "suspect", "arnaque", "méfiance", "prudence", "police", "commissariat","appeler"]
             }
         ];
 
@@ -495,58 +491,129 @@
             document.getElementById('messageModal').style.display = 'block';
         }
 
-        function replyToMessage() {
-            const message = messages[currentMessageIndex];
-            messagesAnswered++;
-            
-            // L'IA détecte si le joueur est tombé dans le panneau
-            if (message.isScam) {
-                // Le joueur a répondu à une arnaque (mauvais choix)
-                showFeedback("❌ Attention ! C'était une arnaque ! Ne répondez jamais à ce type de message.", false);
-            } else {
-                // Le joueur a répondu à un message légitime (bon choix)
-                score++;
-                showFeedback("✅ Bonne réponse ! Ce message était légitime.", true);
+        function handleReply() {
+            const playerReply = document.getElementById("playerReply").value;
+
+            if (playerReply.trim() === "") {
+                alert("Merci d’écrire une réponse !");
+                return;
             }
-            
+
+            analyzeCustomResponse(playerReply);
+        }
+
+const dangerKeywords = [
+    "ok", "oui", "d’accord", "voici", "tiens", "tiens le", "envoyé",
+    "fait", "pris", "acheté", "code", "mot de passe", "numéro",
+    "adresse", "argent", "payer", "paie", "compte", "virement",
+    "urgence", "immédiat", "tout de suite", "je le fais", "je t’envoie",
+    "je donne", "j’envoie", "je paie", "je transfère", "c’est fait",
+    "maintenant", "je te fais confiance", "je m’en occupe", "voilà",
+    "tiens", "carte", "paypal", "bitcoins", "crypto", "photo", "pièce jointe","d'accord",
+    "ok","merci",
+    "voici mon mot de passe",
+    "voilà le code",
+    "je vous l’envoie",
+    "j’ai fait le virement",
+    "je vais acheter la carte",
+    "combien dois-je envoyer",
+    "je te fais confiance",
+    "je comprends l’urgence",
+    "j’envoie tout de suite",
+    "je le fais maintenant",
+    "pas de souci",
+    "je m’en occupe",
+    "voici mes infos",
+    "voici mes coordonnées",
+    "je paie maintenant",
+    "je clique sur le lien",
+    "j’ouvre la pièce jointe",
+    "voici mon numéro",
+    "ça marche",
+    "merci pour l’info",
+    "c’est fait",
+    "pas de problème",
+    "envoyé",
+    "dépêchez-vous",
+    "pas de soucis"
+];
+
+const safeKeywords = [
+    "non", "jamais", "refus", "refuser", "bizarre", "arnaque",
+    "suspect", "doute", "peur", "dangereux", "je ne sais pas",
+    "je ne connais pas", "je ne donne pas", "je ne clique pas",
+    "stop", "faux", "je bloque", "signaler", "bloquer", "police",
+    "je vérifie", "mensonge", "triche", "sécurité", "identité",
+    "c’est illégal", "je doute", "problème", "piège", "spam", "pirate",
+    "arnaqueur", "tentative", "trop rapide", "trop beau", "incohérent","c’est une arnaque",
+    "c’est suspect",
+    "je ne fais pas confiance",
+    "je ne clique pas",
+    "je ne communique pas mes infos",
+    "je ne vous connais pas",
+    "vous êtes qui",
+    "c’est bizarre",
+    "je vais prévenir quelqu’un",
+    "je vais appeler",
+    "je vais vérifier",
+    "ça semble faux",
+    "je ne réponds pas à ça",
+    "je refuse",
+    "non merci",
+    "pas question",
+    "je bloque",
+    "je supprime",
+    "arnaque détectée",
+    "vous êtes un scam",
+    "je signale ce message",
+    "je ne paierai pas",
+    "vous mentez",
+    "j’appelle la police",
+    "c’est illégal"
+];
+
+
+        function analyzeCustomResponse(playerReply) {
+            const message = messages[currentMessageIndex]; // Récupération du message en cours
+
+            if (message.isScam) {
+                const lowerResponse = playerReply.toLowerCase();
+                let score_message = 50;
+                let dangerPoints = 0;
+                let safePoints = 0;
+
+                dangerKeywords.forEach(keyword => {
+                    if (lowerResponse.includes(keyword.toLowerCase())) {
+                        dangerPoints += 25;
+                    }
+                });
+
+                safeKeywords.forEach(keyword => {
+                    if (lowerResponse.includes(keyword.toLowerCase())) {
+                        safePoints += 25;
+                    }
+                });
+
+                score_message = Math.max(0, Math.min(100, score_message + safePoints - dangerPoints));
+
+                if (score_message >= 50) {
+                    score++;
+                    showFeedback("Bonne réponse ! Ce message était un scam.", true);
+                    updateScore();
+                    }
+                else {
+                    showFeedback("Attention ! C'était une arnaque !", false);
+                }
+            } else {
+                score++;
+                showFeedback("Ce message était légitime. Merci pour votre réponse !", true);
+            }
+
             closeModal();
             updateScore();
             markMessageAsAnswered(currentMessageIndex);
         }
 
-        function analyzeCustomResponse(response, scenario) {
-            if (message.isScam) {
-                const lowerResponse = response.toLowerCase();
-            let score = 50; // Score de base
-            let dangerPoints = 0;
-            let safePoints = 0;
-
-            // Analyse des mots-clés dangereux
-            scenario.dangerKeywords.forEach(keyword => {
-            if (lowerResponse.includes(keyword.toLowerCase())) {
-            dangerPoints += 25;
-            }
-            });
-
-            // Analyse des mots-clés sécurisés
-            scenario.safeKeywords.forEach(keyword => {
-            if (lowerResponse.includes(keyword.toLowerCase())) {
-            safePoints += 25;
-            }
-            });
-
-            // Calcul du score final
-            score = Math.max(0, Math.min(100, score + safePoints - dangerPoints));
-            const isSafe = score >= 60;
-            if (score >= 50) {
-                score++;
-                showFeedback("Bonne réponse ! Ce message était un scam.", true);
-            }
-            if (score <50) {
-                showFeedback("Attention ! C'était une arnaque !", false);
-            }
-            }
-        }
 
         function ignoreMessage() {
             const message = messages[currentMessageIndex];
@@ -608,13 +675,13 @@
             const percentage = (score / 10) * 100;
             
             if (percentage >= 80) {
-                resultMessage = "🏆 Excellent ! Vous êtes un expert en détection d'arnaques !";
+                resultMessage = "Excellent ! Vous êtes un expert en détection d'arnaques !";
             } else if (percentage >= 60) {
-                resultMessage = "👍 Bien joué ! Vous avez de bonnes bases en sécurité.";
+                resultMessage = "Bien joué ! Vous avez de bonnes bases en sécurité.";
             } else if (percentage >= 40) {
-                resultMessage = "⚠️ Attention ! Vous devez être plus vigilant face aux arnaques.";
+                resultMessage = "Attention ! Vous devez être plus vigilant face aux arnaques. N'hesitez pas à rejouer !";
             } else {
-                resultMessage = "🚨 Soyez très prudent ! Vous êtes vulnérable aux arnaques.";
+                resultMessage = "Soyez très prudent ! Vous êtes vulnérable aux arnaques. N'hésitez pas à rejouer !";
             }
             
             document.getElementById('finalScore').textContent = `${score}/10`;

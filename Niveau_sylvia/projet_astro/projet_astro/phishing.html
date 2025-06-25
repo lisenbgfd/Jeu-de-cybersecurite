@@ -601,13 +601,10 @@ Service Sécurité Banque Sécurisée`,
             document.querySelectorAll('.mode-content').forEach(content => content.classList.remove('active'));
             
             // Activer le mode sélectionné
+            
             event.target.classList.add('active');
             document.getElementById(mode + '-mode').classList.add('active');
-
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.mode-content').forEach(content => content.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(mode + '-mode').classList.add('active');
+            document.getElementById('hackeuse-rules').style.display = (mode === 'hackeuse') ? 'block' : 'none';
 
             if (mode === 'hackeuse') {
                 document.getElementById('hackeuse-rules').style.display = 'block';
@@ -651,11 +648,6 @@ Service Sécurité Banque Sécurisée`,
 }
 
 
-        function startHackeuseMode() {
-            document.getElementById('hackeuse-rules').style.display = 'none';
-            // ici tu lances l'éditeur de mail, ou affiches le champ pour écrire
-            document.getElementById('hackeuse-mode').classList.add('active');
-        }
 
         function markEmail(emailId, markedAsSafe) {
             const email = emails[emailId];

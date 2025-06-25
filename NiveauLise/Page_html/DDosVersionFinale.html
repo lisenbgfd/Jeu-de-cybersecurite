@@ -915,6 +915,40 @@
             pointer-events: none; 
         }
 
+        .defense-indicator {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(45deg, #00ff00, #00aa00);
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+    font-size: 8px;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.defense-indicator.firewall {
+    background: linear-gradient(45deg, #ff6600, #cc4400);
+    box-shadow: 0 0 8px rgba(255, 102, 0, 0.6);
+}
+
+.defense-indicator.ddos-protection {
+    background: linear-gradient(45deg, #0088ff, #0066cc);
+    box-shadow: 0 0 8px rgba(0, 136, 255, 0.6);
+}
+
+.defense-indicator.rate-limiting {
+    background: linear-gradient(45deg, #9900ff, #6600cc);
+    box-shadow: 0 0 8px rgba(153, 0, 255, 0.6);
+}
+
         @keyframes autoDefensePulse {
             0%, 100% { opacity: 0.5; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.2); }
@@ -1494,7 +1528,7 @@ function endTutorial() {
             Object.keys(gameState.defenses).forEach(def => {
                 gameState.defenses[def] = false;
             });
-            
+            updateDefenseIndicators();
             document.getElementById('phaseIndicator').textContent = 'PHASE D\'APPRENTISSAGE - Testez librement les attaques et défenses';
             document.getElementById('phaseIndicator').classList.remove('challenge');
             document.getElementById('attackPanel').classList.remove('disabled');
@@ -1738,6 +1772,7 @@ function endTutorial() {
             
             addLog(' Firewall global déployé', 'success');
             updateUI();
+            updateDefenseIndicators();
         }
 
         function deployReverseProxy() {
@@ -1746,6 +1781,9 @@ function endTutorial() {
                 addLog(' Budget insuffisant pour le Load Balancer', 'error');
                 return;
             }
+
+            
+            
             
             gameState.budget -= cost;
             gameState.defenses.reverseProxy = true;
@@ -1760,6 +1798,7 @@ function endTutorial() {
             document.getElementById('proxyBtn').disabled = true;
             addLog(' Load Balancer activé', 'success');
             updateUI();
+            updateDefenseIndicators();
         }
 
         function deployRateLimiting() {
@@ -1782,6 +1821,8 @@ function endTutorial() {
             document.getElementById('rateLimitBtn').disabled = true;
             addLog(' Rate Limiting configuré', 'success');
             updateUI();
+            updateDefenseIndicators();
+            
         }
 
         function upgradeInfrastructure() {
@@ -1809,6 +1850,7 @@ function endTutorial() {
             
             addLog(' Infrastructure améliorée', 'success');
             updateUI();
+            updateDefenseIndicators();
         }
 
         function deployRedundancy() {
@@ -1864,7 +1906,7 @@ function endTutorial() {
         }
     });
     
-    // Ajouter l'animation CSS si elle n'existe pas déjà
+
     if (!document.querySelector('#backup-animation-style')) {
         const style = document.createElement('style');
         style.id = 'backup-animation-style';
@@ -1880,6 +1922,7 @@ function endTutorial() {
     addLog(' Système de redondance activé', 'success');
     addLog(' Serveurs de backup déployés', 'info');
     updateUI();
+    updateDefenseIndicators();
 }
 
         // Fonctions visuelles
@@ -2458,6 +2501,63 @@ function startUltimateAttack() {
     }, 20000); 
 } 
 
+function updateDefenseIndicators() {
+    // Supprimer toutes les pastilles existantes
+    document.querySelectorAll('.defense-indicator').forEach(indicator => {
+        indicator.remove();
+    });
+    
+    // Ajouter les pastilles pour chaque défense active
+    Object.keys(gameState.servers).forEach(serverId => {
+        const serverEl = document.getElementById(serverId);
+        if (!serverEl) return;
+        
+        let indicatorCount = 0;
+        
+        // Vérifier chaque type de défense
+        
+        
+        if (gameState.defenses.reverseProxy) {
+            addDefenseIndicator(serverEl, 'P', 'reverseProxy', indicatorCount++);
+        }
+        
+        if (gameState.defenses.rateLimiting) {
+            addDefenseIndicator(serverEl, 'R', 'rate-limiting', indicatorCount++);
+        }
+
+        if (gameState.defenses.infrastructure) {
+            addDefenseIndicator(serverEl, 'I', 'infrastructure', indicatorCount++);
+        }
+
+        if (gameState.defenses.firewall) {
+            addDefenseIndicator(serverEl, 'F', 'firewall', indicatorCount++);
+        }
+
+        if (gameState.defenses.redundancy) {
+            addDefenseIndicator(serverEl, 'Re', 'Redondance', indicatorCount++);
+        }
+        
+        
+        
+    });
+}
+
+function addDefenseIndicator(serverEl, letter, defenseType, position) {
+    const indicator = document.createElement('div');
+    indicator.className = `defense-indicator ${defenseType}`;
+    indicator.textContent = letter;
+    
+    // Positionner les pastilles en cercle autour du serveur
+    const angle = (position * 60) - 90; // 60 degrés entre chaque pastille
+    const radius = 35;
+    const x = Math.cos(angle * Math.PI / 180) * radius;
+    const y = Math.sin(angle * Math.PI / 180) * radius;
+    
+    indicator.style.transform = `translate(${x}px, ${y}px)`;
+    
+    serverEl.appendChild(indicator);
+}
+
 // Fonction d'attaque ultime
 function attackServerUltimate(serverId, intensity) {
     const server = gameState.servers[serverId];
@@ -2542,6 +2642,8 @@ resetToLearning = function() {
         defensePanel.style.opacity = '';
         defensePanel.style.pointerEvents = '';
     }
+
+
     
     // Appeler la fonction de reset originale
     originalResetToLearning(); 
