@@ -16,6 +16,17 @@ commprendre les mécanismes d'une cyberattaque, puis le mode hackeur pour conna�
 adopter face à ce type d'attaques. 
 
 Les étapes de conception: 
-Au cours d'une phase qui a duré jusqu 
+Au cours d'une phase qui a duré jusqu'à avril environ, nous nous sommes avant tout concentré sur la partie
+de renseignements : on a appris les bases de la cybersécurité et des différentes attaques, au travers de 
+vidéos et de livre empruntés au CRDN. Puis de avril à mai, on a d'abord tenté de coder notre code sur Unity, 
+parce qu'on pensait que ce serait plus simple pour travailler en groupe, mais on a eu beaucoup de 
+difficultés, déjà parce qu'on maitrisait mal le C sharp et ensuite parce qu'on trouvait que les rendus 
+visuels n'étaient pas optimaux. Donc on a codé en html, en complément de codes CSS et java script, avec 
+des liens sur des pages qui sont pour l'instant locales et que notre encadrant a prévu d'héberger sur 
+son site. 
 
-
+l'attaque Ddos : 
+Une attaque par déni de service distribuées (Distributed Denial of Service Attack) consiste à rendre inutilisable 
+un service en empêchant les utilisateurs de l'utiliser. Dans ce cas particulier, on inonde le réseau avec des ICMP 
+(Internet Control Message  Protocol) qui gère le contrôle de la connexion entre deux machines. D'abord, 
+on a un tutoriel (je fais le tutoriel). Il y a trois attaques: 
