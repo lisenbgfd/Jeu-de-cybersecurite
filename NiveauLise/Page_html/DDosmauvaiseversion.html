@@ -1778,7 +1778,7 @@ function endTutorial() {
             }
             
             // Créer des paquets visuels
-            createAttackPackets(serverId, blocked);
+            createAttackPackets(serverId, blocked), 'botnet';
             
             // Vérifier l'état global
             updateGlobalHealth();
@@ -2325,7 +2325,7 @@ function attackServerAdvanced(serverId, intensity) {
         }
     }
     
-    createAttackPackets(serverId, blocked);
+    createAttackPackets(serverId, blocked, 'botnet');
     updateGlobalHealth();
     updateUI();
 }
@@ -2354,7 +2354,7 @@ function attackServerSocial(serverId, intensity) {
         addLog(` ${server.type} compromis par ingénierie sociale`, 'error');
     }
     
-    createAttackPackets(serverId, false);
+    createAttackPackets(serverId, false, 'botnet');
     updateGlobalHealth();
     updateUI();
 }
@@ -2647,7 +2647,7 @@ function attackServerUltimate(serverId, intensity) {
         }
     }
     
-    createAttackPackets(serverId, blocked);  
+    createAttackPackets(serverId, blocked, 'botnet');  
     updateGlobalHealth();  
     updateUI();  
     
