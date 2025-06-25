@@ -510,7 +510,7 @@ const dangerKeywords = [
     "je donne", "j’envoie", "je paie", "je transfère", "c’est fait",
     "maintenant", "je te fais confiance", "je m’en occupe", "voilà",
     "tiens", "carte", "paypal", "bitcoins", "crypto", "photo", "pièce jointe","d'accord",
-    "ok","merci",
+    "ok","merci","avec plaisir", "je signe", "plaisir",
     "voici mon mot de passe",
     "voilà le code",
     "je vous l’envoie",
@@ -621,7 +621,7 @@ const safeKeywords = [
             if (message.isScam) {
                 // Le joueur a ignoré une arnaque (bon choix)
                 score++;
-                showFeedback("Excellent ! Vous avez bien fait d'ignorer cette arnaque.", true);
+                showFeedback("Arnaque repérée et ignorée, bravo !", true);
             } else {
                 // Le joueur a ignoré un message légitime (mauvais choix)
                 showFeedback("Dommage ! Ce message était légitime, il fallait répondre.", false);
@@ -641,9 +641,10 @@ const safeKeywords = [
                 transform: translateX(-50%);
                 background: ${isCorrect ? '#4CAF50' : '#f44336'};
                 color: white;
-                padding: 15px 25px;
+                padding: 20px 35px;
                 border-radius: 25px;
                 font-weight: 600;
+                font-size: 1.75rem;
                 z-index: 1001;
                 box-shadow: 0 8px 25px rgba(0,0,0,0.3);
                 animation: fadeInOut 3s ease-in-out;
