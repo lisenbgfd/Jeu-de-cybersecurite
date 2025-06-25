@@ -170,3 +170,12 @@ Sylvia : distinction visuelle renforcée entre mails légitimes et phishing (ic�
 
 Tara : ajustement des choix de réponses, suppression des doublons, cohérence sémantique des options.
 
+**Mardi 24 juin**
+
+_Préparation de la présentation_
+
+Chacune présente son jeu aux autres et prend en compte ses remarques, tous les jeux sont réunis au sein d'un même dossier pour être accessible au sein d'une même page web. 
+
+Rédaction de la présentation que l'on fera vendredi, et chacune commence à s'entraîner sur la démo de son niveau. 
+
+
