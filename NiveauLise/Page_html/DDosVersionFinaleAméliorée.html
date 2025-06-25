@@ -19,33 +19,178 @@
             height: 100vh;  
             overflow: hidden;
         }
-        .packet.ping-flood {
-    background: radial-gradient(circle, #ffff00, #cccc00);
-    box-shadow: 0 0 6px rgba(255, 255, 0, 0.6);
-    animation: pingPulse 0.5s infinite;
+    
+        @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0.7; }
+}
+
+/* Animation de traînée pour Botnet */
+@keyframes botnetTrail {
+    0% { 
+        box-shadow: 0 0 15px #8b00ff, 0 0 30px rgba(139, 0, 255, 0.3);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 25px #8b00ff, 0 0 50px rgba(139, 0, 255, 0.5), 0 0 70px rgba(139, 0, 255, 0.2);
+        transform: scale(1.1);
+    }
+    100% { 
+        box-shadow: 0 0 15px #8b00ff, 0 0 30px rgba(139, 0, 255, 0.3);
+        transform: scale(1);
+    }
+}
+
+
+/* Animation de focus pour Attaque Ciblée */
+@keyframes targetedFocus {
+    0% { 
+        transform: scale(1); 
+        box-shadow: 0 0 12px #ff6b35;
+    }
+    100% { 
+        transform: scale(1.2); 
+        box-shadow: 0 0 20px #ff6b35, 0 0 35px rgba(255, 107, 53, 0.4);
+    }
+}
+
+/* Effets d'impact */
+@keyframes pingImpact {
+    0% { 
+        transform: scale(0); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: scale(1.5); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: scale(3); 
+        opacity: 0; 
+    }
+}
+
+@keyframes botnetImpact {
+    0% { 
+        transform: scale(0) rotate(0deg); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: scale(2) rotate(180deg); 
+        opacity: 0.9; 
+    }
+    100% { 
+        transform: scale(4) rotate(360deg); 
+        opacity: 0; 
+    }
+}
+
+@keyframes targetedImpact {
+    0% { 
+        transform: scale(0); 
+        opacity: 1; 
+        border-radius: 30%;
+    }
+    30% { 
+        transform: scale(1); 
+        opacity: 1; 
+        border-radius: 10%;
+    }
+    100% { 
+        transform: scale(2.5); 
+        opacity: 0; 
+        border-radius: 50%;
+    }
+}
+
+@keyframes blockedImpact {
+    0% { 
+        transform: scale(0); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: scale(1); 
+        opacity: 0.8; 
+        border-width: 3px;
+    }
+    100% { 
+        transform: scale(1.5); 
+        opacity: 0; 
+        border-width: 1px;
+    }
+}
+
+/* Styles spéciaux pour les paquets bloqués */
+.packet.blocked {
+    opacity: 0.6;
+    animation: blockedPacket 0.5s ease-in-out;
+}
+
+@keyframes blockedPacket {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.3; }
+}
+
+/* Amélioration visuelle pour les différents types de paquets */
+.packet.pingflood {
+    filter: drop-shadow(0 0 5px #ff4444);
 }
 
 .packet.botnet {
-    background: radial-gradient(circle, #ff0066, #cc0044);
-    box-shadow: 0 0 8px rgba(255, 0, 102, 0.8);
-    width: 8px;
-    height: 8px;
+    filter: drop-shadow(0 0 8px #8b00ff) drop-shadow(0 0 16px rgba(139, 0, 255, 0.3));
 }
 
 .packet.targeted {
-    background: radial-gradient(circle, #ff6600, #cc4400);
-    box-shadow: 0 0 10px rgba(255, 102, 0, 0.9);
-    animation: targetedFlash 0.3s infinite;
+    filter: drop-shadow(0 0 6px #ff6b35) drop-shadow(0 0 12px rgba(255, 107, 53, 0.4));
 }
 
-@keyframes pingPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+/* Effets sur les serveurs pendant les attaques */
+.server.under-attack-pingflood {
+    animation: pingFloodShake 0.3s infinite;
 }
 
-@keyframes targetedFlash {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+.server.under-attack-botnet {
+    animation: botnetOverload 0.8s infinite;
+}
+
+.server.under-attack-targeted {    
+    animation: targetedStress 0.2s infinite;
+}
+
+@keyframes pingFloodShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-1px); }
+    75% { transform: translateX(1px); }
+}
+
+@keyframes botnetOverload {
+    0% { 
+        filter: brightness(1) saturate(1);
+        box-shadow: 0 0 10px rgba(139, 0, 255, 0.3);
+    }
+    50% { 
+        filter: brightness(0.8) saturate(1.5);
+        box-shadow: 0 0 20px rgba(139, 0, 255, 0.6);
+    }
+    100% { 
+        filter: brightness(1) saturate(1);
+        box-shadow: 0 0 10px rgba(139, 0, 255, 0.3);
+    }
+}
+
+@keyframes targetedStress {
+    0% { 
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(255, 107, 53, 0.7);
+    }
+    100% { 
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+    }
 }
         .tutorial-overlay {
     position: fixed;
@@ -304,6 +449,143 @@
     animation: waveAlert 3s ease-in-out;
     pointer-events: none;
 }
+
+/* Animations pour les effets sur les serveurs */
+
+@keyframes serverExplosion {
+    0% { 
+        transform: translate(-50%, -50%) scale(0); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.5); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: translate(-50%, -50%) scale(3); 
+        opacity: 0; 
+    }
+}
+
+@keyframes serverDestroyed {
+    0%, 100% { 
+        opacity: 1; 
+        filter: brightness(1); 
+    }
+    10%, 30%, 50%, 70%, 90% { 
+        opacity: 0.3; 
+        filter: brightness(0.3) saturate(0); 
+    }
+    20%, 40%, 60%, 80% { 
+        opacity: 0.8; 
+        filter: brightness(1.5) saturate(1.5); 
+    }
+}
+
+/* Effets avancés pour les attaques sur les serveurs */
+.server.under-attack-pingflood {
+    animation: pingFloodShake 0.3s infinite;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.6) !important;
+}
+
+.server.under-attack-botnet {
+    animation: botnetOverload 0.8s infinite;
+    position: relative;
+}
+
+.server.under-attack-botnet::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(45deg, transparent, rgba(139, 0, 255, 0.3), transparent);
+    border-radius: inherit;
+    animation: botnetScan 1s infinite;
+    z-index: -1;
+}
+
+.server.under-attack-targeted {
+    animation: targetedStress 0.2s infinite;
+    position: relative;
+    overflow: visible;
+}
+
+.server.under-attack-targeted::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    border: 2px solid rgba(255, 107, 53, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: targetedCrosshair 0.5s infinite;
+}
+
+@keyframes botnetScan {
+    0% { 
+        transform: rotate(0deg); 
+        opacity: 0.3; 
+    }
+    50% { 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: rotate(360deg); 
+        opacity: 0.3; 
+    }
+}
+
+@keyframes targetedCrosshair {
+    0% { 
+        transform: translate(-50%, -50%) scale(1); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.1); 
+        opacity: 0.6; 
+    }
+    100% { 
+        transform: translate(-50%, -50%) scale(1); 
+        opacity: 1; 
+    }
+}
+
+/* Effets de particules */
+.particle {
+    transition: all 300ms ease-out;
+}
+
+.particle.pingflood {
+    box-shadow: 0 0 4px #ff4444;
+}
+
+.particle.botnet {
+    box-shadow: 0 0 6px #8b00ff;
+}
+
+.particle.targeted {
+    box-shadow: 0 0 5px #ff6b35;
+}
+
+/* Amélioration visuelle générale */
+.server {
+    transition: all 0.3s ease;
+}
+
+.server:hover {
+    transform: scale(1.05);
+}
+
+/* Effet de surcharge réseau */
+.network-container.under-heavy-attack {
+    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.1), transparent);
+    animation: networkStress 2s infinite;
+}
+
 
         @keyframes waveAlert { 
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } 
@@ -1247,7 +1529,7 @@
 let tutorialActive = false;
 let currentTutorialStep = 0;
 let tutorialSteps = [];
-let attackType = 'default';
+
 
 
 function initializeTutorial() {
@@ -1639,146 +1921,457 @@ function endTutorial() {
                 resetToLearning();
             }, 5000);
         }
-
-        // Fonctions d'attaque
-        function startPingFlood() {
-            if (gameState.attackActive) return;
-            
-            gameState.attackActive = true;
-            document.getElementById('stopBtn').disabled = false;
-            
-            showInfoComment('Ping Flood', 
-                'Le Ping Flood envoie des messsages (paquets ICMP) en masse vers les serveurs cibles. ' +
-                'Cette attaque  peut surcharger les serveurs moins protégés. ' +
-                'Durée: 10 secondes. Impact: Modéré sur tous les serveurs.');
-            
-            addLog(' Ping Flood lancé', 'error');
-            
-            attackInterval = setInterval(() => {
-                Object.keys(gameState.servers).forEach(serverId => {
-                    attackServer(serverId, 1);
-                });
-            }, 300);
-            
-            setTimeout(() => {
-                stopAttack();
-            }, 10000);
-            attackType = 'ping-flood';
+    function attackServer(serverId, intensity) {
+    const server = gameState.servers[serverId];
+    if (!server || server.health <= 0) return;
+    
+    // Ajouter effet visuel sur le serveur attaqué
+    addServerAttackEffect(serverId);
+    
+    // Calculer les dégâts avec les défenses
+    let damage = intensity * 2;
+    let blocked = false;
+    
+    // Appliquer les défenses
+    if (gameState.defenses.firewall) {
+        if (Math.random() < 0.4) {
+            blocked = true;
+            damage = 0;
         }
-
-        function startBotnetAttack() {
-            if (gameState.attackActive) return;
-            
-            gameState.attackActive = true;
-            document.getElementById('stopBtn').disabled = false;
-            
-            showInfoComment('Botnet Attack', 
-                'Attaque distribuée: on infecte des machines par propagation d un virus  ' +
-                'Génère un trafic massif depuis plusieurs sources. ' +
-                'Impact très élevé sur l\'infrastructure. Durée: 15 secondes.');
-            
-            addLog(' Attaque Botnet déclenchée', 'error');
-            
-            attackInterval = setInterval(() => {
-                Object.keys(gameState.servers).forEach(serverId => {
-                    attackServer(serverId, 3);
-                });
-            }, 200);
-            
-            setTimeout(() => {
-                stopAttack();
-            }, 15000);
-            attackType = 'botnet'; 
+    }
+    
+    if (gameState.defenses.reverseProxy && !blocked) {
+        damage *= 0.4;
+    }
+    
+    if (gameState.defenses.rateLimiting && !blocked) {
+        damage *= 0.7;
+    }
+    
+    if (gameState.defenses.infrastructure && !blocked) {
+        damage *= 0.3;
+    }
+    
+    if (!blocked) {
+        server.health = Math.max(0, server.health - damage);
+        updateServerVisual(serverId);
+        
+        if (server.health <= 0) {
+            gameState.activeServers--;
+            addLog(` ${server.type} hors service`, 'error');
+            // Effet spécial quand un serveur tombe
+            addServerDestroyedEffect(serverId);
         }
+    }
+    
+    // Créer des paquets visuels
+    createAttackPackets(serverId, blocked);
+    
+    // Vérifier l'état global
+    updateGlobalHealth();
+    updateUI();
+    
+    if (gameState.health <= 0 && gameState.phase === 'challenge') {
+        endChallengePhase(false);
+    }
+}
 
-        function startTargetedAttack() {
-            if (gameState.attackActive || !gameState.selectedServer) {
-                addLog(' Sélectionnez un serveur cible', 'error');
-                return;
-            }
-            
-            gameState.attackActive = true;
-            document.getElementById('stopBtn').disabled = false;
-            
-            const serverType = gameState.servers[gameState.selectedServer].type;
-            showInfoComment('Attaque Ciblée', 
-                `Attaque concentrée sur ${serverType}. ` +
-                'Utilise des techniques spécialisées pour exploiter les faiblesses spécifiques du serveur cible. ' +
-                'Impact très élevé mais localisé. Durée: 12 secondes.');
-            
-            addLog(` Attaque ciblée sur ${serverType}`, 'error');
-            
-            attackInterval = setInterval(() => {
-                attackServer(gameState.selectedServer, 4);
-            }, 150);
-            
-            setTimeout(() => {
-                stopAttack();
-            }, 12000);
-            attackType = 'targeted';
-        }
+function addServerAttackEffect(serverId) {
+    const serverElement = document.getElementById(serverId);
+    if (!serverElement) return;
+    
+    const attackType = gameState.currentAttackType || 'default';
+    
+    // Retirer les anciens effets
+    serverElement.classList.remove('under-attack-pingflood', 'under-attack-botnet', 'under-attack-targeted');
+    
+    // Ajouter le nouvel effet
+    if (attackType !== 'default') {
+        serverElement.classList.add(`under-attack-${attackType}`);
+    }
+    
+    // Retirer l'effet après un délai
+    setTimeout(() => {
+        serverElement.classList.remove(`under-attack-${attackType}`);
+    }, 1000);
+}
 
-        function attackSelectedServer() {
-            startTargetedAttack();
+function addServerDestroyedEffect(serverId) {
+    const serverElement = document.getElementById(serverId);
+    if (!serverElement) return;
+    
+    // Créer un effet d'explosion
+    const explosion = document.createElement('div');
+    explosion.className = 'server-explosion';
+    explosion.style.position = 'absolute';
+    explosion.style.top = '50%';
+    explosion.style.left = '50%';
+    explosion.style.width = '60px';
+    explosion.style.height = '60px';
+    explosion.style.background = 'radial-gradient(circle, #ff4444, #ffaa00, transparent)';
+    explosion.style.borderRadius = '50%';
+    explosion.style.transform = 'translate(-50%, -50%) scale(0)';
+    explosion.style.animation = 'serverExplosion 0.8s ease-out';
+    explosion.style.zIndex = '1001';
+    explosion.style.pointerEvents = 'none';
+    
+    serverElement.style.position = 'relative';
+    serverElement.appendChild(explosion);
+    
+    // Faire clignoter le serveur
+    serverElement.style.animation = 'serverDestroyed 2s ease-in-out';
+    
+    setTimeout(() => {
+        if (explosion.parentNode) {
+            explosion.remove();
         }
+    }, 800);
+}
 
-        function stopAttack() {
-            gameState.attackActive = false;
-            clearInterval(attackInterval);
-            document.getElementById('stopBtn').disabled = true;
-            addLog(' Attaque arrêtée', 'info');
-            hideInfoComment();
+// Fonction pour créer des effets de particules lors d'attaques intenses
+function createParticleEffect(x, y, attackType) {
+    const container = document.getElementById('network-container');
+    const particleCount = attackType === 'botnet' ? 8 : 4;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = `particle ${attackType}`;
+        particle.style.position = 'absolute';
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.width = '4px';
+        particle.style.height = '4px';
+        particle.style.borderRadius = '50%';
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '998';
+        
+        const angle = (360 / particleCount) * i;
+        const distance = 30 + Math.random() * 20;
+        const duration = 300 + Math.random() * 200;
+        
+        switch(attackType) {
+            case 'pingflood':
+                particle.style.background = '#ff4444';
+                break;
+            case 'botnet':
+                particle.style.background = '#8b00ff';
+                break;
+            case 'targeted':
+                particle.style.background = '#ff6b35';
+                break;
         }
+        
+        particle.style.transition = `all ${duration}ms ease-out`;
+        container.appendChild(particle);
+        
+        // Animation des particules
+        setTimeout(() => {
+            const radian = (angle * Math.PI) / 180;
+            const deltaX = Math.cos(radian) * distance;
+            const deltaY = Math.sin(radian) * distance;
+            
+            particle.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            particle.style.opacity = '0';
+        }, 10);
+        
+        setTimeout(() => {
+            if (particle.parentNode) {
+                particle.remove();
+            }
+        }, duration + 50);
+    }
+}
 
-        function attackServer(serverId, intensity) {
-            const server = gameState.servers[serverId];
-            if (!server || server.health <= 0) return;
-            
-            // Calculer les dégâts avec les défenses
-            let damage = intensity * 2;
-            let blocked = false;
-            
-            // Appliquer les défenses
-            if (gameState.defenses.firewall) {
-                if (Math.random() < 0.4) {
-                    blocked = true;
-                    damage = 0;
-                }
-            }
-            
-            if (gameState.defenses.reverseProxy && !blocked) {
-                damage *= 0.4;
-            }
-            
-            if (gameState.defenses.rateLimiting && !blocked) {
-                damage *= 0.7;
-            }
-            
-            if (gameState.defenses.infrastructure && !blocked) {
-                damage *= 0.3;
-            }
-            
-            if (!blocked) {
-                server.health = Math.max(0, server.health - damage);
-                updateServerVisual(serverId);
-                
-                if (server.health <= 0) {
-                    gameState.activeServers--;
-                    addLog(` ${server.type} hors service`, 'error');
-                }
-            }
-            
-            // Créer des paquets visuels
-            createAttackPackets(serverId, blocked);
-            
-            // Vérifier l'état global
-            updateGlobalHealth();
-            updateUI();
-            
-            if (gameState.health <= 0 && gameState.phase === 'challenge') {
-                endChallengePhase(false);
-            }
+        // Fonctions d'attaque avec effets visuels améliorés
+function startPingFlood() {
+    if (gameState.attackActive) return;
+    
+    gameState.attackActive = true;
+    gameState.currentAttackType = 'pingflood'; // Nouveau: type d'attaque
+    document.getElementById('stopBtn').disabled = false;
+    
+    showInfoComment('Ping Flood', 
+        'Le Ping Flood envoie des messsages (paquets ICMP) en masse vers les serveurs cibles. ' +
+        'Cette attaque  peut surcharger les serveurs moins protégés. ' +
+        'Durée: 10 secondes. Impact: Modéré sur tous les serveurs.');
+    
+    addLog(' Ping Flood lancé', 'error');
+    
+    attackInterval = setInterval(() => {
+        Object.keys(gameState.servers).forEach(serverId => {
+            attackServer(serverId, 1);
+        });
+    }, 300);
+    
+    setTimeout(() => {
+        stopAttack();
+    }, 10000);
+}
+
+function startBotnetAttack() {
+    if (gameState.attackActive) return;
+    
+    gameState.attackActive = true;
+    gameState.currentAttackType = 'botnet'; // Nouveau: type d'attaque
+    document.getElementById('stopBtn').disabled = false;
+    
+    showInfoComment('Botnet Attack', 
+        'Attaque distribuée: on infecte des machines par propagation d un virus  ' +
+        'Génère un trafic massif depuis plusieurs sources. ' +
+        'Impact très élevé sur l\'infrastructure. Durée: 15 secondes.');
+    
+    addLog(' Attaque Botnet déclenchée', 'error');
+    
+    attackInterval = setInterval(() => {
+        Object.keys(gameState.servers).forEach(serverId => {
+            attackServer(serverId, 3);
+        });
+    }, 200);
+    
+    setTimeout(() => {
+        stopAttack();
+    }, 15000);
+}
+
+function startTargetedAttack() {
+    if (gameState.attackActive || !gameState.selectedServer) {
+        addLog(' Sélectionnez un serveur cible', 'error');
+        return;
+    }
+    
+    gameState.attackActive = true;
+    gameState.currentAttackType = 'targeted'; // Nouveau: type d'attaque
+    document.getElementById('stopBtn').disabled = false;
+    
+    const serverType = gameState.servers[gameState.selectedServer].type;
+    showInfoComment('Attaque Ciblée', 
+        `Attaque concentrée sur ${serverType}. ` +
+        'Utilise des techniques spécialisées pour exploiter les faiblesses spécifiques du serveur cible. ' +
+        'Impact très élevé mais localisé. Durée: 12 secondes.');
+    
+    addLog(` Attaque ciblée sur ${serverType}`, 'error');
+    
+    attackInterval = setInterval(() => {
+        attackServer(gameState.selectedServer, 4);
+    }, 150);
+    
+    setTimeout(() => {
+        stopAttack();
+    }, 12000);
+}
+
+// Fonction modifiée pour créer des paquets avec effets visuels spécifiques
+function createAttackPackets(serverId, blocked) {
+    const attackType = gameState.currentAttackType || 'default';
+    
+    // Créer 2-4 paquets selon le type d'attaque
+    let packetCount;
+    switch(attackType) {
+        case 'pingflood':
+            packetCount = Math.random() < 0.7 ? 3 : 4; // Plus de paquets
+            break;
+        case 'botnet':
+            packetCount = Math.random() < 0.8 ? 4 : 5; // Beaucoup de paquets
+            break;
+        case 'targeted':
+            packetCount = Math.random() < 0.6 ? 2 : 3; // Moins mais plus gros
+            break;
+        default:
+            packetCount = 2;
+    }
+    
+    for (let i = 0; i < packetCount; i++) {
+        setTimeout(() => {
+            createSinglePacket(serverId, blocked, attackType);
+        }, i * 50);
+    }
+}
+
+function createSinglePacket(serverId, blocked, attackType) {
+    const container = document.getElementById('network-container');
+    const server = document.getElementById(serverId);
+    
+    if (!server) return;
+    
+    const packet = document.createElement('div');
+    packet.className = `packet ${attackType} ${blocked ? 'blocked' : ''}`;
+    
+    // Positionnement initial (bord gauche ou coins)
+    let startX, startY;
+    if (attackType === 'botnet') {
+        // Les paquets botnet viennent de différentes directions
+        const side = Math.floor(Math.random() * 4);
+        switch(side) {
+            case 0: startX = 0; startY = Math.random() * window.innerHeight; break;
+            case 1: startX = window.innerWidth; startY = Math.random() * window.innerHeight; break;
+            case 2: startX = Math.random() * window.innerWidth; startY = 0; break;
+            case 3: startX = Math.random() * window.innerWidth; startY = window.innerHeight; break;
         }
+    } else {
+        // Autres attaques viennent principalement de la gauche
+        startX = Math.random() * 100;
+        startY = Math.random() * window.innerHeight;
+    }
+    
+    packet.style.left = startX + 'px';
+    packet.style.top = startY + 'px';
+    
+    // Définir l'apparence selon le type d'attaque
+    applyPacketStyle(packet, attackType, blocked);
+    
+    container.appendChild(packet);
+    
+    // Animation vers le serveur cible
+    const serverRect = server.getBoundingClientRect();
+    const targetX = serverRect.left + serverRect.width / 2;
+    const targetY = serverRect.top + serverRect.height / 2;
+    
+    // Durée d'animation selon le type
+    let duration;
+    switch(attackType) {
+        case 'pingflood':
+            duration = 800 + Math.random() * 400; // Rapide mais variable
+            break;
+        case 'botnet':
+            duration = 1200 + Math.random() * 800; // Plus lent, plus lourd
+            break;
+        case 'targeted':
+            duration = 600 + Math.random() * 200; // Très rapide et précis
+            break;
+        default:
+            duration = 1000;
+    }
+    
+    packet.style.transition = `all ${duration}ms ease-in-out`;
+    packet.style.transform = `translate(${targetX - startX}px, ${targetY - startY}px)`;
+    
+    // Effets spéciaux pendant l'animation
+    if (attackType === 'targeted') {
+        // Effet de focus pour l'attaque ciblée
+        setTimeout(() => {
+            packet.style.boxShadow = '0 0 20px #ff6b35, 0 0 40px #ff6b35';
+        }, duration * 0.3);
+    }
+    
+    // Suppression du paquet
+    setTimeout(() => {
+        if (packet.parentNode) {
+            // Effet d'impact selon le type et si bloqué
+            createImpactEffect(targetX, targetY, attackType, blocked);
+            packet.remove();
+        }
+    }, duration + 100);
+}
+
+function applyPacketStyle(packet, attackType, blocked) {
+    // Styles de base
+    packet.style.position = 'absolute';
+    packet.style.borderRadius = '50%';
+    packet.style.pointerEvents = 'none';
+    packet.style.zIndex = '1000';
+    
+    if (blocked) {
+        // Paquets bloqués - gris avec bordure rouge
+        packet.style.background = 'linear-gradient(45deg, #666, #999)';
+        packet.style.border = '2px solid #ff4444';
+        packet.style.width = '8px';
+        packet.style.height = '8px';
+        return;
+    }
+    
+    // Styles spécifiques selon le type d'attaque
+    switch(attackType) {
+        case 'pingflood':
+            // Rouge pulsant, petits et rapides
+            packet.style.width = '10px';
+            packet.style.height = '10px';
+            packet.style.background = 'radial-gradient(circle, #ff4444, #cc0000)';
+            packet.style.boxShadow = '0 0 10px #ff4444';
+            packet.style.animation = 'pulse 0.3s infinite alternate';
+            break;
+            
+        case 'botnet':
+            // Violet/noir, plus gros, avec traînée
+            packet.style.width = '14px';
+            packet.style.height = '14px';
+            packet.style.background = 'radial-gradient(circle, #8b00ff, #4b0082)';
+            packet.style.boxShadow = '0 0 15px #8b00ff, 0 0 30px rgba(139, 0, 255, 0.3)';
+            packet.style.animation = 'botnetTrail 0.8s infinite';
+            break;
+            
+        case 'targeted':
+            // Orange brillant, forme légèrement différente
+            packet.style.width = '12px';
+            packet.style.height = '12px';
+            packet.style.background = 'radial-gradient(circle, #ff6b35, #e55100)';
+            packet.style.boxShadow = '0 0 12px #ff6b35';
+            packet.style.borderRadius = '30%';
+            packet.style.animation = 'targetedFocus 0.5s ease-in-out infinite alternate';
+            break;
+            
+        default:
+            packet.style.width = '8px';
+            packet.style.height = '8px';
+            packet.style.background = '#ff0000';
+    }
+}
+
+function createImpactEffect(x, y, attackType, blocked) {
+    const container = document.getElementById('network-container');
+    const impact = document.createElement('div');
+    impact.className = `impact-effect ${attackType}`;
+    
+    impact.style.position = 'absolute';
+    impact.style.left = (x - 15) + 'px';
+    impact.style.top = (y - 15) + 'px';
+    impact.style.width = '30px';
+    impact.style.height = '30px';
+    impact.style.borderRadius = '50%';
+    impact.style.pointerEvents = 'none';
+    impact.style.zIndex = '999';
+    
+    if (blocked) {
+        // Effet d'impact bloqué
+        impact.style.background = 'radial-gradient(circle, rgba(255, 68, 68, 0.6), transparent)';
+        impact.style.border = '2px solid #ff4444';
+        impact.style.animation = 'blockedImpact 0.5s ease-out';
+    } else {
+        // Effets d'impact selon le type
+        switch(attackType) {
+            case 'pingflood':
+                impact.style.background = 'radial-gradient(circle, rgba(255, 68, 68, 0.8), transparent)';
+                impact.style.animation = 'pingImpact 0.4s ease-out';
+                break;
+            case 'botnet':
+                impact.style.background = 'radial-gradient(circle, rgba(139, 0, 255, 0.8), transparent)';
+                impact.style.animation = 'botnetImpact 0.6s ease-out';
+                break;
+            case 'targeted':
+                impact.style.background = 'radial-gradient(circle, rgba(255, 107, 53, 0.9), transparent)';
+                impact.style.animation = 'targetedImpact 0.3s ease-out';
+                break;
+        }
+    }
+    
+    container.appendChild(impact);
+    
+    setTimeout(() => {
+        if (impact.parentNode) {
+            impact.remove();
+        }
+    }, 600);
+}
+
+function stopAttack() {
+    gameState.attackActive = false;
+    gameState.currentAttackType = null; // Reset du type d'attaque
+    clearInterval(attackInterval);
+    document.getElementById('stopBtn').disabled = true;
+    addLog(' Attaque arrêtée', 'info');
+    hideInfoComment();
+}
+
+       
 
         // Fonctions de défense
         function deployFirewall() {
@@ -1958,8 +2551,6 @@ function endTutorial() {
 
         // Fonctions visuelles
         function createAttackPackets(targetServerId, blocked) {
-            const packet = document.createElement('div');
-    packet.className = `packet ${attackType || 'default'}`; 
             const spawnPoint = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
             const targetServer = document.getElementById(targetServerId);
             
