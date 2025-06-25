@@ -1514,6 +1514,10 @@
                 <span class="server-info-label">Statut:</span>
                 <span class="server-info-value" id="serverStatus">Normal</span>
             </div>
+            <div class="server-info-item">
+                <span class="server-info-label">Défenses:</span>
+                <span class="server-info-value" id="serverDefenses">Aucune</span>
+            </div>
             <button class="attack-target-btn" onclick="attackSelectedServer()" id="attackTargetBtn">
                 Attaquer ce serveur
             </button>
@@ -1688,11 +1692,11 @@ function endTutorial() {
                 redundancy: false
             },
             servers: {
-                server1: { health: 100, type: 'Web Server', status: 'normal'},
-                server2: { health: 100, type: 'DB Server', status: 'normal'},
-                server3: { health: 100, type: 'API Server', status: 'normal' },
-                server4: { health: 100, type: 'CDN Node', status: 'normal' },
-                server5: { health: 100, type: 'Cache Server', status: 'normal' }
+                server1: { health: 100, type: 'Web Server', status: 'normal', defenses: [] },
+                server2: { health: 100, type: 'DB Server', status: 'normal', defenses: [] },
+                server3: { health: 100, type: 'API Server', status: 'normal', defenses: [] },
+                server4: { health: 100, type: 'CDN Node', status: 'normal', defenses: [] },
+                server5: { health: 100, type: 'Cache Server', status: 'normal', defenses: [] }
             }
         };
 
@@ -1826,6 +1830,7 @@ function endTutorial() {
             Object.keys(gameState.servers).forEach(serverId => {
                 gameState.servers[serverId].health = 100;
                 gameState.servers[serverId].status = 'normal';
+                gameState.servers[serverId].defenses = [];
                 resetServerVisual(serverId);
             });
             
@@ -2485,7 +2490,7 @@ function stopAttack() {
     
     showInfoComment('Redondance', 
         'Déploie des serveurs de sauvegarde et des systèmes de failover automatique. ' +
-        'Si un serveur tombe, le trafic est automatiquement redirigé vers des serveurs de sauvegarde. ' +
+        'Si un serveur tombe, le trafic est automatiquement redirigé vers les backups. ' +
         'Assure une continuité de service même en cas d\'attaque réussie sur certains serveurs.', 
         'defense');
     
@@ -2651,6 +2656,7 @@ function stopAttack() {
             document.getElementById('serverType').textContent = server.type;
             document.getElementById('serverHealth').textContent = server.health + '%';
             document.getElementById('serverStatus').textContent = server.status;
+            document.getElementById('serverDefenses').textContent = server.defenses.length > 0 ? server.defenses.join(', ') : 'Aucune';
             
             const attackBtn = document.getElementById('attackTargetBtn');
             attackBtn.disabled = gameState.attackActive || gameState.phase === 'challenge';
@@ -3209,7 +3215,7 @@ function attackServerUltimate(serverId, intensity) {
         updateServerVisual(serverId);
         
         if (server.health <= 0) {
-            gameState.actives--;
+            gameState.activeServers--;
             addLog(` ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
         }
     }
@@ -3227,9 +3233,10 @@ function attackServerUltimate(serverId, intensity) {
     }
 }
 
-
+// Modifier la fonction resetToLearning pour restaurer les fonctions originales
 const originalResetToLearning = resetToLearning; 
 resetToLearning = function() { 
+    // Restaurer les fonctions d'attaque originales si elles existent
     if (gameState.originalAttackFunctions) {  
         window.startPingFlood = gameState.originalAttackFunctions.startPingFlood;  
         window.startBotnetAttack = gameState.originalAttackFunctions.startBotnetAttack;  

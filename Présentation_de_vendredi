@@ -1,0 +1,51 @@
+En quoi consiste notre projet Artishow : 
+Notre projet s'intitule "Jeu Web Bonnes et mauvaises pratiques en cybersécurité". 
+L'objectif est de créer un jeu ludique, accessible à tous, notamment aux personnes vulnérables comme 
+les enfants et les séniors qui leur permet de se prémunir contre les dangers en ligne comme le phishing
+ou le craquage de mot de passe.  Le but est aussi que les joueurs comprennent les enjeux globaux liées à 
+la cybersécurité même si ceux-ci ne les touchent pas dans leur quotidien (par exemple comprendre 
+simplement les menaces en terme de cybersécurité au sein de l'entreprise). On a voulu de 
+manière générale proposer une vision originale de la cybersécurité, avec uniquement des personnages 
+féminins pour casser le cliché "les femmes ne peuvent pas faire de l'informatique" . 
+
+L'architecture globale de notre jeu: 
+Notre jeu comporte 4 niveaux auquels on peut accéder via un menu en cliquant sur le bouton correspondant. 
+Chaque niveau explique un danger lié à  la cybersécurité : le phishing, l'arnaque au SMS,l'attaque DDos 
+et enfin le craquage de mot de passe. Dans chaque niveau, il y a deux modes: le mode hackeuse, pour 
+commprendre les mécanismes d'une cyberattaque, puis le mode hackeur pour connaître les comportements à
+adopter face à ce type d'attaques. 
+
+Les étapes de conception: 
+Au cours d'une phase qui a duré jusqu'à avril environ, nous nous sommes avant tout concentré sur la partie
+de renseignements : on a appris les bases de la cybersécurité et des différentes attaques, au travers de 
+vidéos et de livre empruntés au CRDN. Puis de avril à mai, on a d'abord tenté de coder notre code sur Unity, 
+parce qu'on pensait que ce serait plus simple pour travailler en groupe, mais on a eu beaucoup de 
+difficultés, déjà parce qu'on maitrisait mal le C sharp et ensuite parce qu'on trouvait que les rendus 
+visuels n'étaient pas optimaux. Donc on a codé en html, en complément de codes CSS et java script, avec 
+des liens sur des pages qui sont pour l'instant locales et que notre encadrant a prévu d'héberger sur 
+son site. 
+
+
+l'attaque Ddos : 
+Une attaque par déni de service distribuées (Distributed Denial of Service Attack) consiste à rendre inutilisable 
+un service en empêchant les utilisateurs de l'utiliser. Dans ce cas particulier, on inonde le réseau avec des ICMP 
+(Internet Control Message  Protocol) qui gère le contrôle de la connexion entre deux machines. D'abord, 
+on a un tutoriel (je fais le tutoriel). Il y a trois "types" d'attaques: la ping flood que j'ai décrite 
+précedement, la botnet attack qui repose sur le même principe sauf que pour la rendre encore plus massive, 
+on envoie pas l'attaque que depuis un unique ordinateur mais depuis un réseau d'ordinateurs qu'on a infecté 
+à l'aide d'un virus créeant une armée de zombies. Enfin, l'attaque ciblée est explicite. Du côté des 
+défenses, on a le Firewall, qui est une défense générique qui surveille les paquets de données et si ils 
+respectent certaines conditions de sécurité. Le load Balancer permet de mieux répartir les charges, le 
+Rate Limiting limite le débit du traffic et enfin la Redondance redirige le traffic vers des serveurs de 
+backups. Ensuite, un fois qi'on a bien tout compris, on peut passer en mode Attaque : le but est de percer les
+défenses. Puis le mode Défense: on va subir 5 vagues d'attaque, et le but est de survivre. 
+
+Ce qu'on a appris/ Les pistes d'amélioration: 
+Ce projet nous a permis de développer notre autonomie, notamment en termes de recherche de solutions et
+de choix décisifs (abandonner Unity). On a bien sûr égalemment énormément appris sur la cybersécurité, 
+et on va nous-mêmes appliquer des conseils que l'on donne dans le jeu et qu'on ne faisait pas avant. 
+Bien sûr, il y a des pistes d'amélioriation: même si on a tenté de conserver une certaine cohérence 
+visuelle, le fait de choisir de développer chacune le jeu de notre côté implique de légères différences. 
+Et comme il s'agit d'une consigne ouverte, on avait prévu à l'origine d'avoir de nombreuses autres 
+fonctionnalités dans nos niveaux respectifs, qu'on aurait davantage développé avec plus de temps.
+
