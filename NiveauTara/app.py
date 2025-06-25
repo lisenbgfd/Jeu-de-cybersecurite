@@ -34,7 +34,7 @@ def analyze():
                 "messages": [
                     {
                         "role": "user",
-                        "content": f'Voici un message : "{user_message}". Donne une note entre 0% et 100% d\'efficacité scam, avec un bref commentaire.\nFormat:\nScore : XX%\nCommentaire : ...'
+                        "content": f'Voici un message : "{user_message}". Donne une note entre 0% et 100% d\'efficacité scam c\'est à dire combien de gens tomberaient dans le panneau, avec un bref commentaire.\nFormat:\nScore : XX%\nCommentaire : ...'
                     }
                 ]
             }
