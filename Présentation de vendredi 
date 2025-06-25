@@ -29,4 +29,8 @@ l'attaque Ddos :
 Une attaque par déni de service distribuées (Distributed Denial of Service Attack) consiste à rendre inutilisable 
 un service en empêchant les utilisateurs de l'utiliser. Dans ce cas particulier, on inonde le réseau avec des ICMP 
 (Internet Control Message  Protocol) qui gère le contrôle de la connexion entre deux machines. D'abord, 
-on a un tutoriel (je fais le tutoriel). Il y a trois attaques: 
+on a un tutoriel (je fais le tutoriel). Il y a trois "types" d'attaques: la ping flood que j'ai décrite 
+précedement, la botnet attack qui repose sur le même principe sauf que pour la rendre encore plus massive, 
+on envoie pas l'attaque que depuis un unique ordinateur mais depuis un réseau d'ordinateurs qu'on a infecté 
+à l'aide d'un virus créeant une armée de zombies. Enfin, l'attaque ciblée est explicite. Du côté des 
+défenses, on a 
