@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arnaque SMS</title>
+    <title>Arnaque SMS mode victime</title>
     <style>
         * {
             margin: 1;
@@ -510,7 +510,7 @@ const dangerKeywords = [
     "je donne", "j’envoie", "je paie", "je transfère", "c’est fait",
     "maintenant", "je te fais confiance", "je m’en occupe", "voilà",
     "tiens", "carte", "paypal", "bitcoins", "crypto", "photo", "pièce jointe","d'accord",
-    "ok",
+    "ok","merci",
     "voici mon mot de passe",
     "voilà le code",
     "je vous l’envoie",
@@ -534,11 +534,12 @@ const dangerKeywords = [
     "c’est fait",
     "pas de problème",
     "envoyé",
-    "dépêchez-vous"
+    "dépêchez-vous",
+    "pas de soucis"
 ];
 
 const safeKeywords = [
-    "non", "pas", "jamais", "refus", "refuser", "bizarre", "arnaque",
+    "non", "jamais", "refus", "refuser", "bizarre", "arnaque",
     "suspect", "doute", "peur", "dangereux", "je ne sais pas",
     "je ne connais pas", "je ne donne pas", "je ne clique pas",
     "stop", "faux", "je bloque", "signaler", "bloquer", "police",
@@ -577,7 +578,7 @@ const safeKeywords = [
 
             if (message.isScam) {
                 const lowerResponse = playerReply.toLowerCase();
-                let score = 50;
+                let score_message = 50;
                 let dangerPoints = 0;
                 let safePoints = 0;
 
@@ -593,12 +594,14 @@ const safeKeywords = [
                     }
                 });
 
-                score = Math.max(0, Math.min(100, score + safePoints - dangerPoints));
+                score_message = Math.max(0, Math.min(100, score_message + safePoints - dangerPoints));
 
-                if (score >= 50) {
+                if (score_message >= 50) {
                     score++;
                     showFeedback("Bonne réponse ! Ce message était un scam.", true);
-                } else {
+                    updateScore();
+                    }
+                else {
                     showFeedback("Attention ! C'était une arnaque !", false);
                 }
             } else {
