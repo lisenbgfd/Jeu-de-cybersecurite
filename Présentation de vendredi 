@@ -11,5 +11,11 @@ féminins pour casser le cliché "les femmes ne peuvent pas faire de l'informati
 L'architecture globale de notre jeu: 
 Notre jeu comporte 4 niveaux auquels on peut accéder via un menu en cliquant sur le bouton correspondant. 
 Chaque niveau explique un danger lié à  la cybersécurité : le phishing, l'arnaque au SMS,l'attaque DDos 
-et enfin le craquage de mot de passe. Dans chaque 
+et enfin le craquage de mot de passe. Dans chaque niveau, il y a deux modes: le mode hackeuse, pour 
+commprendre les mécanismes d'une cyberattaque, puis le mode hackeur pour connaître les comportements à
+adopter face à ce type d'attaques. 
+
+Les étapes de conception: 
+Au cours d'une phase qui a duré jusqu 
+
 
