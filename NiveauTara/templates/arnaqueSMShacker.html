@@ -358,48 +358,35 @@
 
     <script>
         let score = 0;
-
-function initializeGame() {
-    const messagesList = document.getElementById('messagesList');
-    if (messagesList) messagesList.innerHTML = '';
-}
-
-async function evaluateScamMessage(message) {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer sk-proj-..." // Remplace par ta vraie clé API
-        },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [
-                {
-                    role: "system",
-                    content: "Tu es un expert en cybersécurité spécialisé dans les arnaques par SMS."
-                },
-                {
-                    role: "user",
-                    content: `Voici le message écrit par le joueur :\n\n"${message}"\n\nÉvalue-le comme demandé.`
-                },
-                {
-                    role: "user",
-                    content: `Rappelle-toi : réponds avec ce format seulement :\nScore : XX%\nCommentaire : [brève explication]`
-                }
-            ],
-            temperature: 0.5
-        })
-    });
-
-    const data = await response.json();
-    return data.choices[0].message.content;
-}
-
+        
 function getRandomTime() {
     const hours = Math.floor(Math.random() * 12) + 8;
     const minutes = Math.floor(Math.random() * 60);
     return `${hours}:${minutes.toString().padStart(2, '0')}`;
 }
+
+async function evaluateScamMessage(message) {
+  try {
+    const response = await fetch("http://127.0.0.1:3000/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message })
+    });
+
+    if (!response.ok) {
+      throw new Error("Erreur du serveur");
+    }
+
+    const data = await response.json();
+    return data.result;
+  } catch (error) {
+    console.error("Erreur lors de l'analyse :", error);
+    return "Erreur lors de l'analyse.";
+  }
+}
+
 
 function updateScore() {
     document.getElementById('score').textContent = score;
@@ -438,8 +425,6 @@ function goBack() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initializeGame();
-
     const input = document.getElementById('scamInput');
     const feedbackDiv = document.getElementById('gptFeedback');
     const submitBtn = document.getElementById('submitScam');
@@ -455,21 +440,24 @@ document.addEventListener('DOMContentLoaded', () => {
             feedbackDiv.textContent = evaluation;
         } catch (error) {
             feedbackDiv.textContent = "Erreur lors de l'analyse.";
-            console.error(error);
+            console.error("Erreur GPT :", error);
         }
     }
-
-    input.addEventListener('keydown', async function (event) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            await handleSubmit();
-        }
-    });
 
     if (submitBtn) {
-        submitBtn.addEventListener('click', handleSubmit);
+        submitBtn.addEventListener('click', () => {
+            handleSubmit();
+        });
     }
+
+    input.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSubmit();
+        }
+    });
 });
+
 
 window.onclick = function(event) {
     const modals = document.querySelectorAll('.modal');
