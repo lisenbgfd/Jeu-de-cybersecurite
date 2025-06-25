@@ -40,144 +40,7 @@
         transform: scale(1);
     }
 }
-/* Animations pour les effets sur les serveurs */
 
-@keyframes serverExplosion {
-    0% { 
-        transform: translate(-50%, -50%) scale(0); 
-        opacity: 1; 
-    }
-    50% { 
-        transform: translate(-50%, -50%) scale(1.5); 
-        opacity: 0.8; 
-    }
-    100% { 
-        transform: translate(-50%, -50%) scale(3); 
-        opacity: 0; 
-    }
-}
-
-@keyframes serverDestroyed {
-    0%, 100% { 
-        opacity: 1; 
-        filter: brightness(1); 
-    }
-    10%, 30%, 50%, 70%, 90% { 
-        opacity: 0.3; 
-        filter: brightness(0.3) saturate(0); 
-    }
-    20%, 40%, 60%, 80% { 
-        opacity: 0.8; 
-        filter: brightness(1.5) saturate(1.5); 
-    }
-}
-
-/* Effets avancés pour les attaques sur les serveurs */
-.server.under-attack-pingflood {
-    animation: pingFloodShake 0.3s infinite;
-    box-shadow: 0 0 15px rgba(255, 68, 68, 0.6) !important;
-}
-
-.server.under-attack-botnet {
-    animation: botnetOverload 0.8s infinite;
-    position: relative;
-}
-
-.server.under-attack-botnet::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    background: linear-gradient(45deg, transparent, rgba(139, 0, 255, 0.3), transparent);
-    border-radius: inherit;
-    animation: botnetScan 1s infinite;
-    z-index: -1;
-}
-
-.server.under-attack-targeted {
-    animation: targetedStress 0.2s infinite;
-    position: relative;
-    overflow: visible;
-}
-
-.server.under-attack-targeted::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 120%;
-    height: 120%;
-    border: 2px solid rgba(255, 107, 53, 0.8);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: targetedCrosshair 0.5s infinite;
-}
-
-@keyframes botnetScan {
-    0% { 
-        transform: rotate(0deg); 
-        opacity: 0.3; 
-    }
-    50% { 
-        opacity: 0.8; 
-    }
-    100% { 
-        transform: rotate(360deg); 
-        opacity: 0.3; 
-    }
-}
-
-@keyframes targetedCrosshair {
-    0% { 
-        transform: translate(-50%, -50%) scale(1); 
-        opacity: 1; 
-    }
-    50% { 
-        transform: translate(-50%, -50%) scale(1.1); 
-        opacity: 0.6; 
-    }
-    100% { 
-        transform: translate(-50%, -50%) scale(1); 
-        opacity: 1; 
-    }
-}
-
-/* Effets de particules */
-.particle {
-    transition: all 300ms ease-out;
-}
-
-.particle.pingflood {
-    box-shadow: 0 0 4px #ff4444;
-}
-
-.particle.botnet {
-    box-shadow: 0 0 6px #8b00ff;
-}
-
-.particle.targeted {
-    box-shadow: 0 0 5px #ff6b35;
-}
-
-/* Amélioration visuelle générale */
-.server {
-    transition: all 0.3s ease;
-}
-
-.server:hover {
-    transform: scale(1.05);
-}
-
-/* Effet de surcharge réseau */
-.network-container.under-heavy-attack {
-    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.1), transparent);
-    animation: networkStress 2s infinite;
-}
-
-@keyframes networkStress {
-    0%, 100% {
 
 /* Animation de focus pour Attaque Ciblée */
 @keyframes targetedFocus {
@@ -586,6 +449,143 @@
     animation: waveAlert 3s ease-in-out;
     pointer-events: none;
 }
+
+/* Animations pour les effets sur les serveurs */
+
+@keyframes serverExplosion {
+    0% { 
+        transform: translate(-50%, -50%) scale(0); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.5); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: translate(-50%, -50%) scale(3); 
+        opacity: 0; 
+    }
+}
+
+@keyframes serverDestroyed {
+    0%, 100% { 
+        opacity: 1; 
+        filter: brightness(1); 
+    }
+    10%, 30%, 50%, 70%, 90% { 
+        opacity: 0.3; 
+        filter: brightness(0.3) saturate(0); 
+    }
+    20%, 40%, 60%, 80% { 
+        opacity: 0.8; 
+        filter: brightness(1.5) saturate(1.5); 
+    }
+}
+
+/* Effets avancés pour les attaques sur les serveurs */
+.server.under-attack-pingflood {
+    animation: pingFloodShake 0.3s infinite;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.6) !important;
+}
+
+.server.under-attack-botnet {
+    animation: botnetOverload 0.8s infinite;
+    position: relative;
+}
+
+.server.under-attack-botnet::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(45deg, transparent, rgba(139, 0, 255, 0.3), transparent);
+    border-radius: inherit;
+    animation: botnetScan 1s infinite;
+    z-index: -1;
+}
+
+.server.under-attack-targeted {
+    animation: targetedStress 0.2s infinite;
+    position: relative;
+    overflow: visible;
+}
+
+.server.under-attack-targeted::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    border: 2px solid rgba(255, 107, 53, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: targetedCrosshair 0.5s infinite;
+}
+
+@keyframes botnetScan {
+    0% { 
+        transform: rotate(0deg); 
+        opacity: 0.3; 
+    }
+    50% { 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: rotate(360deg); 
+        opacity: 0.3; 
+    }
+}
+
+@keyframes targetedCrosshair {
+    0% { 
+        transform: translate(-50%, -50%) scale(1); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.1); 
+        opacity: 0.6; 
+    }
+    100% { 
+        transform: translate(-50%, -50%) scale(1); 
+        opacity: 1; 
+    }
+}
+
+/* Effets de particules */
+.particle {
+    transition: all 300ms ease-out;
+}
+
+.particle.pingflood {
+    box-shadow: 0 0 4px #ff4444;
+}
+
+.particle.botnet {
+    box-shadow: 0 0 6px #8b00ff;
+}
+
+.particle.targeted {
+    box-shadow: 0 0 5px #ff6b35;
+}
+
+/* Amélioration visuelle générale */
+.server {
+    transition: all 0.3s ease;
+}
+
+.server:hover {
+    transform: scale(1.05);
+}
+
+/* Effet de surcharge réseau */
+.network-container.under-heavy-attack {
+    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.1), transparent);
+    animation: networkStress 2s infinite;
+}
+
 
         @keyframes waveAlert { 
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } 
