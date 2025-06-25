@@ -307,16 +307,16 @@
     <button class="back-btn" onclick="goBack()">← Retour</button>
     <div class="rules">
         <h2>Règles du Jeu</h2>
-        <p>Vous avez reçu 10 messages, certains sont des arnaques. Faites attention en répondant !</p>
+        <p>Essayez d'écrire le message scam le plus convaincant à l'aide des différentes techniques !</p>
     </div>
 </div>
 
 <!-- Profil du joueur positionné librement -->
 <div class="player-profile">
-    <h2>Vous êtes :</h2>
+    <h2>Vous ciblez :</h2>
     <p><strong>Nom :</strong> Camille B.</p>
     <p><strong>Âge :</strong> 44 ans</p>
-    <p>Vous travaillez à IBM, vous habitez en banlieu parisienne avec votre conjoint et vos deux enfants : Gabrielle 14 ans et Alix 11 ans</p>
+    <p>Elle travaillez à IBM, et habite en banlieu parisienne avec son conjoint et ses deux enfants : Gabrielle 14 ans et Alix 11 ans</p>
 </div>
 
 
@@ -325,44 +325,8 @@
         Score: <span id="score">0</span>/10
     </div>
 
-    <div class="game-container">
-        <div class="phone">
-            <div class="phone-screen">
-                <div class="status-bar">
-                    <span>9:41</span>
-                    <span>🔋 87%</span>
-                </div>
-                <div class="messages-header">
-                    Messages (10)
-                </div>
-                <div class="messages-list" id="messagesList">
-                    <!-- Les messages seront générés par JavaScript -->
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <button class="finish-btn" onclick="finishGame()">Passer au mode hacker </button>
-
-    <!-- Modal pour répondre aux messages -->
-    <div class="modal" id="messageModal">
-        <div class="modal-content">
-            <h3 id="modalSender">Expéditeur</h3>
-            <p id="modalContent">Contenu du message</p>
-
-            <!-- On supprime action/method car on gère tout en JS -->
-            <form onsubmit="return false;">
-                <label for="playerReply">Que faites vous/ Que répondez vous ? :</label><br>
-                <textarea id="playerReply" name="playerReply" rows="4" cols="50" placeholder="Écris ta réponse ici..."></textarea><br>
-
-                <div class="modal-buttons">
-                    <!-- Appelle une fonction qui lit le champ et appelle analyzeCustomResponse avec les bons arguments -->
-                    <button type="button" class="modal-btn reply-btn" onclick="handleReply()">Envoyer</button>
-                    <button type="button" class="modal-btn ignore-btn" onclick="ignoreMessage()">Ignorer</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <button class="finish-btn" onclick="finishGame()">Revenir au menu principal</button>
 
 
 
@@ -381,81 +345,6 @@
 
     <script>
         let score = 0;
-        let messagesAnswered = 0;
-        let currentMessageIndex = -1;
-
-        const messages = [
-            {
-                sender: "Banque Populaire",
-                preview: "Urgent : Votre compte sera suspendu dans 2h...",
-                content: "Urgent : Votre compte sera suspendu dans 2h. Cliquez sur ce lien pour le réactiver : www.banque-populaire-secure.com",
-                isScam: true,
-                type: "link",
-            },
-            {
-                sender: "Mon amour",
-                preview: "Salut ma chérie ! Tu rentres à quelle heure ce soir ? ...",
-                content: "Salut ma chérie ! Tu rentres à quelle heure ce soir ? J'ai préparé ton plat préféré !",
-                isScam: false,
-                type: "family"
-            },
-            {
-                sender: "Netflix Suport",
-                preview: "Votre abonnement Netflix expire demain...",
-                content: "Votre abonnement Netflix expire demain ! Profitez de 50% de réduction en renouvelant maintenant : netflix-renewall.net",
-                isScam: true,
-                type: "link",
-            },
-            {
-                sender: "Unknown",
-                preview: "C'est le livreur j'ai un colis à votre nom...",
-                content: "c'est le livreur j'ai un colis à votre nom qui ne rentrait pas dans la boite aux lettres veuillez choisir un relais https://mondiale-livraison.com",
-                isScam: true,
-                type: "link",
-            },
-            {
-                sender: "Pierre (Travail) ",
-                preview: "Salut ! La réunion de demain est reportée à 15h au lieu de 14h...",
-                content: "Salut ! La réunion de demain est reportée à 15h au lieu de 14h. Merci de confirmer ta présence.",
-                isScam: false,
-                type: "work"
-            },
-            {
-                sender: "Unknown",
-                preview: "Nous cherchons 100 volontaires pour tester...",
-                content: "Nous cherchons 100 volontaires pour tester nos nouveaux appareils auditifs gratuitement. Infos https://adzm.me/8ex7ostc",
-                isScam: true,
-                type: "link",
-            },
-            {
-                sender: "Dr. Martin",
-                preview: "Rappel : Rendez-vous demain 10h pour votre visite annuelle",
-                content: "Bonjour, je vous rappelle votre rendez-vous demain à 10h pour votre visite médicale annuelle.",
-                isScam: false,
-                type: "medical"
-            },
-            {
-                sender: "Sarah",
-                preview: "Salut ! Ça te dit un ciné ce weekend ? Il y a le nouveau film Marvel !",
-                content: "Salut ! Ça te dit un ciné ce weekend ? Il y a le nouveau film Marvel qui sort !",
-                isScam: false,
-                type: "friend"
-            },
-            {
-                sender: "Pôle Emploi",
-                preview: "Nouvelle offre d'emploi correspondant à votre profil",
-                content: "Bonjour, nous avons trouvé une nouvelle offre d'emploi correspondant à votre profil. Consultez votre espace personnel.",
-                isScam: false,
-                type: "job"
-            },
-            {
-                sender: "Unknown",
-                preview: "Coucou maman, j’ai cassé mon téléphone...",
-                content: "Coucou maman, j’ai cassé mon téléphone, là je te parle depuis celui d’un ami. Peux-tu m’avancer de l’argent pour en acheter un autre ? Voici le RIB de mon ami : FR76 5000 4032 8500 0087 8427 258",
-                isScam: true,
-                type: "family",
-            }
-        ];
 
         function initializeGame() {
             const messagesList = document.getElementById('messagesList');
@@ -482,191 +371,12 @@
             return `${hours}:${minutes.toString().padStart(2, '0')}`;
         }
 
-        function openMessage(index) {
-            currentMessageIndex = index;
-            const message = messages[index];
-            
-            document.getElementById('modalSender').textContent = message.sender;
-            document.getElementById('modalContent').textContent = message.content;
-            document.getElementById('messageModal').style.display = 'block';
-        }
-
-        function handleReply() {
-            const playerReply = document.getElementById("playerReply").value;
-
-            if (playerReply.trim() === "") {
-                alert("Merci d’écrire une réponse !");
-                return;
-            }
-
-            analyzeCustomResponse(playerReply);
-        }
-
-const dangerKeywords = [
-    "ok", "oui", "d’accord", "voici", "tiens", "tiens le", "envoyé",
-    "fait", "pris", "acheté", "code", "mot de passe", "numéro",
-    "adresse", "argent", "payer", "paie", "compte", "virement",
-    "urgence", "immédiat", "tout de suite", "je le fais", "je t’envoie",
-    "je donne", "j’envoie", "je paie", "je transfère", "c’est fait",
-    "maintenant", "je te fais confiance", "je m’en occupe", "voilà",
-    "tiens", "carte", "paypal", "bitcoins", "crypto", "photo", "pièce jointe","d'accord",
-    "ok",
-    "voici mon mot de passe",
-    "voilà le code",
-    "je vous l’envoie",
-    "j’ai fait le virement",
-    "je vais acheter la carte",
-    "combien dois-je envoyer",
-    "je te fais confiance",
-    "je comprends l’urgence",
-    "j’envoie tout de suite",
-    "je le fais maintenant",
-    "pas de souci",
-    "je m’en occupe",
-    "voici mes infos",
-    "voici mes coordonnées",
-    "je paie maintenant",
-    "je clique sur le lien",
-    "j’ouvre la pièce jointe",
-    "voici mon numéro",
-    "ça marche",
-    "merci pour l’info",
-    "c’est fait",
-    "pas de problème",
-    "envoyé",
-    "dépêchez-vous"
-];
-
-const safeKeywords = [
-    "non", "pas", "jamais", "refus", "refuser", "bizarre", "arnaque",
-    "suspect", "doute", "peur", "dangereux", "je ne sais pas",
-    "je ne connais pas", "je ne donne pas", "je ne clique pas",
-    "stop", "faux", "je bloque", "signaler", "bloquer", "police",
-    "je vérifie", "mensonge", "triche", "sécurité", "identité",
-    "c’est illégal", "je doute", "problème", "piège", "spam", "pirate",
-    "arnaqueur", "tentative", "trop rapide", "trop beau", "incohérent","c’est une arnaque",
-    "c’est suspect",
-    "je ne fais pas confiance",
-    "je ne clique pas",
-    "je ne communique pas mes infos",
-    "je ne vous connais pas",
-    "vous êtes qui",
-    "c’est bizarre",
-    "je vais prévenir quelqu’un",
-    "je vais appeler",
-    "je vais vérifier",
-    "ça semble faux",
-    "je ne réponds pas à ça",
-    "je refuse",
-    "non merci",
-    "pas question",
-    "je bloque",
-    "je supprime",
-    "arnaque détectée",
-    "vous êtes un scam",
-    "je signale ce message",
-    "je ne paierai pas",
-    "vous mentez",
-    "j’appelle la police",
-    "c’est illégal"
-];
-
-
-        function analyzeCustomResponse(playerReply) {
-            const message = messages[currentMessageIndex]; // Récupération du message en cours
-
-            if (message.isScam) {
-                const lowerResponse = playerReply.toLowerCase();
-                let score = 50;
-                let dangerPoints = 0;
-                let safePoints = 0;
-
-                dangerKeywords.forEach(keyword => {
-                    if (lowerResponse.includes(keyword.toLowerCase())) {
-                        dangerPoints += 25;
-                    }
-                });
-
-                safeKeywords.forEach(keyword => {
-                    if (lowerResponse.includes(keyword.toLowerCase())) {
-                        safePoints += 25;
-                    }
-                });
-
-                score = Math.max(0, Math.min(100, score + safePoints - dangerPoints));
-
-                if (score >= 50) {
-                    score++;
-                    showFeedback("Bonne réponse ! Ce message était un scam.", true);
-                } else {
-                    showFeedback("Attention ! C'était une arnaque !", false);
-                }
-            } else {
-                score++;
-                showFeedback("Ce message était légitime. Merci pour votre réponse !", true);
-            }
-
-            closeModal();
-            updateScore();
-            markMessageAsAnswered(currentMessageIndex);
-        }
-
-
-        function ignoreMessage() {
-            const message = messages[currentMessageIndex];
-            messagesAnswered++;
-            if (message.isScam) {
-                // Le joueur a ignoré une arnaque (bon choix)
-                score++;
-                showFeedback("Excellent ! Vous avez bien fait d'ignorer cette arnaque.", true);
-            } else {
-                // Le joueur a ignoré un message légitime (mauvais choix)
-                showFeedback("Dommage ! Ce message était légitime, il fallait répondre.", false);
-            }
-            
-            closeModal();
-            updateScore();
-            markMessageAsAnswered(currentMessageIndex);
-        }
-
-        function showFeedback(message, isCorrect) {
-            const feedback = document.createElement('div');
-            feedback.style.cssText = `
-                position: fixed;
-                top: 100px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: ${isCorrect ? '#4CAF50' : '#f44336'};
-                color: white;
-                padding: 15px 25px;
-                border-radius: 25px;
-                font-weight: 600;
-                z-index: 1001;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-                animation: fadeInOut 3s ease-in-out;
-            `;
-            feedback.textContent = message;
-            document.body.appendChild(feedback);
-            
-            setTimeout(() => {
-                document.body.removeChild(feedback);
-            }, 3000);
-        }
-
-        function markMessageAsAnswered(index) {
-            const messageElements = document.querySelectorAll('.message-item');
-            messageElements[index].style.opacity = '0.6';
-            messageElements[index].style.pointerEvents = 'none';
-        }
 
         function updateScore() {
             document.getElementById('score').textContent = score;
         }
 
-        function closeModal() {
-            document.getElementById('messageModal').style.display = 'none';
-        }
-
+    
         function finishGame() {
             let resultMessage = '';
             const percentage = (score / 10) * 100;
