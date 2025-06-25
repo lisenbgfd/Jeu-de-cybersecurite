@@ -34,7 +34,7 @@ def analyze():
                 "messages": [
                     {
                         "role": "user",
-                        "content": f'Voici un message : "{user_message}". Donne une note entre 0% et 100% d\'efficacité scam : c\'est à dire combien de gens tomberaient dans le panneau si l\'arnaque est trop évidente, le score doit être médiocre, avec un bref commentaire.\nFormat:\nScore : XX%\nCommentaire : ...'
+                        "content": f'Voici un message : "{user_message}". Ce message est un message scam adréssé à : Camille B. travaille à IBM et habite en région parisienne avec son conjoint et ses deux enfants Alix et Gabrielle. Donne une note entre 0% et 100% d\'efficacité du message scam : c\'est à dire combien de gens tomberaient dans le panneau si l\'arnaque est trop évidente, le score doit être médiocre, avec un bref commentaire.\nFormat:\nScore : XX%\nCommentaire : ...'
                     }
                 ]
             }
