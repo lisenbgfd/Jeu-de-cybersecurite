@@ -1563,7 +1563,7 @@ function initializeTutorial() {
         },
         {
             title: "Surveillance du Système",
-            text: "Surveillez la santé globale, votre budget, le nombre de serveurs actifs et votre score. Le plus important est cette zone en bas: les messages indiquent les phases lancées et si vous avez gagné !"
+            text: "Surveillez la santé globale, votre budget, le nombre de serveurs actifs et votre score. Ces métriques vous aident à évaluer l'efficacité de vos défenses.",
             highlight: ".status-bar",
             position: { top: "30%", left: "50%", transform: "translateX(-50%)" },
             arrow: { direction: "up", top: "25%", left: "50%" }
@@ -1575,6 +1575,17 @@ function initializeTutorial() {
             position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
         }
     ];
+    
+    // Créer les points de progression
+    const progressContainer = document.getElementById('tutorialProgress');
+    progressContainer.innerHTML = '';
+    tutorialSteps.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot';
+        if (index === 0) dot.classList.add('active');
+        progressContainer.appendChild(dot);
+    });
+}
     
     // Créer les points de progression
     const progressContainer = document.getElementById('tutorialProgress');
