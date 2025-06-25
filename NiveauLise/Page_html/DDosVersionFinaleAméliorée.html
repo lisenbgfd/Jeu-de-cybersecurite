@@ -1688,11 +1688,11 @@ function endTutorial() {
                 redundancy: false
             },
             servers: {
-                server1: { health: 100, type: 'Web Server', status: 'normal', defenses: [] },
-                server2: { health: 100, type: 'DB Server', status: 'normal', defenses: [] },
-                server3: { health: 100, type: 'API Server', status: 'normal', defenses: [] },
-                server4: { health: 100, type: 'CDN Node', status: 'normal', defenses: [] },
-                server5: { health: 100, type: 'Cache Server', status: 'normal', defenses: [] }
+                server1: { health: 100, type: 'Web Server', status: 'normal'},
+                server2: { health: 100, type: 'DB Server', status: 'normal'},
+                server3: { health: 100, type: 'API Server', status: 'normal' },
+                server4: { health: 100, type: 'CDN Node', status: 'normal' },
+                server5: { health: 100, type: 'Cache Server', status: 'normal' }
             }
         };
 
@@ -1826,7 +1826,6 @@ function endTutorial() {
             Object.keys(gameState.servers).forEach(serverId => {
                 gameState.servers[serverId].health = 100;
                 gameState.servers[serverId].status = 'normal';
-                gameState.servers[serverId].defenses = [];
                 resetServerVisual(serverId);
             });
             
@@ -2652,7 +2651,6 @@ function stopAttack() {
             document.getElementById('serverType').textContent = server.type;
             document.getElementById('serverHealth').textContent = server.health + '%';
             document.getElementById('serverStatus').textContent = server.status;
-            document.getElementById('serverDefenses').textContent = server.defenses.length > 0 ? server.defenses.join(', ') : 'Aucune';
             
             const attackBtn = document.getElementById('attackTargetBtn');
             attackBtn.disabled = gameState.attackActive || gameState.phase === 'challenge';
@@ -3211,7 +3209,7 @@ function attackServerUltimate(serverId, intensity) {
         updateServerVisual(serverId);
         
         if (server.health <= 0) {
-            gameState.activeServers--;
+            gameState.actives--;
             addLog(` ${server.type} DÉTRUIT par l'attaque ultime`, 'error');
         }
     }
