@@ -1563,7 +1563,7 @@ function initializeTutorial() {
         },
         {
             title: "Surveillance du Système",
-            text: "Surveillez la santé globale, votre budget, le nombre de serveurs actifs et votre score. Ces métriques vous aident à évaluer l'efficacité de vos défenses.",
+            text: "Surveillez la santé globale, votre budget, le nombre de serveurs actifs et votre score. La zone en bas est très importante : elle affiche les phases et vous dit si vous avez gagné ! .",
             highlight: ".status-bar",
             position: { top: "30%", left: "50%", transform: "translateX(-50%)" },
             arrow: { direction: "up", top: "25%", left: "50%" }
@@ -1575,17 +1575,6 @@ function initializeTutorial() {
             position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
         }
     ];
-    
-    // Créer les points de progression
-    const progressContainer = document.getElementById('tutorialProgress');
-    progressContainer.innerHTML = '';
-    tutorialSteps.forEach((_, index) => {
-        const dot = document.createElement('div');
-        dot.className = 'progress-dot';
-        if (index === 0) dot.classList.add('active');
-        progressContainer.appendChild(dot);
-    });
-}
     
     // Créer les points de progression
     const progressContainer = document.getElementById('tutorialProgress');
@@ -2730,7 +2719,7 @@ function stopAttack() {
             }
         }
 
-        // Fonction à ajouter dans votre script JavaScript
+        
 function startAttackMode() {
     gameState.phase = 'attack';
     gameState.botnetCount = 100;
