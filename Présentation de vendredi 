@@ -25,6 +25,7 @@ visuels n'étaient pas optimaux. Donc on a codé en html, en complément de code
 des liens sur des pages qui sont pour l'instant locales et que notre encadrant a prévu d'héberger sur 
 son site. 
 
+
 l'attaque Ddos : 
 Une attaque par déni de service distribuées (Distributed Denial of Service Attack) consiste à rendre inutilisable 
 un service en empêchant les utilisateurs de l'utiliser. Dans ce cas particulier, on inonde le réseau avec des ICMP 
@@ -38,3 +39,6 @@ respectent certaines conditions de sécurité. Le load Balancer permet de mieux 
 Rate Limiting limite le débit du traffic et enfin la Redondance redirige le traffic vers des serveurs de 
 backups. Ensuite, un fois qi'on a bien tout compris, on peut passer en mode Attaque : le but est de percer les
 défenses. Puis le mode Défense: on va subir 5 vagues d'attaque, et le but est de survivre. 
+
+Ce qu'on a appris/ Les pistes d'amélioration: 
+
