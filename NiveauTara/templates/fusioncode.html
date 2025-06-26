@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sécurité des Mots de Passe - Jeux de Sensibilisation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #121212;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .games-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 250px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .game-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .mode-hacker {
+            border-color: rgba(244, 67, 54, 0.5);
+        }
+
+        .mode-hacker:hover {
+            border-color: rgba(244, 67, 54, 0.8);
+            box-shadow: 0 15px 30px rgba(244, 67, 54, 0.2);
+        }
+
+        .mode-creator {
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .mode-creator:hover {
+            border-color: rgba(76, 175, 80, 0.8);
+            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.2);
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+        }
+
+        .importance-text {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .lock-icon {
+            display: inline-block;
+            color: #ffc107;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .games-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            .game-button {
+                width: 100%;
+                max-width: 300px;
+                padding: 1.5rem;
+            }
+
+            .game-title {
+                font-size: 1.2rem;
+            }
+
+            .game-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .importance-text {
+                font-size: 0.9rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+
+            .game-button {
+                padding: 1.2rem;
+            }
+
+            .game-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔐 Sécurité des Mots de Passe</h1>
+        <p class="subtitle">Découvre l'importance de la cybersécurité à travers deux expériences interactives</p>
+        
+        <div class="games-container">
+            <a href="hackMotdepasse.html" class="game-button mode-hacker">
+                <div class="game-icon">🔓</div>
+                <div class="game-title">Mode Hackeur</div>
+                <div class="game-subtitle">Tente de pirater un téléphone</div>
+            </a>
+            
+            <a href="Modevictimemotdepasse.html" class="game-button mode-creator">
+                <div class="game-icon">🛡️</div>
+                <div class="game-title">Mode Victime</div>
+                <div class="game-subtitle">Crée un mot de passe sécurisé</div>
+            </a>
+        </div>
+        
+        <div class="importance-text">
+            <span class="lock-icon">🔒</span>
+            <strong>Pourquoi c'est important ?</strong><br>
+            Chaque jour, des millions de comptes sont piratés à cause de mots de passe faibles. 
+            Ces jeux te montrent concrètement les risques et comment mieux te protéger.
+        </div>
+    </div>
+</body>
+</html>

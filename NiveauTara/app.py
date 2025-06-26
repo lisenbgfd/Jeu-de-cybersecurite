@@ -12,20 +12,45 @@ CORS(app)
 
 #SMS hacker
 @app.route("/")
-def home():
+def hacker_mode():
     return render_template("arnaqueSMShacker.html") 
 
 #SMS hackée
 @app.route("/modeVictime")
-def hacker_mode():
+def hackee_mode():
     return render_template("arnaqueSMShackée.html")
 
-#page d'acceuil
+#Page d'acceuil
 @app.route("/acceuil")
-def acceuil():
-    # chemin vers NiveauSylvia/index.html
-    index_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "NiveauSylvia", "index.html"))
-    return send_file(index_path)
+def home():
+    return render_template("index.html")
+
+
+#Page DDOS
+@app.route("/ddos")
+def ddos_mode():
+    return render_template("DDosVersionFinaleAméliorée.html")
+
+#Page phishing
+@app.route("/phishing")
+def phishing_mode():
+    return render_template("phishing.html")
+
+#Page acceuil Mot de passe
+@app.route("/acceuilmotdepasse")
+def pw_mode():
+    return render_template("fusioncode.html")
+
+#Page DDOS
+@app.route("/mdpHack")
+def hackermdp_mode():
+    return render_template("hackMotdepasse.html")
+
+#Page DDOS
+@app.route("/mdpVictime")
+def hackeemdp_mode():
+    return render_template("Modevictimemotdepasse.html")
+
 
 
 @app.route("/analyze", methods=["POST"])
