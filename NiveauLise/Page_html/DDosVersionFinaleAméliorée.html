@@ -1478,7 +1478,7 @@
             </div>
             <div class="stat">
                 <div class="stat-label">Budget</div>
-                <div class="stat-value" id="budgetText">8000€</div>
+                <div class="stat-value" id="budgetText">15000€</div>
             </div>
             <div class="stat">
                 <div class="stat-label">Serveurs Actifs</div>
@@ -1495,7 +1495,7 @@
             <div id="logs">
                 <div class="log-entry log-info">Système multi-serveurs initialisé</div>
                 <div class="log-entry log-info">5 serveurs opérationnels</div>
-                <div class="log-entry log-success">Budget initial: 8000€</div>
+                <div class="log-entry log-success">Budget initial: 15000€</div>
             </div>
         </div>
 
@@ -1674,7 +1674,7 @@ function endTutorial() {
         let gameState = {
             phase: 'learning', // 'learning' ou 'challenge'
             health: 100,
-            budget: 8000,
+            budget: 15000,
             score: 0,
             activeServers: 5,
             selectedServer: null,
@@ -1814,7 +1814,7 @@ function endTutorial() {
         function resetToLearning() {
             gameState.phase = 'learning';
             gameState.health = 100;
-            gameState.budget = 8000;
+            gameState.budget = 15000;
             gameState.score = 0;
             gameState.activeServers = 5;
             gameState.attackActive = false;
@@ -2085,10 +2085,11 @@ function startPingFlood() {
     gameState.currentAttackType = 'pingflood'; // Nouveau: type d'attaque
     document.getElementById('stopBtn').disabled = false;
     
-    showInfoComment('Ping Flood', 
-        'Le Ping Flood envoie des messsages (paquets ICMP) en masse vers les serveurs cibles. ' +
-        'Cette attaque  peut surcharger les serveurs moins protégés. ' +
-        'Durée: 10 secondes. Impact: Modéré sur tous les serveurs.');
+    showInfoComment('Ping Flood',
+    'Bombarde tous vos serveurs avec des milliers de petits messages. ' +
+    'Comme sonner à toutes les portes en même temps pour embêter. ' +
+    'Les serveurs faibles risquent de ralentir ou planter. ' +
+    'Durée: 10 secondes.');
     
     addLog(' Ping Flood lancé', 'error');
     
@@ -2110,10 +2111,11 @@ function startBotnetAttack() {
     gameState.currentAttackType = 'botnet'; // Nouveau: type d'attaque
     document.getElementById('stopBtn').disabled = false;
     
-    showInfoComment('Botnet Attack', 
-        'Attaque distribuée: on infecte des machines par propagation d un virus  ' +
-        'Génère un trafic massif depuis plusieurs sources. ' +
-        'Impact très élevé sur l\'infrastructure. Durée: 15 secondes.');
+    showInfoComment('Attaque Botnet',
+    'Une armée d\'ordinateurs infectés attaque en même temps. ' +
+    'Très difficile à arrêter car l\'attaque vient de partout dans le monde. ' +
+    'C\'est comme être attaqué par mille personnes à la fois. ' +
+    'Durée: 15 secondes.');
     
     addLog(' Attaque Botnet déclenchée', 'error');
     
@@ -2139,10 +2141,12 @@ function startTargetedAttack() {
     document.getElementById('stopBtn').disabled = false;
     
     const serverType = gameState.servers[gameState.selectedServer].type;
-    showInfoComment('Attaque Ciblée', 
-        `Attaque concentrée sur ${serverType}. ` +
-        'Utilise des techniques spécialisées pour exploiter les faiblesses spécifiques du serveur cible. ' +
-        'Impact très élevé mais localisé. Durée: 12 secondes.');
+    showInfoComment('Attaque Ciblée',
+    `Attaque laser concentrée sur votre ${serverType}. ` +
+    'Utilise les faiblesses spécifiques de ce type de serveur. ' +
+    'Moins de trafic mais beaucoup plus précis et dangereux. ' +
+    'Comme viser un point faible avec une flèche. ' +
+    'Durée: 12 secondes.');
     
     addLog(` Attaque ciblée sur ${serverType}`, 'error');
     
@@ -2381,10 +2385,10 @@ function stopAttack() {
             gameState.score += 100;
             
             showInfoComment('Firewall Global', 
-                'Pare-feu périmétrique qui analyse et filtre le trafic entrant. ' +
-                'Bloque 40% des paquets malveillants basés sur des signatures connues. ' +
-                'Efficace contre les attaques simples mais peut être contourné par des techniques avancées.', 
-                'defense');
+    'Un garde numérique qui surveille tout ce qui entre sur vos serveurs. ' +
+    'Il reconnaît les attaques connues et bloque 40% des paquets dangereux. ' +
+    'Première ligne de défense contre les pirates.', 
+    'defense');
             
             document.getElementById('firewallBtn').disabled = true;
             document.querySelectorAll('.firewall').forEach(fw => fw.classList.add('active'));
@@ -2409,10 +2413,10 @@ function stopAttack() {
             gameState.score += 200;
             
             showInfoComment('Load Balancer', 
-                'Répartit le trafic entre plusieurs serveurs et cache les requêtes. ' +
-                'Réduit l\'impact des attaques de 60% en distribuant la charge. ' +
-                'Inclut des fonctionnalités de cache et de compression pour optimiser les performances.', 
-                'defense');
+    'Répartit intelligemment le trafic entre vos serveurs. ' +
+    'Quand une attaque arrive, il divise la charge pour éviter la surcharge. ' +
+    'Réduit l\'impact des attaques de 60% en dispersant les connexions.', 
+    'defense');
             
             document.getElementById('proxyBtn').disabled = true;
             addLog(' Load Balancer activé', 'success');
@@ -2432,10 +2436,10 @@ function stopAttack() {
             gameState.score += 150;
             
             showInfoComment('Rate Limiting', 
-                'Limite le nombre de requêtes par seconde par IP source. ' +
-                'Réduit l\'efficacité des attaques de 30% en throttlant les connexions suspectes. ' +
-                'Particulièrement efficace contre les attaques depuis un nombre limité de sources.', 
-                'defense');
+    'Contrôle la vitesse des connexions depuis chaque adresse IP. ' +
+    'Si quelqu\'un essaie d\'envoyer trop de requêtes trop vite, il le ralentit. ' +
+    'Très efficace contre les attaques qui viennent de peu d\'endroits.', 
+    'defense');
             
             document.getElementById('rateLimitBtn').disabled = true;
             addLog(' Rate Limiting configuré', 'success');
@@ -2456,10 +2460,10 @@ function stopAttack() {
             gameState.score += 400;
             
             showInfoComment('Infrastructure+', 
-                'Amélioration majeure de l\'infrastructure réseau et serveurs. ' +
-                'Augmente la capacité de traitement de 70% et améliore la résilience. ' +
-                'Inclut des serveurs plus puissants, plus de bande passante et de meilleurs algorithmes de traitement.', 
-                'defense');
+    'Améliore tous vos serveurs avec du matériel plus puissant. ' +
+    'Augmente leur capacité de 70% pour résister aux grosses attaques. ' +
+    'Comme passer d\'une petite route à une autoroute.', 
+    'defense');
             
             document.getElementById('infraBtn').disabled = true;
             Object.keys(gameState.servers).forEach(serverId => {
@@ -2484,10 +2488,10 @@ function stopAttack() {
     gameState.score += 350;
     
     showInfoComment('Redondance', 
-        'Déploie des serveurs de sauvegarde et des systèmes de failover automatique. ' +
-        'Si un serveur tombe, le trafic est automatiquement redirigé vers des serveurs de sauvegarde. ' +
-        'Assure une continuité de service même en cas d\'attaque réussie sur certains serveurs.', 
-        'defense');
+    'Crée des serveurs de secours qui prennent le relais automatiquement. ' +
+    'Si un serveur tombe à cause d\'une attaque, les autres continuent à fonctionner. ' +
+    'Votre site reste en ligne même pendant les attaques.', 
+    'defense');
     
     document.getElementById('redundancyBtn').disabled = true;
     
@@ -2823,7 +2827,7 @@ function startAdvancedAttack() {
     
     setTimeout(() => {
         stopAttack();
-    }, 8000);
+    }, 15000);
 }
 
 function startSocialEngineering() {
