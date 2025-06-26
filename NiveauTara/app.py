@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 import requests
 import os
@@ -10,13 +10,20 @@ REZEL_API_KEY="sk-95bc3ad84fcd45f8971531404e0b16ef"
 app = Flask(__name__)
 CORS(app)
 
+#SMS hacker
 @app.route("/")
 def home():
-    return render_template("arnaqueSMShacker.html")  # Ton fichier HTML à placer dans /templates
+    return render_template("arnaqueSMShacker.html") 
 
+#SMS hackée
 @app.route("/modeVictime")
 def hacker_mode():
     return render_template("arnaqueSMShackée.html")
+
+#page d'acceuil
+@app.route("/acceuil")
+def acceuil():
+    return send_file("index.html")
 
 
 @app.route("/analyze", methods=["POST"])
