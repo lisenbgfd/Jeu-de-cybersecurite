@@ -53,6 +53,13 @@ C'est comme avoir ses objets les plus utilisés à portée de main plutôt que d
   Ensuite, un fois qi'on a bien tout compris, on peut passer en mode Attaque : le but est de percer les
 défenses. Puis le mode Défense: on va subir 5 vagues d'attaque, et le but est de survivre. 
 
+Le phishing : 
+Le phishing est une technique de cyberattaque qui consiste à tromper les utilisateurs afin de leur soutirer des informations sensibles, comme des identifiants de connexion, des données bancaires ou des numéros de carte de crédit.
+Cette méthode repose souvent sur des courriels ou des sites web frauduleux imitant des sources de confiance, dans le but de manipuler la victime.
+Le phishing peut également servir de porte d’entrée à des logiciels malveillants, notamment les RATs (Remote Access Trojans). 
+Ces derniers sont des programmes espions qui, une fois installés sur l’ordinateur de la victime, permettent à un cybercriminel de prendre le contrôle à distance de la machine, accédant ainsi aux fichiers, à la webcam, aux frappes clavier, et bien plus encore. 
+Le couplage du phishing avec un RAT rend l’attaque d’autant plus redoutable, car il offre à l’attaquant un accès prolongé et discret au système compromis.
+
 Ce qu'on a appris/ Les pistes d'amélioration: 
 Ce projet nous a permis de développer notre autonomie, notamment en termes de recherche de solutions et
 de choix décisifs (abandonner Unity). On a bien sûr égalemment énormément appris sur la cybersécurité, 
