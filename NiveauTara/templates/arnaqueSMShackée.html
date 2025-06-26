@@ -304,7 +304,7 @@
 </head>
 <body>
     <div class="header">
-    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <button class="back-btn" onclick="window.location.href='https://artishow-jeu-cyber.rezel.net/acceuil'">← Retour</button>
     <div class="rules">
         <h2>Règles du Jeu</h2>
         <p>Vous avez reçu 10 messages, certains sont des arnaques. Faites attention en répondant !</p>
@@ -700,11 +700,6 @@ const safeKeywords = [
             initializeGame();
         }
 
-        function goBack() {
-            if (confirm('Êtes-vous sûr de vouloir quitter le jeu ?')) {
-                window.history.back();
-            }
-        }
 
         // Initialiser le jeu au chargement
         document.addEventListener('DOMContentLoaded', initializeGame);
