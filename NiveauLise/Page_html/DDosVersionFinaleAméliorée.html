@@ -145,7 +145,7 @@
 }
 
 /* Effets sur les serveurs pendant les attaques */
-.server.under-attack-pingflood {
+..under-attack-pingflood {
     animation: pingFloodShake 0.3s infinite;
 }
 
@@ -490,7 +490,6 @@
 
 .server.under-attack-botnet {
     animation: botnetOverload 0.8s infinite;
-    position: relative;
 }
 
 .server.under-attack-botnet::before {
@@ -504,6 +503,7 @@
     border-radius: inherit;
     animation: botnetScan 1s infinite;
     z-index: -1;
+    pointer-events: none;
 }
 
 .server.under-attack-targeted {
