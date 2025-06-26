@@ -14,6 +14,11 @@ CORS(app)
 def home():
     return render_template("arnaqueSMShacker.html")  # Ton fichier HTML à placer dans /templates
 
+@app.route("/modeVictime")
+def hacker_mode():
+    return render_template("arnaqueSMShackée.html")
+
+
 @app.route("/analyze", methods=["POST"])
 def analyze():
     data = request.get_json()
