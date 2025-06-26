@@ -399,41 +399,11 @@ async function evaluateScamMessage(message) {
 }
 
 
-function updateScore() {
-    document.getElementById('score').textContent = score;
-}
-
-function finishGame() {
-    let resultMessage = '';
-    const percentage = (score / 10) * 100;
-
-    if (percentage >= 80) {
-        resultMessage = "Excellent ! Vous êtes un expert en détection d'arnaques !";
-    } else if (percentage >= 60) {
-        resultMessage = "Bien joué ! Vous avez de bonnes bases en sécurité.";
-    } else if (percentage >= 40) {
-        resultMessage = "Attention ! Vous devez être plus vigilant face aux arnaques.";
-    } else {
-        resultMessage = "Soyez très prudent ! Vous êtes vulnérable aux arnaques.";
-    }
-
-    document.getElementById('finalScore').textContent = `${score}/10`;
-    document.getElementById('resultMessage').textContent = resultMessage;
-    document.getElementById('resultModal').style.display = 'block';
-}
-
-function restartGame() {
-    score = 0;
-    updateScore();
-    document.getElementById('resultModal').style.display = 'none';
-    initializeGame();
-}
-
 function goBack() {
-    if (confirm('Êtes-vous sûr de vouloir quitter le jeu ?')) {
-        window.history.back();
-    }
+    // Redirection vers la page d’accueil
+    window.location.href = "https://artishow-jeu-cyber.rezel.net/acceuil";
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('scamInput');
