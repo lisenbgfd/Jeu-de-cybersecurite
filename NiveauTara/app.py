@@ -23,7 +23,9 @@ def hacker_mode():
 #page d'acceuil
 @app.route("/acceuil")
 def acceuil():
-    return send_file("index.html")
+    # chemin vers NiveauSylvia/index.html
+    index_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "NiveauSylvia", "index.html"))
+    return send_file(index_path)
 
 
 @app.route("/analyze", methods=["POST"])
