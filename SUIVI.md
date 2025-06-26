@@ -179,3 +179,12 @@ Chacune présente son jeu aux autres et prend en compte ses remarques, tous les 
 Rédaction de la présentation que l'on fera vendredi, et chacune commence à s'entraîner sur la démo de son niveau. 
 
 
+**Jeudi 26 juin**
+
+_Retour sur les remarques de notre encadrant_
+
+Nous avons mené des derniers peaufinages en fonction des retours de notre encadrant
+
+_Hébergement de notre jeu par Rezel_
+
+Nous allons héberger notre site par Rezel, pour que les joueurs n'aient pas à télécharger chaque fichier pour jouer à notre jeu.
