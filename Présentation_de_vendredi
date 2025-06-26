@@ -37,7 +37,20 @@ on envoie pas l'attaque que depuis un unique ordinateur mais depuis un réseau d
 défenses, on a le Firewall, qui est une défense générique qui surveille les paquets de données et si ils 
 respectent certaines conditions de sécurité. Le load Balancer permet de mieux répartir les charges, le 
 Rate Limiting limite le débit du traffic et enfin la Redondance redirige le traffic vers des serveurs de 
-backups. Ensuite, un fois qi'on a bien tout compris, on peut passer en mode Attaque : le but est de percer les
+backups. Ensuite on a plusieurs serveurs : Un serveur web stocke et délivre les pages web
+ (HTML, CSS, images) aux navigateurs des utilisateurs. C'est comme un bibliothécaire qui 
+ vous donne les livres que vous demandez.
+Un serveur API agit comme un intermédiaire qui permet aux applications de communiquer entre elles en échangeant 
+des données. C'est comme un traducteur qui facilite la conversation entre deux personnes parlant des 
+langues différentes.Un serveur de base de données stocke et organise toutes les informations importantes
+ (comptes utilisateurs, produits, commandes, etc.). C'est comme un immense classeur numérique où chaque 
+ information a sa place précise.
+Un serveur de cache garde en mémoire les données les plus demandées pour les servir plus rapidement. 
+C'est comme avoir ses objets les plus utilisés à portée de main plutôt que de les chercher dans le grenier
+ à chaque fois.Un nœud CDN est un serveur situé près des utilisateurs qui stocke des copies des contenus 
+ populaires pour réduire les temps de chargement. C'est comme avoir plusieurs magasins dans différentes
+  villes plutôt qu'un seul entrepôt central. 
+  Ensuite, un fois qi'on a bien tout compris, on peut passer en mode Attaque : le but est de percer les
 défenses. Puis le mode Défense: on va subir 5 vagues d'attaque, et le but est de survivre. 
 
 Ce qu'on a appris/ Les pistes d'amélioration: 
